@@ -1,0 +1,40 @@
+body{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+h1, h3{
+    background-color: #D8B4F8;
+    border: solid black;
+    padding-top: 50 px;
+    padding-bottom: 50 px;
+}
+
+h3{
+    text-align: center;
+}
+
+ol>li{
+    text-align: center;
+    border: solid black;
+    display: inline-block;
+    height: 50px;
+    width: 100px;
+    margin: 2em;
+    background-color: #A6FF96;
+}
+
+a{
+    color: black;
+}
+
+a:hover{
+    color: #D8B4F8;
+}
+
+.navi{
+    color: blue;
+    margin-right: 20px;
+}

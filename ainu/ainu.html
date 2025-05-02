@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ainu Language Research</title>
+    <link rel="stylesheet" href="ainu.css">
+</head>
+<body>
+    <header>
+        <a href="javascript:history.back()" class="logo">
+            <img src="cam.png" alt="Logo">
+        </a>
+        <h1 class="greeting">イランカラプテ! (Hello!)</h1>
+    </header>
+
+    <main>
+        <section class="blurb">
+            <p>I am Cameron, researcher in the Ainu language and culture. If you would liek to read my body of research, please click any of the buttons below to be shown a free version of my works.</p>
+        </section>
+
+        <section class="pdf-links">
+            <h2>Research Papers</h2>
+            <ul>
+                <li><a href="#" class="pdf-button" data-pdf="jp.pdf">Research in Ainu Language Revitalization</a></li>
+                <li><a href="#" class="pdf-button" data-pdf="is.pdf">Research in Ainu Cultural Suppression</a></li>
+            </ul>
+        </section>
+
+        <section class="pdf-viewer">
+            <div class="pdf-controls" style="display: none;">
+                <button id="close-pdf">Close PDF</button>
+                <button id="fullscreen-pdf">Fullscreen</button>
+            </div>
+            <iframe id="pdf-iframe" name="pdf-viewer" style="width: 100%; height: 500px; border: none;"></iframe>
+        </section>
+    </main>
+
+    <script src="ainu.js"></script>
+
+    <footer>
+        <p>©2025 Cameron Hollabaugh.</p>
+        <a href="javascript:void(0);" class="contact-button" id="contactButton">Contact Me</a>
+    </footer>
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <p><strong>Email:</strong> cameronhollabaugh@yahoo.com</p>
+            <p><strong>Phone:</strong> +1 (717) 727-5469</p>
+        </div>
+    </div>
+    
+    <script src="ainu.js"></script>        
+</body>
+</html>

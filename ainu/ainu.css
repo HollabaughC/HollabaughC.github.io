@@ -1,0 +1,217 @@
+/* General body and layout */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #D0B88E; /* Earthy tone based on Ainu motifs */
+    color: #3A2A2A; /* Deep earthy brown */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #8E4B35; /* Deep red-brown, earthy tone */
+    padding: 20px;
+}
+
+.greeting {
+    font-size: 2rem;
+    color: #FFF;
+    margin-left: 20px; /* Adds space between the logo and the text */
+    font-family: 'Ainu', sans-serif; /* Assuming you want to display Ainu script in a unique font */
+}
+
+/* Blurb section */
+.blurb {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #3A2A2A;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* PDF Links section */
+.pdf-links {
+    margin: 50px auto;
+    text-align: center;
+}
+
+.pdf-links ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.pdf-links li {
+    display: inline-block;
+    margin: 10px;
+}
+
+/* Circular PDF selection buttons */
+.pdf-links .pdf-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px; /* Fixed size to ensure perfect circles */
+    height: 150px; /* Fixed size to ensure perfect circles */
+    background-color: #3A2A2A;
+    color: #FFF;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s, transform 0.3s;
+    line-height: 1.2; /* Ensures the text inside stays centered */
+}
+
+.pdf-links .pdf-button:hover {
+    background-color: #D88C44; /* A golden hue, inspired by traditional Ainu colors */
+    transform: scale(1.1);
+}
+
+/* Logo styling */
+.logo {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    padding: 0; /* Removed padding for a perfect circle */
+    background: radial-gradient(circle at 40% 40%, #8E4B35 0%, #5E2B23 70%, #3A1A15 100%); /* Earthy gradient */
+    background-size: 200% 200%;
+    animation: swirlBackground 6s linear infinite;
+    box-shadow: none; /* Removed glow effect */
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fully covers the circle */
+    border-radius: 50%; /* Ensures the image is fully circular */
+    mix-blend-mode: lighten;
+}
+
+@keyframes swirlBackground {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.logo:hover {
+    cursor: pointer;
+    transform: scale(1.08);
+    box-shadow: none; /* No glow on hover */
+}
+
+/* PDF Viewer and Controls */
+.pdf-viewer {
+    position: relative;
+    margin-top: 20px;
+}
+
+.pdf-controls {
+    text-align: center;
+    margin-bottom: 10px; /* Add margin between controls and iframe */
+}
+
+.pdf-controls button {
+    background-color: #3A2A2A;
+    color: #FFF;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+
+.pdf-controls button:hover {
+    background-color: #D88C44;
+}
+
+footer {
+    background-color: #3A2A2A; /* Deep earthy tone matching the header */
+    color: #FFF;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    font-size: 1rem;
+}
+
+footer p {
+    margin: 0;
+    font-style: italic;
+    color: #D88C44; /* A soft golden hue to fit the Ainu aesthetic */
+}
+
+footer .contact-button {
+    display: inline-block;
+    background-color: #D88C44; /* A golden hue to stand out */
+    color: #3A2A2A; /* Deep earthy brown */
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 25px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+footer .contact-button:hover {
+    background-color: #8E4B35; /* A darker gold when hovered */
+    transform: scale(1.05);
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed in place */
+    z-index: 1; /* On top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Background with slight transparency */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #3A2A2A;
+    border-radius: 10px;
+}
+
+.modal-content p {
+    margin: 10px 0;
+}
+
+.close {
+    color: #aaa;
+    font-size: 2rem;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

@@ -5,11 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cameron Hollabaugh</title>
   <link rel="stylesheet" href="index.css">
+  <script src="index.js" defer></script>
 </head>
 <body>
   <header>
-    <img src="img/cam.png" alt="Cam's Logo" class="logo">
-  </header>
+    <div class="header-text">
+      <span class="left-text">Cameron</span>
+      <img src="img/cam.png" alt="Cam's Logo" class="logo">
+      <span class="right-text">Hollabaugh</span>
+    </div>
+  </header>  
+
+  <div id="loading-overlay">
+    <div class="spinner">
+      <img src="img/cam.png" alt="Cam's Logo" class="spinner-logo" />
+    </div>
+    <div class="loading-text">Loading...</div>
+  </div>  
+
+  <div id="loading-overlay">
+    <div class="loading-text">Loading...</div>
+  </div>
 
   <main>
     <h1>Welcome to My Site!</h1>
@@ -18,7 +34,12 @@
       <a href="cs.html" class="circle-btn"><img src="img/CS.png" alt="Computer Science"><span>Computer Science</span></a>
       <a href="japanese.html" class="circle-btn"><img src="img/JP.png" alt="Japanese"><span>Japanese</span></a>
       <a href="intl.html" class="circle-btn"><img src="img/IS.png" alt="International Studies"><span>International Studies</span></a>
+    
     </div>
   </main>
+
+  <footer>
+    <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+  </footer>  
 </body>
 </html>

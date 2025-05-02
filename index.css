@@ -1,8 +1,27 @@
-body {
+html, body {
+  height: 100%;
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #121212;
   color: #e6e1fa;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 20%, rgba(190, 144, 255, 0.1), transparent 70%),
+              radial-gradient(circle at 80% 60%, rgba(150, 90, 255, 0.1), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 header {
@@ -10,8 +29,38 @@ header {
   align-items: center;
   justify-content: center;
   padding: 2em 2em;
-  background: linear-gradient(145deg, #2a2a2a, #1c1c1c);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+  background: radial-gradient(circle at center, #3a2a5d 0%, #1c1b2a 100%);
+  box-shadow: 0 4px 20px rgba(128, 90, 213, 0.5), 0 0 80px rgba(190, 144, 255, 0.2) inset;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-text {
+  display: flex;
+  align-items: center;
+  gap: 2em; /* Increase gap for better spacing */
+  margin-left: 1em; /* Add slight space on left side */
+  margin-right: 1em; /* Add slight space on right side */
+}
+
+.left-text, .right-text {
+  font-size: 4em; /* Increase font size */
+  font-weight: bold;
+  color: #c6b3f7;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), 0 0 20px #8a6fc9, 0 0 30px #b48ead;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  z-index: 2;
+}
+
+.left-text {
+  transform: translateX(-10px); /* Move slightly left to fit better next to logo */
+}
+
+.right-text {
+  transform: translateX(10px); /* Move slightly right to fit better next to logo */
 }
 
 .logo {
@@ -21,7 +70,80 @@ header {
   background-color: #292838;
   padding: 12px;
   box-shadow: 0 0 20px #b48ead;
+  transition: transform 0.3s ease;
+  z-index: 1;
 }
+
+header::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(200, 150, 255, 0.1) 0%, transparent 80%);
+  animation: pulseHeader 8s infinite alternate ease-in-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes pulseHeader {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.logo {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  padding: 12px;
+  background: radial-gradient(circle at 40% 40%, #444 0%, #222 70%, #111 100%);
+  background-size: 200% 200%;
+  animation: swirlBackground 6s linear infinite;
+  box-shadow:
+    0 0 30px rgba(200, 150, 255, 0.7),
+    0 0 60px rgba(160, 110, 255, 0.5),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  mix-blend-mode: lighten;
+}
+
+@keyframes swirlBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.logo:hover {
+  cursor: pointer;
+  transform: scale(1.08);
+  box-shadow:
+    0 0 40px rgba(220, 170, 255, 0.9),
+    0 0 90px rgba(160, 110, 255, 0.6),
+    inset 0 0 12px rgba(255, 255, 255, 0.3);
+}
+
 
 main {
   text-align: center;
@@ -52,7 +174,7 @@ h1 {
   background-color: #3a3a4d;
   border-radius: 50%;
   overflow: hidden;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: background-color 0.3s, transform 0.3s;
   box-shadow: 0 0 15px rgba(180, 142, 173, 0.4);
   text-decoration: none;
   color: #e6e1fa;
@@ -82,14 +204,163 @@ h1 {
   font-size: 1.5em;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  transition: color 0.3s ease;
 }
 
 .circle-btn:hover {
   background-color: #7a6acf;
-  cursor: pointer;
   transform: scale(1.05);
 }
 
-nav {
+.circle-btn:hover span {
+  color: #c6b3f7;
+}
+
+/* Loading overlay */
+#loading-overlay {
   display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(28, 27, 42, 0.7); /* translucent */
+  z-index: 9000;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* allow interaction behind */
+  animation: fadeInOverlay 0.5s ease-in-out;
+}
+
+.spinner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: spin 2s linear infinite;
+  width: 150px;
+  height: 150px;
+}
+
+.spinner-logo {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.loading-text {
+  color: #caa9fa;
+  font-size: 2em;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Falling logos */
+.falling-clone {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5000;
+  animation: fall 3s forwards ease-in;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(600px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+main {
+  text-align: center;
+  padding: 4em 2em;
+  background: linear-gradient(to bottom, #1e1e1e, #141414);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  flex: 1; /* Allows the main content to expand and push footer to the bottom */
+}
+
+footer {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 1.5em 1em;
+  background: radial-gradient(circle at top center, #2a2038, #1c1b2a);
+  box-shadow:
+    0 -4px 20px rgba(180, 142, 255, 0.2),
+    0 -6px 40px rgba(120, 100, 200, 0.1),
+    inset 0 1px 5px rgba(255, 255, 255, 0.05);
+  color: #d8c6ff;
+  font-size: 1em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 10;
+}
+
+footer p {
+  margin: 0;
+  animation: glowFooter 4s ease-in-out infinite alternate;
+  text-shadow:
+    0 0 4px #b48ead,
+    0 0 8px #8a6fc9,
+    0 0 12px #654c9e;
+}
+
+@keyframes glowFooter {
+  0% {
+    color: #e2d3ff;
+    text-shadow:
+      0 0 5px #c9a0ff,
+      0 0 10px #b48ead,
+      0 0 15px #7e57c2;
+  }
+  100% {
+    color: #d0b8ff;
+    text-shadow:
+      0 0 10px #b48ead,
+      0 0 15px #9b7dcf,
+      0 0 20px #6e44a8;
+  }
+}
+
+/* Footer blow-up animation */
+@keyframes blowUp {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    letter-spacing: normal;
+  }
+  50% {
+    transform: scale(1.4);
+    letter-spacing: 4px;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+    letter-spacing: 10px;
+  }
+}
+
+#footer-secret.blowing-up {
+  animation: blowUp 1s ease forwards;
+  pointer-events: none;
 }

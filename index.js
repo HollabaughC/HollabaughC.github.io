@@ -1,15 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
   const logo = document.querySelector('.logo');
+  const footerSecret = document.getElementById('footer-secret');
   const overlay = document.getElementById('loading-overlay');
+
+  function showOverlayAndNavigate(url) {
+    overlay.style.display = 'flex';
+
+    // Start fade-out just before navigation
+    setTimeout(() => {
+      overlay.classList.add('fade-out');
+    }, 4700);
+
+    setTimeout(() => {
+      window.location.href = url;
+    }, 5000);
+  }
 
   if (logo) {
     logo.addEventListener('click', () => {
       createBouncingClones(logo, 5);
-      overlay.style.display = 'flex';
+      showOverlayAndNavigate('game.html');
+    });
+  }
 
-      setTimeout(() => {
-        window.location.href = 'game.html';
-      }, 5000);
+  if (footerSecret) {
+    footerSecret.addEventListener('click', () => {
+      footerSecret.classList.add('blowing-up');
+      showOverlayAndNavigate('secret.html');
     });
   }
 });
@@ -57,12 +74,10 @@ function createBouncingClones(sourceLogo, count) {
       const clone = clones[i];
       const { el, pos, velocity, size } = clone;
 
-      // Gravity
       velocity.y += gravity;
       pos.x += velocity.x;
       pos.y += velocity.y;
 
-      // Edge bounce
       if (pos.x <= 0 || pos.x + size >= bounds.width) {
         velocity.x *= -damping;
         pos.x = Math.max(0, Math.min(pos.x, bounds.width - size));
@@ -74,7 +89,6 @@ function createBouncingClones(sourceLogo, count) {
         pos.y = bounds.height - size;
       }
 
-      // Lavender trail
       const trail = document.createElement('div');
       trail.classList.add('trail-dot');
       trail.style.left = `${pos.x + size / 2}px`;
@@ -82,7 +96,6 @@ function createBouncingClones(sourceLogo, count) {
       document.body.appendChild(trail);
       setTimeout(() => trail.remove(), 1000);
 
-      // Collision with other clones
       for (let j = i + 1; j < clones.length; j++) {
         const other = clones[j];
         const dx = other.pos.x - pos.x;
@@ -114,21 +127,3 @@ function createBouncingClones(sourceLogo, count) {
     clones.forEach(c => c.el.remove());
   }, 4000);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Existing logo click logic...
-
-  const footerSecret = document.getElementById('footer-secret');
-  const overlay = document.getElementById('loading-overlay');
-
-  if (footerSecret) {
-    footerSecret.addEventListener('click', () => {
-      footerSecret.classList.add('blowing-up');
-      overlay.style.display = 'flex';
-
-      setTimeout(() => {
-        window.location.href = 'secret.html';
-      }, 5000);
-    });
-  }
-});

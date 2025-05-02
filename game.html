@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cameron Hollabaugh</title>
+  <link rel="stylesheet" href="game.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-text">
+      <span class="left-text">Cameron</span>
+      <a href="javascript:history.back()"><img src="img/cam.png" alt="Cam's Logo" class="logo"></a>
+      <span class="right-text">Hollabaugh</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="game-container">
+      <h1>Snake Game</h1>
+      <p>Use arrow keys to play!</p>
+
+      <!-- Game Canvas -->
+      <div id="game-area">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+      </div>
+
+      <!-- Game Buttons -->
+      <div class="button-container">
+        <button id="start-btn" class="circle-btn">Start Game</button>
+        <button id="pause-btn" class="circle-btn">Pause</button>
+        <button id="reset-btn" class="circle-btn">Reset Game</button>
+      </div>
+
+      <p id="score">Score: 0</p>
+      <p id="high-score">High Score: 0</p>
+
+      <!-- Game Over Notification -->
+      <div id="game-over" class="game-over">
+        <p>Game Over! Score: <span id="final-score">0</span></p>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+  </footer>
+</body>
+</html>

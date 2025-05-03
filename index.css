@@ -38,13 +38,13 @@ header {
 .header-text {
   display: flex;
   align-items: center;
-  gap: 2em; /* Increase gap for better spacing */
-  margin-left: 1em; /* Add slight space on left side */
-  margin-right: 1em; /* Add slight space on right side */
+  gap: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
 }
 
 .left-text, .right-text {
-  font-size: 4em; /* Increase font size */
+  font-size: 4em;
   font-weight: bold;
   color: #c6b3f7;
   text-transform: uppercase;
@@ -56,11 +56,11 @@ header {
 }
 
 .left-text {
-  transform: translateX(-10px); /* Move slightly left to fit better next to logo */
+  transform: translateX(-10px);
 }
 
 .right-text {
-  transform: translateX(10px); /* Move slightly right to fit better next to logo */
+  transform: translateX(10px);
 }
 
 .logo {
@@ -216,16 +216,15 @@ h1 {
   color: #c6b3f7;
 }
 
-/* Loading overlay */
 #loading-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background-color: rgba(28, 27, 42, 0.7); /* translucent */
+  background-color: rgba(28, 27, 42, 0.7);
   z-index: 9000;
   justify-content: center;
   align-items: center;
-  pointer-events: none; /* allow interaction behind */
+  pointer-events: none;
   animation: fadeInOverlay 0.5s ease-in-out;
 }
 
@@ -270,7 +269,6 @@ h1 {
   100% { transform: rotate(360deg); }
 }
 
-/* Falling logos */
 .falling-clone {
   position: absolute;
   width: 40px;
@@ -297,7 +295,7 @@ main {
   padding: 4em 2em;
   background: linear-gradient(to bottom, #1e1e1e, #141414);
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
-  flex: 1; /* Allows the main content to expand and push footer to the bottom */
+  flex: 1;
 }
 
 footer {
@@ -342,7 +340,6 @@ footer p {
   }
 }
 
-/* Footer blow-up animation */
 @keyframes blowUp {
   0% {
     transform: scale(1);

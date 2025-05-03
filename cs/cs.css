@@ -1,0 +1,195 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e6e1fa;
+    overflow-x: hidden;
+    background-color: #1e1e1e;
+  }
+  
+  body {
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  header {
+    display: flex;
+    justify-content: center;
+    padding: 1.5em;
+    background: linear-gradient(145deg, #1e1e2f, #3a3a4d);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5), 0px 0px 15px rgba(60, 60, 60, 0.3);
+    border-bottom: 2px solid #00ff00;
+    position: relative;
+    z-index: 2;
+  }
+  
+  header .logo {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background-color: #333;
+    padding: 12px;
+    box-shadow: 0 0 20px rgba(120, 120, 255, 0.5);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  
+  header .logo:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
+  }
+  
+  main {
+    text-align: center;
+    padding: 3em;
+    background: #121212;
+  }
+  
+  h1 {
+    color: #00ff00;
+    font-size: 3em;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-top: 3em;
+    flex-wrap: wrap;
+  }
+  
+  .circle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 300px;
+    background-color: #3a3a4d;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 0 15px rgba(180, 142, 173, 0.4);
+    text-decoration: none;
+    color: #e6e1fa;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+    position: relative;
+  }
+  
+  .circle-btn .preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: block;
+    z-index: 1;
+  }
+  
+  .circle-btn .preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  .circle-btn:hover {
+    background-color: #7a6acf;
+    transform: scale(1.05);
+  }
+  
+  .circle-btn .btn-text {
+    position: relative;
+    z-index: 2;
+    color: #e6e1fa;
+    transition: color 0.3s ease;
+  }
+  
+  .circle-btn:hover .btn-text {
+    color: #ff0;
+  }
+  
+  .circle-btn .btn-text {
+    position: relative;
+    z-index: 2;
+    color: #e6e1fa;
+    font-weight: 900;
+    font-size: 1.5em;
+    text-align: center;
+    line-height: 300px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6),
+                 0 0 10px rgba(0, 0, 0, 0.3);
+    -webkit-text-stroke: 2px #000;
+    -moz-text-stroke: 2px #000;
+    text-stroke: 2px #000;
+  }   
+  
+  footer {
+    text-align: center;
+    padding: 1.5em 1em;
+    background: linear-gradient(145deg, #3a3a4d, #232337);
+    color: #c6b3f7;
+    font-size: 1em;
+    box-shadow: inset 0 1px 5px rgba(255, 255, 255, 0.05);
+    border-top: 2px solid #00ff00;
+    position: relative;
+    z-index: 1;
+  }
+  
+  footer p {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  header::before, footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    z-index: -1;
+  }
+  
+  footer::before {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+  
+  header, footer {
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+  }
+  
+  header:hover, footer:hover {
+    background: linear-gradient(145deg, #232337, #3a3a4d);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+  
+  a {
+    color: #f8f8f8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  a:hover {
+    color: #ff0;
+  }
+  
+  #preview-container {
+    margin-top: 3em;
+    text-align: center;
+    padding: 2em;
+    background: #121212;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  }
+  
+  #preview-iframe {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    margin-top: 2em;
+  }
+  

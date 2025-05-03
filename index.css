@@ -361,3 +361,22 @@ footer p {
   animation: blowUp 1s ease forwards;
   pointer-events: none;
 }
+
+@media (max-width: 600px) {
+  .header-text {
+    flex-direction: column;
+    gap: 1em;
+    text-align: center;
+  }
+
+  .left-text,
+  .right-text {
+    font-size: 2.5em;
+    transform: none;
+  }
+
+  .logo {
+    width: 100px;
+    height: 100px;
+  }
+}

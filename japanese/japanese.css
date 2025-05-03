@@ -1,4 +1,4 @@
-/* japanese.css */
+/* ainu.css */
 
 html, body {
   height: 100%;
@@ -206,6 +206,11 @@ footer {
   #pdf-viewer iframe {
     width: 95%;
     height: 80%;
+  }
+
+  .header-text {
+    flex-direction: column;
+    gap: 0.5em;
   }
 }
 

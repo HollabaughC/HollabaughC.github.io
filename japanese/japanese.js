@@ -1,12 +1,16 @@
-// japanese.js
-
-const pdfButton = document.getElementById('pdf-button');
+const pdfButtons = document.querySelectorAll('.pdf-button');
 const pdfViewer = document.getElementById('pdf-viewer');
 const closeButton = document.getElementById('close-pdf');
 const fullscreenButton = document.getElementById('fullscreen-pdf');
+const iframe = document.querySelector('#pdf-viewer iframe'); // Get the iframe
 
-pdfButton.addEventListener('click', () => {
-  pdfViewer.style.display = 'flex';
+// Add event listeners to all PDF buttons
+pdfButtons.forEach(button => {
+  button.addEventListener('click', (event) => {
+    const pdfFile = event.target.getAttribute('data-pdf'); // Get the PDF file name from the data-pdf attribute
+    iframe.src = pdfFile; // Load the selected PDF
+    pdfViewer.style.display = 'flex'; // Show the PDF viewer
+  });
 });
 
 closeButton.addEventListener('click', () => {
@@ -14,7 +18,6 @@ closeButton.addEventListener('click', () => {
 });
 
 fullscreenButton.addEventListener('click', () => {
-  const iframe = document.querySelector('#pdf-viewer iframe');
   if (iframe.requestFullscreen) {
     iframe.requestFullscreen();
   } else if (iframe.webkitRequestFullscreen) { /* Safari */

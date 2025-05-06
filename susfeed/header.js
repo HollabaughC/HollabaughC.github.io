@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="articles.html">Susarticles</a></li>
-                    <li><a href="#">Quizzes</a></li>
+                    <li><a href="quiz.html">Quizzes</a></li>
                     <li><a href="https://www.youtube.com/@SusFeed">SusFeed Video</a></li>
                     <li><a href="about.html">About</a></li>
                 </ul>
@@ -22,5 +22,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (headerDiv) {
         headerDiv.innerHTML = headerContent;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const footerContent = `
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2025 SusFeed. All rights reserved.</p>
+            </div>
+        </footer>
+    `;
+    
+    const footerDiv = document.querySelector('.site-footer');
+    
+    if (footerDiv) {
+        footerDiv.innerHTML = footerContent;
     }
 });

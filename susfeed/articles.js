@@ -17,7 +17,6 @@ function renderArticles(articlesToLoad) {
     card.href = articlePath;
     card.className = "article-card";
 
-    // Determine if this article is among the first 9 in allArticles
     const articleIndex = allArticles.findIndex(
       a => a.folder === folder && a.file === file
     );
@@ -122,7 +121,7 @@ fetch('articles/index.json')
   .then(res => res.json())
   .then(data => {
     allArticles = data;
-    sortArticles("newest"); // Default sort
+    sortArticles("newest");
   })
   .catch(err => {
     console.error("Error loading article index:", err);

@@ -315,3 +315,43 @@ html, body {
   background-color: #ba1a1a;
   box-shadow: inset 0 -2px 0 #ffcccc;
 }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 2.5fr 2fr 1.5fr;
+  gap: 40px;
+  padding: 40px 0;
+}
+
+.featured-quizzes {
+  padding: 40px 20px;
+  background-color: #f2f2f2;
+  border-top: 5px solid #b30000;
+  text-align: center;
+}
+
+.featured-quizzes .article-title,
+.new-quizzes .card-title {
+  color: #ba1a1a;
+}
+
+.new-quizzes {
+  margin-top: 40px;
+}
+
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-article .article-title,
+  .featured-quizzes .article-title,
+  .new-articles .section-title,
+  .new-quizzes .card-title {
+    text-align: center;
+  }
+
+  .new-quizzes .article-grid {
+    grid-template-columns: 1fr;
+  }
+}

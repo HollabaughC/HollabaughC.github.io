@@ -330,12 +330,8 @@ html, body {
 }
 
 .featured-quizzes .article-title,
-.new-quizzes .card-title {
+.card-title {
   color: #ba1a1a;
-}
-
-.new-quizzes {
-  margin-top: 40px;
 }
 
 @media (max-width: 1024px) {
@@ -346,11 +342,11 @@ html, body {
   .featured-article .article-title,
   .featured-quizzes .article-title,
   .new-articles .section-title,
-  .new-quizzes .card-title {
+  .card-title {
     text-align: center;
   }
 
-  .new-quizzes .article-grid {
+  .article-grid {
     grid-template-columns: 1fr;
   }
 }

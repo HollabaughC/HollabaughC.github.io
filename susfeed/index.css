@@ -357,7 +357,7 @@ html, body {
   border: 1px solid #ddd;
   border-radius: 12px;
   max-width: 500px;
-  margin: 40px auto; /* Center horizontally with margin on top */
+  margin: 40px auto;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;

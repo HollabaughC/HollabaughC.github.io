@@ -350,3 +350,79 @@ html, body {
     grid-template-columns: 1fr;
   }
 }
+
+.grade-calculator {
+  padding: 30px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 40px auto; /* Center horizontally with margin on top */
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grade-calculator h1 {
+  margin-bottom: 20px;
+  color: #ba1a1a;
+  font-size: 28px;
+  text-align: center;
+  width: 100%;
+}
+
+.assignments-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.assignment {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+  gap: 10px;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.assignment input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #ba1a1a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #8e0000;
+}
+
+#result {
+  margin-top: 25px;
+  font-size: 18px;
+  color: #ba1a1a;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}

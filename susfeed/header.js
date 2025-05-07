@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const footerContent = `
         <footer class="site-footer">
             <div class="container">
-                <p>&copy; 2025 SusFeed. All rights reserved.</p>
+                <a href="gif/easteregg.html"><p>&copy; 2025 SusFeed. All rights reserved.</p></a>
             </div>
         </footer>
     `;

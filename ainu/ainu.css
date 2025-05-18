@@ -244,3 +244,13 @@ footer p {
     0% { transform: scale(0.6); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+}

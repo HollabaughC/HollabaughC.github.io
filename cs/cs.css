@@ -240,3 +240,13 @@ h1 {
   justify-content: center;
   height: 100%;
 }
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+}

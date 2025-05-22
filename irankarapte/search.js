@@ -78,11 +78,34 @@ function searchWords(words, query, learnedWords) {
   const lowerQuery = query.toLowerCase();
   return words
     .filter(word => learnedWords.includes(word.word))
-    .filter(word => 
+    .filter(word =>
       word.word.toLowerCase().includes(lowerQuery) ||
       word.kana.toLowerCase().includes(lowerQuery) ||
       word.meaning.toLowerCase().includes(lowerQuery)
     );
+}
+
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    const jaVoice = voices.find(voice => voice.lang.startsWith('ja')) || null;
+    if (jaVoice) {
+      utterance.voice = jaVoice;
+      utterance.lang = jaVoice.lang;
+    } else {
+      utterance.lang = 'ja-JP';
+    }
+    speechSynthesis.speak(utterance);
+  } else {
+    alert('Speech synthesis not supported in this browser.');
+  }
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+  };
 }
 
 function displayResults(filteredWords) {
@@ -98,6 +121,7 @@ function displayResults(filteredWords) {
       <th>Ainu Word</th>
       <th>Katakana</th>
       <th>Meaning</th>
+      <th>Speak</th>
     </tr>
   `;
   table.appendChild(thead);
@@ -105,7 +129,7 @@ function displayResults(filteredWords) {
   const tbody = document.createElement('tbody');
   if (filteredWords.length === 0) {
     const row = document.createElement('tr');
-    row.innerHTML = `<td colspan="3">No results found</td>`;
+    row.innerHTML = `<td colspan="4">No results found</td>`;
     tbody.appendChild(row);
   } else {
     filteredWords.forEach(entry => {
@@ -115,6 +139,31 @@ function displayResults(filteredWords) {
         <td>${entry.kana}</td>
         <td>${entry.meaning}</td>
       `;
+
+      const speakCell = document.createElement('td');
+      const speakBtn = document.createElement('button');
+      speakBtn.textContent = '🔊';
+      speakBtn.title = `Speak: ${entry.kana}`;
+      speakBtn.style.cursor = 'pointer';
+      speakBtn.style.fontSize = '1.2em';
+      speakBtn.style.padding = '4px 8px';
+      speakBtn.style.borderRadius = '8px';
+      speakBtn.style.border = '1px solid #a37d52';
+      speakBtn.style.background = 'transparent';
+      speakBtn.style.color = '#7c4b2c';
+      speakBtn.style.transition = 'color 0.3s ease';
+
+      speakBtn.addEventListener('mouseenter', () => {
+        speakBtn.style.color = '#a37d52';
+      });
+      speakBtn.addEventListener('mouseleave', () => {
+        speakBtn.style.color = '#7c4b2c';
+      });
+
+      speakBtn.addEventListener('click', () => speakText(entry.kana));
+      speakCell.appendChild(speakBtn);
+      row.appendChild(speakCell);
+
       tbody.appendChild(row);
     });
   }
@@ -145,7 +194,7 @@ function createSearchInput() {
   const searchButton = document.getElementById('searchButton');
   const searchInput = document.getElementById('search');
 
-  searchButton.addEventListener('click', function() {
+  searchButton.addEventListener('click', function () {
     const query = searchInput.value.trim();
     if (query) {
       const learnedWords = loadLearnedWords(currentFileName);
@@ -153,9 +202,15 @@ function createSearchInput() {
       displayResults(filteredWords);
     }
   });
+
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      searchButton.click();
+    }
+  });
 }
 
-window.loadSelectedJSON = function() {
+window.loadSelectedJSON = function () {
   const select = document.getElementById('levelSelector');
   loadWords(select.value);
   createSearchInput();

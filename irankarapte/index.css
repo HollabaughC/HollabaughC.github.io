@@ -359,7 +359,6 @@ button:hover {
   padding-top: 1.5em;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 600px) {
   body {
     padding: 1em;
@@ -387,5 +386,50 @@ button:hover {
 
   #meaning {
     font-size: 1.1em;
+  }
+}
+
+#speakKanaBtn {
+  background: none;
+  border: none;
+  color: #a37d52;
+  font-size: 1.3em;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  padding: 0.2em 0;
+  margin-top: 1em;
+  text-shadow: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+  animation: glowTextBtn 3s ease-in-out infinite alternate;
+  outline: none;
+  box-shadow: none
+}
+
+#speakKanaBtn:hover {
+  color: #d9a05a;
+  transform: scale(1.05);
+}
+
+#speakKanaBtn:active {
+  transform: scale(0.97);
+}
+
+#speakKanaBtn:focus {
+  outline: none;
+  text-decoration: underline;
+  text-decoration-color: #d9a05a;
+  text-underline-offset: 3px;
+}
+
+@keyframes glowTextBtn {
+  0% {
+    color: #a37d52;
+    text-shadow: 0 0 5px #d9a05a;
+  }
+  100% {
+    color: #d9a05a;
+    text-shadow: 0 0 15px #d9a05a;
   }
 }

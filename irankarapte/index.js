@@ -1,6 +1,18 @@
 let words = [];
 let shownIndices = [];
 let currentFileName = 'index.json'; // default
+let japaneseVoice = null;
+
+// Load Japanese voice from speech synthesis API
+function loadJapaneseVoice() {
+  const voices = speechSynthesis.getVoices();
+  japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadJapaneseVoice;
+}
+loadJapaneseVoice();
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -80,3 +92,31 @@ function loadSelectedJSON() {
 }
 
 loadWords();
+
+// Add event listener for speak button
+document.getElementById('speakKanaBtn').addEventListener('click', () => {
+  const kanaText = document.getElementById('kana').textContent;
+  const button = document.getElementById('speakKanaBtn');
+
+  if (!kanaText) return;
+
+  // Fallback message if no Japanese voice is available
+  if (!japaneseVoice) {
+    alert('Japanese voice not available on this device or browser.');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(kanaText);
+  utterance.voice = japaneseVoice;
+  utterance.lang = 'ja-JP';
+
+  utterance.onstart = () => {
+    button.disabled = true;
+  };
+
+  utterance.onend = () => {
+    button.disabled = false;
+  };
+
+  speechSynthesis.speak(utterance);
+});

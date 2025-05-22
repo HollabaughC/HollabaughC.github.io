@@ -1,8 +1,6 @@
 import('./header.js');
 
 let words = [];
-let voices = [];
-let voicesReady = false;
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -42,27 +40,10 @@ async function loadWords(fileName = 'index.json') {
   }
 }
 
-// Ensure voices are loaded
-function loadVoices() {
-  voices = speechSynthesis.getVoices();
-  voicesReady = voices.length > 0;
-  if (!voicesReady) {
-    // Retry loading after voiceschanged fires
-    speechSynthesis.onvoiceschanged = () => {
-      voices = speechSynthesis.getVoices();
-      voicesReady = true;
-    };
-  }
-}
-
-function speakText(text, retry = 0) {
-  if (!voicesReady && retry < 5) {
-    setTimeout(() => speakText(text, retry + 1), 200);
-    return;
-  }
-
+function speakText(text) {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
     const jaVoice = voices.find(voice => voice.lang.startsWith('ja')) || null;
     if (jaVoice) {
       utterance.voice = jaVoice;
@@ -74,6 +55,12 @@ function speakText(text, retry = 0) {
   } else {
     alert('Speech synthesis not supported in this browser.');
   }
+}
+
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = () => {
+    speechSynthesis.getVoices();
+  };
 }
 
 function displayDictionary(learnedEntries) {
@@ -145,7 +132,6 @@ window.loadSelectedJSON = function() {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  loadVoices();
   const select = document.getElementById('levelSelector');
   loadWords(select.value);
 });

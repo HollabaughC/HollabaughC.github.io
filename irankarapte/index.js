@@ -1,26 +1,16 @@
 let words = [];
 let shownIndices = [];
-let currentFileName = 'index.json';
+let currentFileName = 'index.json'; // default
 let japaneseVoice = null;
 
-function loadJapaneseVoice(attempts = 10) {
+// Load Japanese voice from speech synthesis API
+function loadJapaneseVoice() {
   const voices = speechSynthesis.getVoices();
-
-  if (!voices.length && attempts > 0) {
-    return setTimeout(() => loadJapaneseVoice(attempts - 1), 250);
-  }
-
-  japaneseVoice = voices.find(voice => voice.lang === 'ja-JP') ||
-                  voices.find(voice => voice.lang && voice.lang.toLowerCase().includes('ja'));
-
-  if (!japaneseVoice && attempts === 0) {
-    const warning = document.getElementById('browserWarning');
-    if (warning) warning.style.display = 'inline';
-  }
+  japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
 }
 
-if ('onvoiceschanged' in speechSynthesis) {
-  speechSynthesis.onvoiceschanged = () => loadJapaneseVoice(10);
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadJapaneseVoice;
 }
 loadJapaneseVoice();
 
@@ -47,7 +37,8 @@ function saveShownIndices(key, indices) {
 
 async function loadWords(fileName = 'index.json') {
   try {
-    currentFileName = fileName;
+    currentFileName = fileName; // store globally
+
     const res = await fetch(fileName);
     words = await res.json();
 
@@ -102,14 +93,16 @@ function loadSelectedJSON() {
 
 loadWords();
 
+// Add event listener for speak button
 document.getElementById('speakKanaBtn').addEventListener('click', () => {
   const kanaText = document.getElementById('kana').textContent;
   const button = document.getElementById('speakKanaBtn');
 
   if (!kanaText) return;
 
+  // Fallback message if no Japanese voice is available
   if (!japaneseVoice) {
-    alert('Japanese voice not available on this device or browser. Try Chrome or Firefox.');
+    alert('Japanese voice not available on this device or browser.');
     return;
   }
 

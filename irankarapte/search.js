@@ -2,6 +2,29 @@ import('./header.js');
 
 let words = [];
 let currentFileName = 'index.json';
+let japaneseVoice = null;
+
+// Load Japanese voice robustly
+function loadJapaneseVoice(attempts = 10) {
+  const voices = speechSynthesis.getVoices();
+
+  if (!voices.length && attempts > 0) {
+    return setTimeout(() => loadJapaneseVoice(attempts - 1), 250);
+  }
+
+  japaneseVoice = voices.find(voice => voice.lang === 'ja-JP') ||
+                  voices.find(voice => voice.lang.toLowerCase().includes('ja'));
+
+  if (!japaneseVoice && attempts === 0) {
+    const warning = document.getElementById('browserWarning');
+    if (warning) warning.style.display = 'inline';
+  }
+}
+
+if ('onvoiceschanged' in speechSynthesis) {
+  speechSynthesis.onvoiceschanged = () => loadJapaneseVoice(10);
+}
+loadJapaneseVoice();
 
 function getCookie(name) {
   const value = `; ${document.cookie}`;
@@ -86,26 +109,21 @@ function searchWords(words, query, learnedWords) {
 }
 
 function speakText(text) {
+  if (!text) return;
+
   if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = speechSynthesis.getVoices();
-    const jaVoice = voices.find(voice => voice.lang.startsWith('ja')) || null;
-    if (jaVoice) {
-      utterance.voice = jaVoice;
-      utterance.lang = jaVoice.lang;
-    } else {
-      utterance.lang = 'ja-JP';
+    if (!japaneseVoice) {
+      alert('Japanese voice not available on this device or browser. Try Chrome or Firefox.');
+      return;
     }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.voice = japaneseVoice;
+    utterance.lang = 'ja-JP';
     speechSynthesis.speak(utterance);
   } else {
     alert('Speech synthesis not supported in this browser.');
   }
-}
-
-if (speechSynthesis.onvoiceschanged !== undefined) {
-  speechSynthesis.onvoiceschanged = () => {
-    speechSynthesis.getVoices();
-  };
 }
 
 function displayResults(filteredWords) {
@@ -214,7 +232,7 @@ window.loadSelectedJSON = function () {
   const select = document.getElementById('levelSelector');
   loadWords(select.value);
   createSearchInput();
-}
+};
 
 loadWords();
 createSearchInput();

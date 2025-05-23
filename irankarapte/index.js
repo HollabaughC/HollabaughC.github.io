@@ -1,9 +1,8 @@
 let words = [];
 let shownIndices = [];
-let currentFileName = 'index.json'; // default
+let currentFileName = 'index.json';
 let japaneseVoice = null;
 
-// Load Japanese voice from speech synthesis API
 function loadJapaneseVoice() {
   const voices = speechSynthesis.getVoices();
   japaneseVoice = voices.find(voice => voice.lang === 'ja-JP');
@@ -93,14 +92,12 @@ function loadSelectedJSON() {
 
 loadWords();
 
-// Add event listener for speak button
 document.getElementById('speakKanaBtn').addEventListener('click', () => {
   const kanaText = document.getElementById('kana').textContent;
   const button = document.getElementById('speakKanaBtn');
 
   if (!kanaText) return;
 
-  // Fallback message if no Japanese voice is available
   if (!japaneseVoice) {
     alert('Japanese voice not available on this device or browser.');
     return;

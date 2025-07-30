@@ -36,13 +36,18 @@ function saveShownIndices(key, indices) {
 
 async function loadWords(fileName = 'index.json') {
   try {
-    currentFileName = fileName; // store globally
+    if (!fileName.startsWith('levels/')) {
+      fileName = 'levels/' + fileName;
+    }
+
+    currentFileName = fileName;
 
     const res = await fetch(fileName);
     words = await res.json();
 
     const cookieKey = `shownIndices_${fileName}`;
     shownIndices = loadShownIndices(cookieKey);
+
     if (shownIndices.length >= words.length) {
       shownIndices = [];
       saveShownIndices(cookieKey, shownIndices);

@@ -25,7 +25,12 @@ function saveShownIndices(key, indices) {
 }
 
 async function loadWords(fileName = 'index.json') {
+  if (!fileName.startsWith('levels/')) {
+    fileName = 'levels/' + fileName;
+  }
+
   currentFileName = fileName;
+
   try {
     const res = await fetch(fileName);
     words = await res.json();
@@ -202,6 +207,8 @@ function createSearchInput() {
       displayResults(filteredWords);
     }
   });
+
+  document.getElementById('levelSelector').addEventListener('change', loadSelectedJSON);
 
   searchInput.addEventListener('keydown', e => {
     if (e.key === 'Enter') {

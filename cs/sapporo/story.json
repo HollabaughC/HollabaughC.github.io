@@ -1,0 +1,1755 @@
+{
+  "start": {
+    "lines": [
+      {"character": "system", "text": "Welcome to Sapporo. You have been sent on a mission, one you will learn in due time."}
+    ],
+    "choices": [
+      {
+        "text": "Understood.",
+        "next": "start1"
+      },
+      {
+        "text": "Understood.",
+        "next": "start1"
+      },
+      {
+        "text": "Understood.",
+        "next": "start1"
+      }
+    ]
+  },
+
+  "start1": {
+    "lines": [
+      {"character": "system", "text": "Before we begin, you have been outfitted with multiple cybernetic enhancements: a quickhacking module, a neural implant, and arm muscle enhancements. Which do you choose as your primary device?"}
+    ],
+    "choices": [
+      {
+        "text": "Quickhacking module (Hacking)",
+        "next": "start2",
+        "skillChange": {"hacking": 2}
+      },
+      {
+        "text": "Neural implant (Persuasion)",
+        "next": "start2",
+        "skillChange": {"persuasion": 2}
+      },
+      {
+        "text": "Arm muscle enhancements (Combat)",
+        "next": "start2",
+        "skillChange": {"combat": 2}
+      }
+    ]
+  },
+
+  "start2": {
+    "lines": [
+      {"character": "system", "text": "Right, you are a mercenary. You find yourself in a car. By your surroundings, you must be in the center of the city."}
+    ],
+    "choices": [
+      {
+        "text": "Look up.",
+        "next": "start3"
+      },
+      {
+        "text": "Look up.",
+        "next": "start3"
+      },
+      {
+        "text": "Look up.",
+        "next": "start3"
+      }
+    ]
+  },
+
+  "start3": {
+    "lines": [
+      {"character": "system", "text": "You see a woman in her twenties."}
+    ],
+    "choices": [
+      {
+        "text": "Listen.",
+        "next": "mission"
+      },
+      {
+        "text": "Listen.",
+        "next": "mission"
+      },
+      {
+        "text": "Listen.",
+        "next": "mission"
+      }
+    ]
+  },
+  
+  "mission": {
+    "lines": [
+      {"character": "raven", "text": "Are you okay? You took quite the beating there you know."}
+    ],
+    "choices": [
+      {
+        "text": "I'm fine.",
+        "next": "mission1"
+      },
+      {
+        "text": "Been better.",
+        "next": "mission2"
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "mission3"
+      }
+    ]
+  },
+
+  "mission1": {
+    "lines": [
+      {"character": "raven", "text": "Good to hear. Now, are you ready to hear the gig?"}
+    ],
+    "choices": [
+      {
+        "text": "I'm all ears.",
+        "next": "gig"
+      },
+      {
+        "text": "Go on...",
+        "next": "gig"
+      },
+      {
+        "text": "No.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "mission2": {
+    "lines": [
+      {"character": "raven", "text": "Sorry about that. Now, are you ready to hear the gig?"}
+    ],
+    "choices": [
+      {
+        "text": "I'm all ears.",
+        "next": "gig"
+      },
+      {
+        "text": "Go on...",
+        "next": "gig"
+      },
+      {
+        "text": "No.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "mission3": {
+    "lines": [
+      {"character": "raven", "text": "Oookay? Now, are you ready to hear the gig?"}
+    ],
+    "choices": [
+      {
+        "text": "I'm all ears.",
+        "next": "gig"
+      },
+      {
+        "text": "Go on...",
+        "next": "gig"
+      },
+      {
+        "text": "No.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "gig": {
+    "lines": [
+      {"character": "raven", "text": "You and I have been tasked by a secret benefactor with infiltrating the governor's mansion and stealing an artifact."}
+    ],
+    "choices": [
+      {
+        "text": "Go on...",
+        "next": "gig1"
+      },
+      {
+        "text": "The governor? The one armed to the teeth with corporate bodyguards?",
+        "next": "gig2"
+      },
+      {
+        "text": "And am I allowed to ask who this 'benefactor' is?",
+        "next": "gig3"
+      }
+    ]
+  },
+
+  "gig1": {
+    "lines": [
+      {"character": "raven", "text": "Well, that's it. I was just told about some implant, no idea what else is in store, just a photo. You in?"}
+    ],
+    "choices": [
+      {
+        "text": "Hell yeah!",
+        "next": "gig_accept",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Well, I guess I have nothing really to lose?",
+        "next": "gig_accept",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "No.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "gig2": {
+    "lines": [
+      {"character": "raven", "text": "Precisely. He has some implant, photo right here. No idea what else is in store, but I hear you're the best. You in?"}
+    ],
+    "choices": [
+      {
+        "text": "Hell yeah!",
+        "next": "gig_accept",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Fine.",
+        "next": "gig_accept",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "No.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "gig3": {
+    "lines": [
+      {"character": "raven", "text": "Not until we have the goods and go get paid, I barely know myself."}
+    ],
+    "choices": [
+      {
+        "text": "Huh.",
+        "next": "gig"
+      },
+      {
+        "text": "How disappointing.",
+        "next": "gig"
+      },
+      {
+        "text": "I'm out.",
+        "next": "end_wimp"
+      }
+    ]
+  },
+
+  "gig_accept": {
+    "lines": [
+      {"character": "raven", "text": "Alright, I hope you know what you're in for. Let's get a move on then."}
+    ],
+    "choices": [
+      {
+        "text": "I know what I'm doing.",
+        "next": "gig_accept1"
+      },
+      {
+        "text": "Understood, I hope the risk is worth it.",
+        "next": "gig_accept1"
+      },
+      {
+        "text": "I’m ready for anything.",
+        "next": "gig_accept1"
+      }
+    ]
+  },
+
+  "gig_accept1": {
+    "lines": [
+      {"character": "system", "text": "You continue on the road to the governor, now would be the time to get to know your partner."}
+    ],
+    "choices": [
+      {
+        "text": "So, where are you from?",
+        "next": "gig_accept2"
+      },
+      {
+        "text": "What made you accept this gig anyways?",
+        "next": "gig_accept3"
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "gig_accept4"
+      }
+    ]
+  },
+
+  "gig_accept2": {
+    "lines": [
+      {"character": "raven", "text": "Otaru, small town outside the city. My great grandparents were forced out of Hakodate by the Shogun and we kinda ended up there."}
+    ],
+    "choices": [
+      {
+        "text": "Oh, I'm sorry to hear that.",
+        "next": "gig_accept5",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Sounds rough.",
+        "next": "gig_accept5",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "gig_accept5"
+      }
+    ]
+  },
+
+  "gig_accept3": {
+    "lines": [
+      {"character": "raven", "text": "Money, same as anyone else. My great grandparents were stripped of their propery and reputation, family never recovered since."}
+    ],
+    "choices": [
+      {
+        "text": "I'm so sorry.",
+        "next": "gig_accept5",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Sounds, awful.",
+        "next": "gig_accept5",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "gig_accept5"
+      }
+    ]
+  },
+
+  "gig_accept4": {
+    "lines": [
+      {"character": "system", "text": "You say nothing. Why bother getting to know her."}
+    ],
+    "choices": [
+      {
+        "text": "Exactly.",
+        "next": "gig_accept5"
+      },
+      {
+        "text": "Exactly.",
+        "next": "gig_accept5"
+      },
+      {
+        "text": "Exactly.",
+        "next": "gig_accept5"
+      }
+    ]
+  },
+
+  "gig_accept5": {
+    "lines": [
+      {"character": "system", "text": "You reach the coast north of Sapporo. You don't see any buildings in the immediate area, just an island in the distance obscured by fog."}
+    ],
+    "choices": [
+      {
+        "text": "So, where is his mansion?",
+        "next": "gig_accept6"
+      },
+      {
+        "text": "You know, I would have expected something more... obvious?",
+        "next": "gig_accept6"
+      },
+      {
+        "text": "So why are we in the middle of nowhere?",
+        "next": "gig_accept6"
+      }
+    ]
+  },
+
+  "gig_accept6": {
+    "lines": [
+      {"character": "raven", "text": "Ah, you really new here. He lives on that island over there, though the fog does make it pretty hard to actually see."}
+    ],
+    "choices": [
+      {
+        "text": "So, if we can't see it, how do we get in?",
+        "next": "gig_accept7"
+      },
+      {
+        "text": "I suppose it makes sense for someone that high-profile. How do we make it inside?",
+        "next": "gig_accept7"
+      },
+      {
+        "text": "There has to be some way around this fog, right?",
+        "next": "gig_accept7"
+      }
+    ]
+  },
+
+  "gig_accept7": {
+    "lines": [
+      {"character": "raven", "text": "That's just it, we don't get inside by swimming over. Rumor has it, the island is just a facade with a larger facility underneath. Stands to reason there is a land access point."}
+    ],
+    "choices": [
+      {
+        "text": "But I don't see anything of the sort?",
+        "next": "gig_accept8"
+      },
+      {
+        "text": "Do you really believe some crackpot rumor?",
+        "next": "gig_accept9",
+        "affinityChange": {"raven": -1}
+      },
+      {
+        "text": "I doubt he would make it easy to find...",
+        "next": "gig_accept10"
+      }
+    ]
+  },
+
+  "gig_accept8": {
+    "lines": [
+      {"character": "raven", "text": "Well, we should look around then. Maybe we can find something."}
+    ],
+    "choices": [
+      {
+        "text": "*Scan the area for quickhack vulnerabilities*",
+        "next": "gig_accept11",
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "*Ask Raven to check underwater*",
+        "next": "gig_accept12",
+        "skillChange": {"persuasion": 1},
+        "affinityReq": {"raven": 1}
+      },
+      {
+        "text": "*Try knocking over rocks for a trapdoor*",
+        "next": "gig_accept13",
+        "skillChange": {"combat": 1}
+      }
+    ]
+  },
+
+  "gig_accept9": {
+    "lines": [
+      {"character": "raven", "text": "Humor me, beats the hell out of swimming over."}
+    ],
+    "choices": [
+      {
+        "text": "*Scan the area for quickhack vulnerabilities*",
+        "next": "gig_accept11",
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "*Ask Raven to check underwater*",
+        "next": "gig_accept12",
+        "skillChange": {"persuasion": 1},
+        "affinityReq": {"raven": 1}
+      },
+      {
+        "text": "*Try knocking over rocks for a trapdoor*",
+        "next": "gig_accept13",
+        "skillChange": {"combat": 1}
+      }
+    ]
+  },
+
+  "gig_accept10": {
+    "lines": [
+      {"character": "raven", "text": "Precisely. But maybe he got cocky, look around, maybe we can find a way in."}
+    ],
+    "choices": [
+      {
+        "text": "*Scan the area for quickhack vulnerabilities*",
+        "next": "gig_accept11",
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "*Ask Raven to check underwater*",
+        "next": "gig_accept12",
+        "skillChange": {"persuasion": 1},
+        "affinityReq": {"raven": 1}
+      },
+      {
+        "text": "*Try knocking over rocks*",
+        "next": "gig_accept13",
+        "skillChange": {"combat": 1}
+      }
+    ]
+  },
+
+  "gig_accept11": {
+    "lines": [
+      {"character": "system", "text": "You find a quickhack point, suspicious to find in a bush..."}
+    ],
+    "choices": [
+      {
+        "text": "*Hack whatever the thing is*",
+        "next": "hack_in",
+        "skillReq": {"hacking": 1}
+      },
+      {
+        "text": "*Hack whatever the thing is*",
+        "next": "hack_in",
+        "skillReq": {"hacking": 1}
+      },
+      {
+        "text": "*Hack whatever the thing is*",
+        "next": "hack_in",
+        "skillReq": {"hacking": 1}
+      }
+    ]
+  },
+
+  "gig_accept12": {
+    "lines": [
+      {"character": "raven", "text": "Fine, but you owe me one."}
+    ],
+    "choices": [
+      {
+        "text": "Yeah yeah.",
+        "next": "talk_in",
+        "skillReq": {"persuasion": 1}
+      },
+      {
+        "text": "You can hold me to it.",
+        "next": "talk_in",
+        "skillReq": {"persuasion": 1}
+      },
+      {
+        "text": "Don't worry, I'll repay you ;).",
+        "next": "talk_in",
+        "skillReq": {"persuasion": 1}
+      }
+    ]
+  },
+
+"gig_accept13": {
+    "lines": [
+      {"character": "system", "text": "You found a trapdoor. Seems a bit careless to put it under a rock that easy to move."}
+    ],
+    "choices": [
+      {
+        "text": "*Open the door*",
+        "next": "punch_in",
+        "skillReq": {"combat": 1}
+      },
+      {
+        "text": "*Open the door*",
+        "next": "punch_in",
+        "skillReq": {"combat": 1}
+      },
+      {
+        "text": "*Open the door*",
+        "next": "punch_in",
+        "skillReq": {"combat": 1}
+      }
+    ]
+  },
+
+"hack_in": {
+    "lines": [
+      {"character": "raven", "text": "Wow, color me impressed! Well, and baffled. What kind of idiot leaves a vulnerable trapdoor this close to the road?"}
+    ],
+    "choices": [
+      {
+        "text": "Could be a trap.",
+        "next": "hack_in1"
+      },
+      {
+        "text": "Luckily for us, the idiot whose mansion we're breaking in to.",
+        "next": "hack_in2"
+      },
+      {
+        "text": "Give me some credit, it wasn't *that* easy.",
+        "next": "hack_in3"
+      }
+    ]
+  },
+
+  "hack_in1": {
+    "lines": [
+      {"character": "raven", "text": "Could be, but we won't know until we continue. You ready?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes, let's go.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "All good.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "One sec, let me check for cameras.",
+        "next": "hack_in5",
+        "skillReq": {"hacking": 3}
+      }
+    ]
+  },
+
+  "hack_in2": {
+    "lines": [
+      {"character": "raven", "text": "Precisely. You ready?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes, let's go.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "All good.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "One sec, let me check for cameras.",
+        "next": "hack_in5",
+        "skillReq": {"hacking": 3}
+      }
+    ]
+  },
+
+  "hack_in3": {
+    "lines": [
+      {"character": "raven", "text": "Some humility? I like that. You ready?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes, let's go.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "All good.",
+        "next": "hack_in4"
+      },
+      {
+        "text": "One sec, let me check for cameras.",
+        "next": "hack_in5",
+        "skillReq": {"hacking": 3}
+      }
+    ]
+  },
+
+  "hack_in4": {
+    "lines": [
+      {"character": "system", "text": "You go down the trapdoor. It appears to lead to a maintenence shaft going down beneath the ocean. You guess Raven was right after all."}
+    ],
+    "choices": [
+      {
+        "text": "*Continue down*",
+        "next": "hack_in6"
+      },
+      {
+        "text": "*Continue down*",
+        "next": "hack_in6"
+      },
+      {
+        "text": "*Continue down*",
+        "next": "hack_in6"
+      }
+    ]
+  },
+
+  "hack_in5": {
+    "lines": [
+      {"character": "system", "text": "No cameras spotted. Weird. May as well go ahead."}
+    ],
+    "choices": [
+      {
+        "text": "All clear.",
+        "next": "hack_in4",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "All clear.",
+        "next": "hack_in4",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "All clear.",
+        "next": "hack_in4",
+        "affinityChange": {"raven": 1}
+      }
+    ]
+  },
+
+  "hack_in6": {
+    "lines": [
+      {"character": "raven", "text": "Just an FYI, I have no idea what we will find down here until we reach the mansion itself. Keep a look out for any tech that could get us caught."}
+    ],
+    "choices": [
+      {
+        "text": "Gotcha.",
+        "next": "underwater"
+      },
+      {
+        "text": "I'll definitely try.",
+        "next": "underwater"
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "underwater"
+      }
+    ]
+  },
+
+  "talk_in": {
+    "lines": [
+      {"character": "raven", "text": "Oh my god, there actually is something off the shore. You mind taking a look with me?"}
+    ],
+    "choices": [
+      {
+        "text": "Let's go.",
+        "next": "talk_in1"
+      },
+      {
+        "text": "Can I know what it is first?",
+        "next": "talk_in2"
+      },
+      {
+        "text": "You sure it's safe?",
+        "next": "talk_in3"
+      }
+    ]
+  },
+
+  "talk_in1": {
+    "lines": [
+      {"character": "raven", "text": "Cool, come check it out!"}
+    ],
+    "choices": [
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      }
+    ]
+  },
+
+  "talk_in2": {
+    "lines": [
+      {"character": "raven", "text": "Uh, not entirely sure. Just come check it out!"}
+    ],
+    "choices": [
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      }
+    ]
+  },
+
+  "talk_in3": {
+    "lines": [
+      {"character": "raven", "text": "I'm alive aren't I? Just come check it out!"}
+    ],
+    "choices": [
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      },
+      {
+        "text": "Okay.",
+        "next": "talk_in4"
+      }
+    ]
+  },
+
+  "talk_in4": {
+    "lines": [
+      {"character": "system", "text": "Looks like a trapdoor of sorts in the water."}
+    ],
+    "choices": [
+      {
+        "text": "*Open it*",
+        "next": "talk_in5"
+      },
+      {
+        "text": "*Ask Raven to open it*",
+        "next": "talk_in6",
+        "skillReq": {"persuasion": 3},
+        "affinityReq": {"raven": 1}
+      },
+      {
+        "text": "*Kick it in*",
+        "next": "talk_in5"
+      }
+    ]
+  },
+
+  "talk_in5": {
+    "lines": [
+      {"character": "raven", "text": "A maintenence shaft? We have to continue through, but just as an FYI I have no idea what we will find until the mansion. Watch out down here just in case, you can't talk your way out of being shot by a turret."}
+    ],
+    "choices": [
+      {
+        "text": "Gotcha.",
+        "next": "underwater"
+      },
+      {
+        "text": "I'll do my best.",
+        "next": "underwater"
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "underwater"
+      }
+    ]
+  },
+
+  "talk_in6": {
+    "lines": [
+      {"character": "raven", "text": "Only because I like you. Looks like a maintenence shaft. Just as an FYI, I have no idea what we will find until we reach the mansion. Watch out down here just in case, even you can't talk your way out of being shot by a turret."}
+    ],
+    "choices": [
+      {
+        "text": "I'll take my chances.",
+        "next": "underwater",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Understood.",
+        "next": "underwater",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Can't fault me if I try.",
+        "next": "underwater",
+        "affinityChange": {"raven": 1}
+      }
+    ]
+  },
+
+  "punch_in": {
+    "lines": [
+      {"character": "raven", "text": "Seems real stupid to put a trapdoor in borderline plain sight..."}
+    ],
+    "choices": [
+      {
+        "text": "Let's just count our blessings.",
+        "next": "punch_in1"
+      },
+      {
+        "text": "I guess we got lucky?",
+        "next": "punch_in1"
+      },
+      {
+        "text": "Well, just makes it all the more convenient for us.",
+        "next": "punch_in1"
+      }
+    ]
+  },
+
+  "punch_in1": {
+    "lines": [
+      {"character": "raven", "text": "Well, I suppose you're right. Ready to head on?"}
+    ],
+    "choices": [
+      {
+        "text": "Yep, let's go.",
+        "next": "punch_in2"
+      },
+      {
+        "text": "What if it's a trap?",
+        "next": "punch_in3"
+      },
+      {
+        "text": "Hang on, I should kick it in just in case someone is below us.",
+        "next": "punch_in4",
+        "skillReq": {"combat": 3}
+      }
+    ]
+  },
+
+  "punch_in2": {
+    "lines": [
+      {"character": "system", "text": "You open the trapdoor and jump down. It appears to be a maintenence shaft."}
+    ],
+    "choices": [
+      {
+        "text": "Yep, let's go.",
+        "next": "punch_in5"
+      },
+      {
+        "text": "All clear!",
+        "next": "punch_in5"
+      },
+      {
+        "text": "No one in sight, let's go.",
+        "next": "punch_in5"
+      }
+    ]
+  },
+
+  "punch_in3": {
+    "lines": [
+      {"character": "raven", "text": "Very well could be, stay on guard."}
+    ],
+    "choices": [
+      {
+        "text": "Let's go.",
+        "next": "punch_in2"
+      },
+      {
+        "text": "We should go on with caution then.",
+        "next": "punch_in2"
+      },
+      {
+        "text": "Hang on, I should kick it in just in case someone is below us.",
+        "next": "punch_in4",
+        "skillReq": {"combat": 3}
+      }
+    ]
+  },
+
+  "punch_in4": {
+    "lines": [
+      {"character": "system", "text": "You kick down the door to find a maintenence shaft. There seems to be nobody inside."}
+    ],
+    "choices": [
+      {
+        "text": "All clear.",
+        "next": "punch_in6",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "All clear.",
+        "next": "punch_in6",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "All clear.",
+        "next": "punch_in6",
+        "affinityChange": {"raven": 1}
+      }
+    ]
+  },
+
+  "punch_in5": {
+    "lines": [
+      {"character": "raven", "text": "Perfect. FYI, I don't know what exactly lies ahead until the mansion. stay on guard."}
+    ],
+    "choices": [
+      {
+        "text": "Understood.",
+        "next": "underwater"
+      },
+      {
+        "text": "Gotcha.",
+        "next": "underwater"
+      },
+      {
+        "text": "Hear you loud and clear.",
+        "next": "underwater"
+      }
+    ]
+  },
+
+  "punch_in6": {
+    "lines": [
+      {"character": "raven", "text": "Well, better safe than sorry I guess. Hopefully we don't get billed for this... Oh and FYI, I don't know what exactly lies ahead until the mansion. stay on guard."}
+    ],
+    "choices": [
+      {
+        "text": "I'd like to see him try. Let's go on.",
+        "next": "underwater"
+      },
+      {
+        "text": "Guess we'll have to find out then.",
+        "next": "underwater"
+      },
+      {
+        "text": "Understood.",
+        "next": "underwater"
+      }
+    ]
+  },
+
+  "underwater": {
+    "lines": [
+      {"character": "system", "text": "You continue down the maintenence shaft, watching out for surveillance or traps. You try to think of something to say to pass the time."}
+    ],
+    "choices": [
+      {
+        "text": "So, what exactly happened to your family?",
+        "next": "underwater1",
+        "affinityChange": {"raven": 1},
+        "affinityReq": {"raven": 2}
+      },
+      {
+        "text": "What do you plan on doing after this?",
+        "next": "underwater4",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "*Stay silent*",
+        "next": "underwater5"
+      }
+    ]
+  },
+
+  "underwater1": {
+    "lines": [
+      {"character": "raven", "text": "My great grandparents, they weren't typical. Japanese government stripped them of their assets and forced them north."}
+    ],
+    "choices": [
+      {
+        "text": "Why would they do something like that?",
+        "next": "underwater2"
+      },
+      {
+        "text": "Why?",
+        "next": "underwater2"
+      },
+      {
+        "text": "That sounds awful, why would that happen?",
+        "next": "underwater2"
+      }
+    ]
+  },
+
+  "underwater2": {
+    "lines": [
+      {"character": "raven", "text": "Great grandparents were mixed, Ainu farmer in his ancestral land and black woman escaping segregation in the US. Not exactly a combination Japan tolerated at the time. When Hokkaido was annexed, everything they had was taken. Family has been shunned since."}
+    ],
+    "choices": [
+      {
+        "text": "I didn't know that. I'm sorry.",
+        "next": "underwater3"
+      },
+      {
+        "text": "I didn't know that. I'm sorry.",
+        "next": "underwater3"
+      },
+      {
+        "text": "I didn't know that. I'm sorry.",
+        "next": "underwater3"
+      }
+    ]
+  },
+
+  "underwater3": {
+    "lines": [
+      {"character": "raven", "text": "It is what it is. Good at least to have someone like you who has some empathy."}
+    ],
+    "choices": [
+      {
+        "text": "Of course, any time.",
+        "next": "underwater6",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Of course, any time.",
+        "next": "underwater6",
+        "affinityChange": {"raven": 1}
+      },
+      {
+        "text": "Of course, any time.",
+        "next": "underwater6",
+        "affinityChange": {"raven": 1}
+      }
+    ]
+  },
+
+  "underwater4": {
+    "lines": [
+      {"character": "raven", "text": "Gonna leave Japan. Not much here for me anyways."}
+    ],
+    "choices": [
+      {
+        "text": "I see.",
+        "next": "underwater6"
+      },
+      {
+        "text": "I wish you luck on that.",
+        "next": "underwater6"
+      },
+      {
+        "text": "Good riddance, am I right?",
+        "next": "underwater6"
+      }
+    ]
+  },
+
+  "underwater5": {
+    "lines": [
+      {"character": "system", "text": "Well, no point in talking to her."}
+    ],
+    "choices": [
+      {
+        "text": "Exactly.",
+        "next": "underwater6"
+      },
+      {
+        "text": "Exactly.",
+        "next": "underwater6"
+      },
+      {
+        "text": "Exactly.",
+        "next": "underwater6"
+      }
+    ]
+  },
+
+  "underwater6": {
+    "lines": [
+      {"character": "system", "text": "You reach the end of the maintenence shaft. You peak out past the exit and see a big door with two guards near it. They don't seem to have spotted you."}
+    ],
+    "choices": [
+      {
+        "text": "*Consult Raven*",
+        "next": "underwater7"
+      },
+      {
+        "text": "*Consult Raven*",
+        "next": "underwater7"
+      },
+      {
+        "text": "*Run at the guards*",
+        "next": "end_idiot"
+      }
+    ]
+  },
+
+  "underwater7": {
+    "lines": [
+      {"character": "raven", "text": "Looks like we've reached something notable. At least enough to have 2 people on payroll to guard it. No idea how we get past them though."}
+    ],
+    "choices": [
+      {
+        "text": "*Check for quickhack point*",
+        "next": "underwater8",
+        "skillReq": {"hacking": 1},
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "*Try talking to the guards*",
+        "next": "underwater13",
+        "skillReq": {"persuasion": 1},
+        "skillChange": {"persuasion": 1}
+      },
+      {
+        "text": "*Ask Raven to take out guards together*",
+        "next": "underwater10",
+        "skillReq": {"combat": 1},
+        "skillChange": {"combat": 1},
+        "affinityReq": {"raven": 2}
+      }
+    ]
+  },
+
+  "underwater8": {
+    "lines": [
+      {"character": "system", "text": "You find the door has a digital lock. You hack it open, causing it to swing into and knock out both guards."}
+    ],
+    "choices": [
+      {
+        "text": "We got it!",
+        "next": "underwater9"
+      },
+      {
+        "text": "That worked?",
+        "next": "underwater9"
+      },
+      {
+        "text": "Are they out cold?",
+        "next": "underwater9"
+      }
+    ]
+  },
+
+  "underwater9": {
+    "lines": [
+      {"character": "raven", "text": "Looks like it. I'm baffled that worked. But, I guess we should count our blessings and move forward."}
+    ],
+    "choices": [
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      },
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      },
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      }
+    ]
+  },
+
+  "underwater10": {
+    "lines": [
+      {"character": "raven", "text": "Uh, sure. On 3!"}
+    ],
+    "choices": [
+      {
+        "text": "1,2,3!",
+        "next": "underwater11"
+      },
+      {
+        "text": "1,2,3!",
+        "next": "underwater11"
+      },
+      {
+        "text": "1,2,3!",
+        "next": "underwater11"
+      }
+    ]
+  },
+
+  "underwater11": {
+    "lines": [
+      {"character": "system", "text": "You catch the guards off guard. You bash them against the wall, knocking them out cold."}
+    ],
+    "choices": [
+      {
+        "text": "*Search for a key with Raven*",
+        "next": "underwater12"
+      },
+      {
+        "text": "*Search for a key with Raven*",
+        "next": "underwater12"
+      },
+      {
+        "text": "*Search for a key with Raven*",
+        "next": "underwater12"
+      }
+    ]
+  },
+
+  "underwater12": {
+    "lines": [
+      {"character": "raven", "text": "I found a key, let's move forward."}
+    ],
+    "choices": [
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      },
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      },
+      {
+        "text": "*Continue ahead*",
+        "next": "room"
+      }
+    ]
+  },
+
+  "underwater13": {
+    "lines": [
+      {"character": "system", "text": "You inexplicably decide to walk up to the guards to negotiate your way in."}
+    ],
+    "choices": [
+      {
+        "text": "*Talk to the guards*",
+        "next": "underwater14"
+      },
+      {
+        "text": "*Talk to the guards*",
+        "next": "underwater14"
+      },
+      {
+        "text": "*Talk to the guards*",
+        "next": "underwater14"
+      }
+    ]
+  },
+
+  "underwater14": {
+    "lines": [
+      {"character": "guard1", "text": "Who the hell are you?"}
+    ],
+    "choices": [
+      {
+        "text": "An intern?",
+        "next": "underwater15"
+      },
+      {
+        "text": "The janitor?",
+        "next": "underwater15"
+      },
+      {
+        "text": "I lost my uniform?",
+        "next": "underwater15"
+      }
+    ]
+  },
+
+  "underwater15": {
+    "lines": [
+      {"character": "guard1", "text": "See that just sounds wrong."}
+    ],
+    "choices": [
+      {
+        "text": "Uhhh...",
+        "next": "underwater16"
+      },
+      {
+        "text": "Uhhh...",
+        "next": "underwater16"
+      },
+      {
+        "text": "Uhhh...",
+        "next": "underwater16"
+      }
+    ]
+  },
+
+  "underwater16": {
+    "lines": [
+      {"character": "guard2", "text": "Well hold on, didn't the governor just say something about a couple of new hires?"}
+    ],
+    "choices": [
+      {
+        "text": "Continue",
+        "next": "underwater17"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater17"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater17"
+      }
+    ]
+  },
+
+  "underwater17": {
+    "lines": [
+      {"character": "guard1", "text": "Honestly, no idea. He kinda tends to ramble, don't really pay all that much attention."}
+    ],
+    "choices": [
+      {
+        "text": "Continue",
+        "next": "underwater18"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater18"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater18"
+      }
+    ]
+  },
+
+  "underwater18": {
+    "lines": [
+      {"character": "guard2", "text": "No, no. I am definitely sure we were getting new hires. Just let them in."}
+    ],
+    "choices": [
+      {
+        "text": "Continue",
+        "next": "underwater19"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater19"
+      },
+      {
+        "text": "Continue",
+        "next": "underwater19"
+      }
+    ]
+  },
+
+  "underwater19": {
+    "lines": [
+      {"character": "guard1", "text": "Uhhh, okay. Go on in then. Just, make sure not to break anything."}
+    ],
+    "choices": [
+      {
+        "text": "Go through door",
+        "next": "underwater20"
+      },
+      {
+        "text": "Go through door",
+        "next": "underwater20"
+      },
+      {
+        "text": "Go through door",
+        "next": "underwater20"
+      }
+    ]
+  },
+
+  "underwater20": {
+    "lines": [
+      {"character": "raven", "text": "I legitimately can't believe that worked. Well, let's continue forward."}
+    ],
+    "choices": [
+      {
+        "text": "*Go through door*",
+        "next": "room"
+      },
+      {
+        "text": "*Go through door*",
+        "next": "room"
+      },
+      {
+        "text": "*Go through door*",
+        "next": "room"
+      }
+    ]
+  },
+
+  "room": {
+    "lines": [
+      {"character": "system", "text": "You find yourself in a room with various high-tech devices. In the center is a giant glowing tube filled with blue liquid leading around the room to a central console."}
+    ],
+    "choices": [
+      {
+        "text": "What is this?",
+        "next": "room1"
+      },
+      {
+        "text": "What is this?",
+        "next": "room1"
+      },
+      {
+        "text": "What is this?",
+        "next": "room1"
+      }
+    ]
+  },
+
+  "room1": {
+    "lines": [
+      {"character": "raven", "text": "If I'm not mistaken, we are directly below the mansion itself. This looks to be the generator that maintains the artifact. It must be somewhere in this room. Check the central console."}
+    ],
+    "choices": [
+      {
+        "text": "*Look at central console*",
+        "next": "room2"
+      },
+      {
+        "text": "*Look at central console*",
+        "next": "room2"
+      },
+      {
+        "text": "*Look at central console*",
+        "next": "room2"
+      }
+    ]
+  },
+
+  "room2": {
+    "lines": [
+      {"character": "system", "text": "You look at the central console. The blue liquid appears to be funneling into a small chip connected to the console."}
+    ],
+    "choices": [
+      {
+        "text": "*Consult Raven*",
+        "next": "room3"
+      },
+      {
+        "text": "*Consult Raven*",
+        "next": "room3"
+      },
+      {
+        "text": "*Consult Raven*",
+        "next": "room3"
+      }
+    ]
+  },
+
+  "room3": {
+    "lines": [
+      {"character": "raven", "text": "That... That's the artifact! It matches the photos exactly. You should have no problem removing it, I believe its auxiliary power can keep it on for a few days, so just pull it out and we can leave."}
+    ],
+    "choices": [
+      {
+        "text": "*Override the computer and force eject the artifact*",
+        "next": "room4",
+        "skillReq": {"hacking": 1},
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "*Convince Raven to take it*",
+        "next": "room5",
+        "skillReq": {"persuasion": 1},
+        "skillChange": {"persuasion": 1}
+      },
+      {
+        "text": "*Yank it out*",
+        "next": "room6",
+        "skillReq": {"combat": 1},
+        "skillChange": {"combat": 1}
+      }
+    ]
+  },
+
+  "room4": {
+    "lines": [
+      {"character": "system", "text": "You hack into the console and the artifact ejects. You pick it up and put it in your pocket."}
+    ],
+    "choices": [
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      }
+    ]
+  },
+
+  "room5": {
+    "lines": [
+      {"character": "system", "text": "Raven yanks out the artifact. She hands it to you."}
+    ],
+    "choices": [
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      }
+    ]
+  },
+
+  "room6": {
+    "lines": [
+      {"character": "system", "text": "You yank out the artifact and pocket it."}
+    ],
+    "choices": [
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      },
+      {
+        "text": "That was suspiciously easy...",
+        "next": "room7"
+      }
+    ]
+  },
+
+  "room7": {
+    "lines": [
+      {"character": "raven", "text": "Regardless, we have it. So we need to exit immediately before anyone sees."}
+    ],
+    "choices": [
+      {
+        "text": "On it.",
+        "next": "room8"
+      },
+      {
+        "text": "Let's go.",
+        "next": "room8"
+      },
+      {
+        "text": "Lead the way.",
+        "next": "room8"
+      }
+    ]
+  },
+
+  "room8": {
+    "lines": [
+      {"character": "system", "text": "UNAUTHORIZED TAMPERING DETECTED! UNAUTHORIZED TAMPERING DETECTED! UNAUTHORIZED TAMPERING DETECTED!"}
+    ],
+    "choices": [
+      {
+        "text": "!",
+        "next": "room9"
+      },
+      {
+        "text": "!",
+        "next": "room9"
+      },
+      {
+        "text": "!",
+        "next": "room9"
+      }
+    ]
+  },
+
+  "room9": {
+    "lines": [
+      {"character": "system", "text": "Sirens start going off in the room and all exits shut down. You have no conventional way out."}
+    ],
+    "choices": [
+      {
+        "text": "!",
+        "next": "room10"
+      },
+      {
+        "text": "!",
+        "next": "room10"
+      },
+      {
+        "text": "!",
+        "next": "room10"
+      }
+    ]
+  },
+
+  "room10": {
+    "lines": [
+      {"character": "raven", "text": "Shit! We need to run, quick! The governor will be down any second, do whatever you can! I will try to find something..."}
+    ],
+    "choices": [
+      {
+        "text": "*Hack the system and shut it down*",
+        "next": "room11",
+        "skillReq": {"hacking": 2}
+      },
+      {
+        "text": "*Wait for the governor to show up and fake surrender*",
+        "next": "room12",
+        "skillReq": {"persuasion": 2}
+      },
+      {
+        "text": "*Grab a nearby pipe and pry your way back to where you came from*",
+        "next": "room13",
+        "skillReq": {"combat": 2}
+      }
+    ]
+  },
+
+  "room11": {
+    "lines": [
+      {"character": "system", "text": "This is your first decision point, what you choose here will affect the story. Do you wish to go forward with this option?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes.",
+        "next": "story1.json",
+        "skillChange": {"hacking": 1}
+      },
+      {
+        "text": "No.",
+        "next": "room10"
+      },
+      {
+        "text": "Let me see the others again.",
+        "next": "room10"
+      }
+    ]
+  },
+
+  "room12": {
+    "lines": [
+      {"character": "system", "text": "This is your first decision point, what you choose here will affect the story. Do you wish to go forward with this option?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes.",
+        "next": "story2.json",
+        "skillChange": {"persuasion": 1}
+      },
+      {
+        "text": "No.",
+        "next": "room10"
+      },
+      {
+        "text": "Let me see the others again.",
+        "next": "room10"
+      }
+    ]
+  },
+  
+  "room13": {
+    "lines": [
+      {"character": "system", "text": "This is your first decision point, what you choose here will affect the story. Do you wish to go forward with this option?"}
+    ],
+    "choices": [
+      {
+        "text": "Yes.",
+        "next": "story3.json",
+        "skillChange": {"combat": 1}
+      },
+      {
+        "text": "No.",
+        "next": "room10"
+      },
+      {
+        "text": "Let me see the others again.",
+        "next": "room10"
+      }
+    ]
+  },
+
+  "end_wimp": {
+    "lines": [
+      {"character": "system", "text": "You risked nothing, and you gained nothing. Congrats. Why did you even bother turning on the game?"}
+    ],
+    "choices": [
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      },
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      },
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      }
+    ]
+  },
+
+  "end_idiot": {
+    "lines": [
+      {"character": "system", "text": "You died. Really feel like you dropped the ball on that one."}
+    ],
+    "choices": [
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      },
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      },
+      {
+        "text": "Click clear save data.",
+        "next": ""
+      }
+    ]
+  }
+}

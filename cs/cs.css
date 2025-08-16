@@ -215,3 +215,12 @@ body, html {
   width: 100%;
   border: none;
 }
+
+.minesweeper div {
+  font-size: 14px;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+.minesweeper div:hover {
+  background:#330033 !important;
+}

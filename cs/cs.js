@@ -48,16 +48,7 @@ programs.forEach(btn => {
         <textarea id="text-editor" style="flex:1;width:100%;height:100%;"></textarea>
         <button id="save-text" style="padding:5px;">Save as .txt</button>
       `;
-    } else if(title === "Minesweeper"){
-      contentHTML = `
-        <div class="minesweeper" style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;background:#0a0015;color:#f0f; font-family:monospace;">
-          <h2 style="color:#ff66ff;text-shadow:0 0 8px #ff00ff;">💀 Minesweeper 💀</h2>
-          <div id="minesweeper-grid" style="display:grid;grid-template-columns:repeat(10,30px);grid-gap:2px;"></div>
-          <button id="restart-minesweeper" style="margin-top:10px;padding:5px 10px;background:#2a003f;color:#fff;border:1px solid #ff00ff;cursor:pointer;">Restart</button>
-        </div>
-      `;
-    }
-    else {
+    } else {
       contentHTML = `<iframe class="window-content" src="${link}" frameborder="0" style="flex:1;width:100%;border:none;"></iframe>`;
     }
 
@@ -77,94 +68,6 @@ programs.forEach(btn => {
     const minimizeBtn = win.querySelector('.window-minimize');
     const maximizeBtn = win.querySelector('.window-maximize');
     const closeBtn = win.querySelector('.window-close');
-
-    // Minesweeper functionality
-if(title === "Minesweeper"){
-  const gridEl = win.querySelector('#minesweeper-grid');
-  const restartBtn = win.querySelector('#restart-minesweeper');
-
-  function createGrid(){
-    gridEl.innerHTML = '';
-    const size = 10; // 10x10
-    const mineCount = 15;
-    const cells = [];
-    const mines = new Set();
-
-    // Random mines
-    while(mines.size < mineCount){
-      mines.add(Math.floor(Math.random() * size * size));
-    }
-
-    // Create cells
-    for(let i=0;i<size*size;i++){
-      const cell = document.createElement('div');
-      cell.style.width = '30px';
-      cell.style.height = '30px';
-      cell.style.background = '#1a0028';
-      cell.style.border = '1px solid #ff00ff';
-      cell.style.display = 'flex';
-      cell.style.alignItems = 'center';
-      cell.style.justifyContent = 'center';
-      cell.style.cursor = 'pointer';
-      cell.style.color = '#ff99ff';
-      cell.dataset.index = i;
-      cell.dataset.revealed = "false";
-      gridEl.appendChild(cell);
-      cells.push(cell);
-    }
-
-    // Neighbor offsets (8 directions)
-    const neighbors = [-size-1,-size,-size+1, -1,1, size-1,size,size+1];
-
-    function getNeighborIndexes(i){
-      const row = Math.floor(i / size);
-      const col = i % size;
-      return neighbors
-        .map(offset => i + offset)
-        .filter(idx => {
-          if(idx < 0 || idx >= size*size) return false;
-          const nRow = Math.floor(idx / size);
-          const nCol = idx % size;
-          return Math.abs(nRow-row) <= 1 && Math.abs(nCol-col) <= 1;
-        });
-    }
-
-    function revealCell(i){
-      const cell = cells[i];
-      if(cell.dataset.revealed === "true") return; // already revealed
-      cell.dataset.revealed = "true";
-      cell.style.background = '#330044';
-
-      if(mines.has(i)){
-        cell.textContent = '💥';
-        cell.style.background = '#ff0033';
-        alert('Game Over!');
-        return;
-      }
-
-      // Count surrounding mines
-      const neighborsIdx = getNeighborIndexes(i);
-      const count = neighborsIdx.filter(idx => mines.has(idx)).length;
-
-      if(count > 0){
-        cell.textContent = count;
-        cell.style.fontWeight = 'bold';
-      } else {
-        // Flood fill: reveal neighbors if empty
-        neighborsIdx.forEach(idx => revealCell(idx));
-      }
-    }
-
-    // Add click handlers
-    cells.forEach((cell, i)=>{
-      cell.addEventListener('click', ()=> revealCell(i));
-    });
-
-    restartBtn.addEventListener('click', createGrid);
-  }
-
-  createGrid();
-}
 
     // Close
     closeBtn.addEventListener('click', () => {

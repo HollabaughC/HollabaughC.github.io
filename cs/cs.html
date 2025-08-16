@@ -3,52 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cameron Hollabaugh</title>
+  <title>Cameron OS</title>
   <link rel="icon" type="image/x-icon" href="cs.png">
   <link rel="stylesheet" href="cs.css">
   <script src="cs.js" defer></script>
 </head>
 <body>
-  <div class="page-wrapper">
-  <header>
-    <div class="header-text">
-      <a href="../../index.html">
-        <img src="cam.png" alt="Cam's Logo" class="logo">
-      </a>
-    </div>
-  </header>
+  <div class="desktop">
 
-  <main>
-    <h1>Computer Programming Work</h1>
-    <p>Enter a digital world of my creation, from video games to practical applications to this very site!</p>
-    <p><a href="https://github.com/HollabaughC">For code for each project, go to my GitHub by at https://github.com/HollabaughC or by clicking this sentence.</a></p>
-    <div class="button-container">
-      <a href="https://hollabaughc.github.io" class="circle-btn" data-preview="https://hollabaughc.github.io">
-        <span class="btn-text">This Site</span>
-        <div class="preview"></div>
-      </a>
-      <a href="https://github.com/HollabaughC/cs310project" class="circle-btn" data-preview="DND/DND.html">
-        <span class="btn-text">D&D Character Creator</span>
-        <div class="preview"></div>
-      </a>
-      <a href="costco/index.html" class="circle-btn" data-preview="costco/index.html">
-        <span class="btn-text">Costco Food Court Picker</span>
-        <div class="preview"></div>
-      </a>
-      <a href="../irankarapte/index.html" class="circle-btn" data-preview="../irankarapte/index.html">
-        <span class="btn-text">Irankarapte - Ainu Language Learning</span>
-        <div class="preview"></div>
-      </a>
-      <a href="sapporo/index.html" class="circle-btn" data-preview="sapporo/index.html">
-        <span class="btn-text">Sapporo: A Text-Based Adventure</span>
-        <div class="preview"></div>
-      </a>
-    </div>
-  </main>
+    <div class="background-title">Cameron OS</div>
 
-  <footer>
-    <p id="footer-secret">©2025 Cameron Hollabaugh</p>
-  </footer>
+    <div class="programs">
+      <div class="program-btn" data-title="github" data-link="github.html" data-icon="img/github.png">
+        <img src="img/github.png" alt="">
+        <div class="program-label">My GitHub</div>
+      </div>
+      <div class="program-btn" data-title="COS Browser" data-link="" data-icon="browser.png">
+        <img src="browser.png" alt="Web Browser Icon"><span>COS Browser</span>
+      </div>
+      <div class="program-btn" data-title="Notepad" data-link="" data-icon="img/texteditor.png">
+        <img src="img/texteditor.png" alt="Text Editor Icon"><span>COS Notepad</span>
+      </div>
+      <div class="program-btn" data-title="This Site" data-link="https://hollabaughc.github.io" data-icon="img/cam.png">
+        <img src="img/cam.png" alt="">
+        <div class="program-label">This Site</div>
+      </div>
+      <div class="program-btn" data-title="D&D Character Creator" data-link="DND/static/index.html" data-icon="img/dnd.png">
+        <img src="img/dnd.png" alt="">
+        <div class="program-label">D&D Creator (2023)</div>
+      </div>
+      <div class="program-btn" data-title="Costco Food Court Picker" data-link="costco/index.html" data-icon="img/costco.png">
+        <img src="img/costco.png" alt="">
+        <div class="program-label">Costco Picker (2024)</div>
+      </div>
+      <div class="program-btn" data-title="Irankarapte" data-link="../irankarapte/index.html" data-icon="img/irankarapte.png">
+        <img src="img/irankarapte.png" alt="">
+        <div class="program-label">Irankarapte (2025)</div>
+      </div>
+      <div class="program-btn" data-title="Project Sapporo" data-link="sapporo/index.html" data-icon="img/sapporo.png">
+        <img src="img/sapporo.png" alt="">
+        <div class="program-label">Sapporo (2025)</div>
+      </div>
+    </div>
+
+    <div class="taskbar">
+      <button id="home-btn">🏠 Home</button>
+      <div id="taskbar-center">
+        <input type="text" id="search-bar" placeholder="Search programs...">
+        <div id="open-programs"></div>
+      </div>
+    </div>
   </div>
+
+  <div id="windows-container"></div>
+
 </body>
 </html>

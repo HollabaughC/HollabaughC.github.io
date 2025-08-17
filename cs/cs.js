@@ -98,7 +98,7 @@ function openProgram(btn) {
     isMaximized = !isMaximized;
   });
 
-  // Dragging with snap
+  // Dragging
   const header = win.querySelector('.window-header');
   let offsetX, offsetY, dragging = false;
 
@@ -109,26 +109,27 @@ function openProgram(btn) {
   offsetY = e.clientY - win.offsetTop;
   win.style.zIndex = 100;
 
+  // Only move while mouse is held down
   const onMouseMove = eMove => {
     if (!dragging) return;
     win.style.left = (eMove.clientX - offsetX) + 'px';
     win.style.top = (eMove.clientY - offsetY) + 'px';
 
-    // Snap to left half
-    if (eMove.clientX < 10) {
+    if (eMove.clientY < 10) {
+      win.style.top = '0';
+      win.style.left = '0';
+      win.style.width = '100%';
+      win.style.height = 'calc(100% + 40px)';
+    } else if (eMove.clientX < 10) {
       win.style.top = '0';
       win.style.left = '0';
       win.style.width = '50%';
       win.style.height = 'calc(100% - 40px)';
-      isMaximized = true;
-    } 
-    // Snap to right half
-    else if (eMove.clientX > window.innerWidth - 10) {
+    } else if (eMove.clientX > window.innerWidth - 10) {
       win.style.top = '0';
       win.style.left = '50%';
       win.style.width = '50%';
       win.style.height = 'calc(100% - 40px)';
-      isMaximized = true;
     }
   };
 
@@ -150,7 +151,7 @@ function openProgram(btn) {
   });
 
   // Text editor save
-  if (title === "Text Editor") {
+  if (title === "Notepad") {
     win.querySelector('#save-text').addEventListener('click', () => {
       const text = win.querySelector('#text-editor').value;
       const blob = new Blob([text], { type: 'text/plain' });

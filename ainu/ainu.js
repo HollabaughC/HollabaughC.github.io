@@ -1,52 +1,24 @@
-// Open PDFs in the iframe when a link is clicked
-document.querySelectorAll('.pdf-links a').forEach(link => {
-    link.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent default link behavior
-        const pdfPath = this.getAttribute('data-pdf'); // Get the PDF path
+document.querySelectorAll('.book').forEach(book => {
+    book.addEventListener('click', () => {
+        const pdfPath = book.getAttribute('data-pdf');
+        const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdf-iframe');
-        const controls = document.querySelector('.pdf-controls');
-        
-        iframe.src = pdfPath; // Load the PDF into iframe
-        controls.style.display = 'block'; // Show PDF controls
+        iframe.src = pdfPath;
+        modal.style.display = 'flex';
     });
 });
 
-// Close the PDF viewer
-document.getElementById('close-pdf').addEventListener('click', function() {
+document.querySelector('.close-pdf').addEventListener('click', () => {
+    const modal = document.getElementById('pdfModal');
     const iframe = document.getElementById('pdf-iframe');
-    iframe.src = ''; // Unload PDF
-    document.querySelector('.pdf-controls').style.display = 'none'; // Hide controls
+    iframe.src = '';
+    modal.style.display = 'none';
 });
 
-// Toggle fullscreen mode for the PDF viewer
-document.getElementById('fullscreen-pdf').addEventListener('click', function() {
-    const iframe = document.getElementById('pdf-iframe');
-    if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-    } else if (iframe.mozRequestFullScreen) { // Firefox
-        iframe.mozRequestFullScreen();
-    } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari
-        iframe.webkitRequestFullscreen();
-    } else if (iframe.msRequestFullscreen) { // IE/Edge
-        iframe.msRequestFullscreen();
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('pdfModal');
+    if (e.target === modal) {
+        modal.style.display = 'none';
+        document.getElementById('pdf-iframe').src = '';
     }
 });
-
-// Modal handling for contact info
-const modal = document.getElementById("contactModal");
-const btn = document.getElementById("contactButton");
-const span = document.getElementById("closeModal");
-
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}

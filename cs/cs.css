@@ -37,11 +37,20 @@ body, html {
   width: 100px;
   margin: 10px auto;
   text-align: center;
-  cursor: pointer;
+  cursor: grab;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.program-btn.dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  transform: scale(1.05);
+  z-index: 50;
 }
 
 .program-btn img {

@@ -1,0 +1,268 @@
+{
+  "unit": [
+    {
+      "unit": 0,
+      "topic": "Intro and First Program",
+      "question": [
+        {
+          "question": 0,
+          "text": "What is the correct syntax to print 'Hello, World!' in Python?",
+          "answers": [
+            "echo 'Hello, World!'",
+            "print('Hello, World!')",
+            "printf('Hello, World!')",
+            "System.out.println('Hello, World!')"
+          ],
+          "correct": 1,
+          "hint": "Use Python's built-in function for displaying output."
+        },
+        {
+          "question": 1,
+          "text": "What does the `#` symbol signify in Python?",
+          "answers": [
+            "Division operator",
+            "Comment line",
+            "End of statement",
+            "String delimiter"
+          ],
+          "correct": 1,
+          "hint": "This is often used to explain code or skip execution of certain lines."
+        },
+        {
+          "question": 2,
+          "text": "Which of these is an interpreted programming language?",
+          "answers": [
+            "C",
+            "Java",
+            "Python",
+            "Assembly"
+          ],
+          "correct": 2,
+          "hint": "The language does not require compilation before execution."
+        },
+        {
+          "question": 3,
+          "text": "What file extension is used for Python files?",
+          "answers": [
+            ".py",
+            ".python",
+            ".pt",
+            ".exe"
+          ],
+          "correct": 0,
+          "hint": "It's short for 'Python.'"
+        },
+        {
+          "question": 4,
+          "text": "Which organization develops Python?",
+          "answers": [
+            "Microsoft",
+            "Apple",
+            "Google",
+            "Python Software Foundation"
+          ],
+          "correct": 3,
+          "hint": "It’s a non-profit organization focused on Python."
+        }
+      ]
+    },
+    {
+      "unit": 1,
+      "topic": "Values, Data Types and Operations",
+      "question": [
+        {
+          "question": 0,
+          "text": "Which of these is a mutable data type in Python?",
+          "answers": [
+            "String",
+            "List",
+            "Tuple",
+            "Integer"
+          ],
+          "correct": 1,
+          "hint": "This data type allows you to modify its content after creation."
+        },
+        {
+          "question": 1,
+          "text": "What is the output of `5 + 3 * 2` in Python?",
+          "answers": [
+            "16",
+            "13",
+            "10",
+            "11"
+          ],
+          "correct": 3,
+          "hint": "Python follows operator precedence (PEMDAS)."
+        },
+        {
+          "question": 2,
+          "text": "What will `type(42.0)` return in Python?",
+          "answers": [
+            "<class 'int'>",
+            "<class 'float'>",
+            "<class 'double'>",
+            "<class 'str'>"
+          ],
+          "correct": 1,
+          "hint": "It's a decimal number."
+        },
+        {
+          "question": 3,
+          "text": "Which operator is used for exponentiation in Python?",
+          "answers": [
+            "^",
+            "**",
+            "*",
+            "//"
+          ],
+          "correct": 1,
+          "hint": "It's a double symbol, not a single symbol."
+        },
+        {
+          "question": 4,
+          "text": "What does the `len()` function return?",
+          "answers": [
+            "The size of memory occupied by an object",
+            "The number of elements in an object",
+            "The type of an object",
+            "The first element of an object"
+          ],
+          "correct": 1,
+          "hint": "It's often used with strings, lists, and tuples."
+        }
+      ]
+    },
+    {
+      "unit": 2,
+      "topic": "Function Calls & Type Conversion Functions",
+      "question": [
+        {
+          "question": 0,
+          "text": "Which function converts a string to an integer in Python?",
+          "answers": [
+            "str()",
+            "float()",
+            "int()",
+            "convert()"
+          ],
+          "correct": 2,
+          "hint": "It's a single keyword function for numerical type conversion."
+        },
+        {
+          "question": 1,
+          "text": "What is the output of `round(3.7)`?",
+          "answers": [
+            "3",
+            "4",
+            "3.5",
+            "Error"
+          ],
+          "correct": 1,
+          "hint": "The function rounds to the nearest integer."
+        },
+        {
+          "question": 2,
+          "text": "Which function returns the absolute value of a number?",
+          "answers": [
+            "abs()",
+            "ceil()",
+            "fabs()",
+            "int()"
+          ],
+          "correct": 0,
+          "hint": "It's short for 'absolute.'"
+        },
+        {
+          "question": 3,
+          "text": "What does the `type()` function do?",
+          "answers": [
+            "Changes the type of an object",
+            "Checks the memory address of an object",
+            "Returns the type of an object",
+            "Converts between data types"
+          ],
+          "correct": 2,
+          "hint": "It provides information, not conversion."
+        },
+        {
+          "question": 4,
+          "text": "Which of these functions is used to convert a number to a string?",
+          "answers": [
+            "float()",
+            "int()",
+            "str()",
+            "type()"
+          ],
+          "correct": 2,
+          "hint": "It's a basic type conversion for textual representation."
+        }
+      ]
+    },
+    {
+      "unit": 3,
+      "topic": "Variables & Input",
+      "question": [
+        {
+          "question": 0,
+          "text": "Which of these is a valid Python variable name?",
+          "answers": [
+            "2cool",
+            "cool_guy",
+            "cool-guy",
+            "None"
+          ],
+          "correct": 1,
+          "hint": "Variable names can't start with a number or use hyphens."
+        },
+        {
+          "question": 1,
+          "text": "What function is used to take input from the user in Python?",
+          "answers": [
+            "scan()",
+            "input()",
+            "read()",
+            "ask()"
+          ],
+          "correct": 1,
+          "hint": "It's a built-in function that waits for the user to type."
+        },
+        {
+          "question": 2,
+          "text": "Which of these is the correct way to assign a value to a variable?",
+          "answers": [
+            "x = 10",
+            "x == 10",
+            "x <- 10",
+            "10 = x"
+          ],
+          "correct": 0,
+          "hint": "Use the single equals sign for assignment."
+        },
+        {
+          "question": 3,
+          "text": "What is the default data type of input from the `input()` function?",
+          "answers": [
+            "int",
+            "float",
+            "str",
+            "bool"
+          ],
+          "correct": 2,
+          "hint": "All inputs are treated as textual data unless converted."
+        },
+        {
+          "question": 4,
+          "text": "Which of these statements is true about variables in Python?",
+          "answers": [
+            "Variable names are case-insensitive.",
+            "Python requires you to declare the variable type.",
+            "Variables in Python can change their type during execution.",
+            "You can't reassign values to a variable."
+          ],
+          "correct": 2,
+          "hint": "Python variables are dynamically typed."
+        }
+      ]
+    }
+  ]
+}

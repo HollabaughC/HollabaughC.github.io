@@ -1,0 +1,109 @@
+{
+    "study_guide": [
+      {
+        "unit": 0,
+        "topic": "Intro and First Program",
+        "lesson": [
+          {
+            "lesson": 0,
+            "text": "Python has many built-in functions, the most basic being 'print()', a function that outputs text enclosed in single or double quotes to the console."
+          },
+          {
+            "lesson": 1,
+            "text": "In Python, the '#' symbol is used to add comments. Anything following '#' on the same line is ignored by the interpreter."
+          },
+          {
+            "lesson": 2,
+            "text": "Python is an interpreted language, meaning code is executed line by line without prior compilation, unlike languages like C or Java."
+          },
+          {
+            "lesson": 3,
+            "text": "Python files use the '.py' extension. For example, a Python script might be saved as 'script.py'."
+          },
+          {
+            "lesson": 4,
+            "text": "Python is developed and maintained by the Python Software Foundation (PSF), a non-profit organization supporting the Python community."
+          }
+        ]
+      },
+      {
+        "unit": 1,
+        "topic": "Values, Data Types and Operations",
+        "lesson": [
+          {
+            "lesson": 0,
+            "text": "Lists in Python are mutable, meaning their contents can be changed after creation, unlike tuples or strings."
+          },
+          {
+            "lesson": 1,
+            "text": "Python follows the operator precedence of PEMDAS (Parentheses, Exponents, Multiplication/Division, Addition/Subtraction), so '5 + 3 * 2' evaluates to 11."
+          },
+          {
+            "lesson": 2,
+            "text": "In Python, floating-point numbers are represented by the 'float' type. Calling 'type(42.0)' returns '<class 'float'>' because 42.0 is a float."
+          },
+          {
+            "lesson": 3,
+            "text": "Python uses the '**' operator for exponentiation. For example, '2 ** 3' equals 8."
+          },
+          {
+            "lesson": 4,
+            "text": "The 'len()' function in Python returns the number of items in an object like a list, string, or tuple."
+          }
+        ]
+      },
+      {
+        "unit": 2,
+        "topic": "Function Calls & Type Conversion Functions",
+        "lesson": [
+          {
+            "lesson": 0,
+            "text": "The 'int()' function converts a string or a float to an integer, if possible."
+          },
+          {
+            "lesson": 1,
+            "text": "The 'round()' function in Python rounds a number to the nearest integer. 'round(3.7)' returns 4."
+          },
+          {
+            "lesson": 2,
+            "text": "The 'abs()' function returns the absolute value of a number, removing any negative sign."
+          },
+          {
+            "lesson": 3,
+            "text": "The 'type()' function returns the data type of an object. For example, 'type(42)' returns '<class 'int'>' because 42 is an integer."
+          },
+          {
+            "lesson": 4,
+            "text": "The 'str()' function converts a number or any object into its string representation."
+          }
+        ]
+      },
+      {
+        "unit": 3,
+        "topic": "Variables & Input",
+        "lesson": [
+          {
+            "lesson": 0,
+            "text": "Variable names in Python must start with a letter or an underscore and cannot contain spaces or hyphens."
+          },
+          {
+            "lesson": 1,
+            "text": "The 'input()' function prompts the user for input and returns the input as a string."
+          },
+          {
+            "lesson": 2,
+            "text": "In Python, variables are assigned using '=', such as 'x = 10'. The '==' operator is used for comparison, not assignment."
+          },
+          {
+            "lesson": 3,
+            "text": "The 'input()' function returns data as a string by default, even if the input appears to be numeric."
+          },
+          {
+            "lesson": 4,
+            "text": "Python is dynamically typed, allowing variables to change types during execution. For example, 'x = 5' can be reassigned to 'x = 'hello''."
+          }
+        ]
+      }
+    ]
+  }
+  

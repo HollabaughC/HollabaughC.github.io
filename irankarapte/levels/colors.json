@@ -1,0 +1,12 @@
+[
+  { "word": "black", "kana": "クンネ", "meaning": "kunne" },
+  { "word": "white", "kana": "レタㇻ", "meaning": "retar" },
+  { "word": "gray", "kana": "カツ゚ワ", "meaning": "katuwa" },
+  { "word": "red", "kana": "フレ", "meaning": "hure" },
+  { "word": "blue", "kana": "アサンキ", "meaning": "asanki" },
+  { "word": "yellow", "kana": "シゥニン", "meaning": "siwnin" },
+  { "word": "green", "kana": "フキナネ", "meaning": "hukinane" },
+  { "word": "orange", "kana": "フレトㇺ シゥニン", "meaning": "huretom siwnin" },
+  { "word": "purple", "kana": "アサンキ コフレ", "meaning": "asanki kohure" },
+  { "word": "brown", "kana": "トイェロ", "meaning": "toyero" }
+]

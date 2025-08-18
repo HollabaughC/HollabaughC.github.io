@@ -2,26 +2,166 @@
   {
     "word": "irankarapte",
     "kana": "イランカラㇷ゚テ",
-    "meaning": "hello (lit. 'let me touch your heart')"
+    "meaning": "hello (also 'nice to meet you')"
   },
   {
-    "word": "kamuy",
-    "kana": "カムイ",
-    "meaning": "god or spiritual being"
+    "word": "he",
+    "kana": "ヘ",
+    "meaning": "hello (informal)"
   },
   {
-    "word": "ruyne",
-    "kana": "ルイネ",
-    "meaning": "snow"
+    "word": "iwanke ya",
+    "kana": "エイワンケ　ヤ？",
+    "meaning": "how are you?"
   },
   {
-    "word": "cikap",
-    "kana": "チカㇷ゚",
-    "meaning": "bird"
+    "word": "ku=iwanke, iyairaykere",
+    "kana": "クイワンケ、イライライケレ",
+    "meaning": "fine, thank you"
   },
   {
-    "word": "moyre",
-    "kana": "モイレ",
-    "meaning": "cloud"
+    "word": "re hemanta ya",
+    "kana": "エレ　ヘマンテ　ヤ？",
+    "meaning": "what is your name?"
+  },
+  {
+    "word": "k=ani anakne ____ ku=ne",
+    "kana": "カニ　アナㇰネ　_____　クネ",
+    "meaning": "my name is _____"
+  },
+  {
+    "word": "ku=e=ehomaruye. o yan",
+    "kana": "クエエホマルイェ。オ　ヤン",
+    "meaning": "please"
+  },
+  {
+    "word": "iyairaykere",
+    "kana": "イヤイライケレ",
+    "meaning": "thank you"
+  },
+  {
+    "word": "e",
+    "kana": "エ",
+    "meaning": "you're welcome / yes"
+  },
+  {
+    "word": "somo",
+    "kana": "ソモ",
+    "meaning": "no / excuse me (getting attention)"
+  },
+  {
+    "word": "ku=yayapapu",
+    "kana": "クヤヤパプ",
+    "meaning": "excuse me (begging pardon) / I'm sorry"
+  },
+  {
+    "word": "apunno paye yan",
+    "kana": "アプンノ　パイェ　ヤン",
+    "meaning": "goodbye (for those who leave)"
+  },
+  {
+    "word": "apunno oka yan",
+    "kana": "アプンノ　オカ　ヤン",
+    "meaning": "goodbye (for those who stay)"
+  },
+  {
+    "word": "aynu-itak ku=ye ka eaykap",
+    "kana": "アイヌイタㇰ クイタㇰ カ エアイカㇷ゚",
+    "meaning": "I can't speak Ainu [well]"
+  },
+  {
+    "word": "amerika-itak e=ye easkay ya",
+    "kana": "アメリカイタㇰ　クハウェアン　エアイカㇷ゚　ヤ？",
+    "meaning": "do you speak English?"
+  },
+  {
+    "word": "amerika-itak a=ye easkay ya",
+    "kana": "アメリカイタㇰ　アイタㇰ　エアㇱカイ　ヤ？",
+    "meaning": "is there someone here who speaks English?"
+  },
+  {
+    "word": "en=ka mesu",
+    "kana": "エニカメス！",
+    "meaning": "help!"
+  },
+  {
+    "word": "aeyam",
+    "kana": "アエヤㇺ！",
+    "meaning": "look out!"
+  },
+  {
+    "word": "apunno mokor yan",
+    "kana": "アプンノ　モコㇿ　ヤン",
+    "meaning": "good night (to sleep)"
+  },
+  {
+    "word": "k=erampewtek",
+    "kana": "ケラㇺペウテㇰ",
+    "meaning": "I don't understand"
+  },
+  {
+    "word": "asinru hunak an ya",
+    "kana": "アシンル　フナㇰ　アン　ヤ？",
+    "meaning": "where is the toilet?"
+  },
+  {
+    "word": "en=koramputuye",
+    "kana": "エンコランプトゥイェ",
+    "meaning": "leave me alone"
+  },
+  {
+    "word": "somo tempa",
+    "kana": "ソモ テンパ！",
+    "meaning": "don't touch me!"
+  },
+  {
+    "word": "keisatu ku=hotuyekar kusune",
+    "kana": "ケイサトゥ クホトゥイェカㇻ クスネ",
+    "meaning": "I'll call the police"
+  },
+  {
+    "word": "keisatu",
+    "kana": "ケイサトゥ！",
+    "meaning": "police!"
+  },
+  {
+    "word": "tere! ikkap",
+    "kana": "テレ！イッカㇷ゚！",
+    "meaning": "stop! thief!"
+  },
+  {
+    "word": "ku=esirturaynu",
+    "kana": "クエシㇼトゥライヌ",
+    "meaning": "I'm lost"
+  },
+  {
+    "word": "pusari ku=isamka",
+    "kana": "プサリ クイサㇺカ",
+    "meaning": "I lost my bag"
+  },
+  {
+    "word": "santoku ku=isamka",
+    "kana": "サントク クイサㇺカ",
+    "meaning": "I lost my wallet"
+  },
+  {
+    "word": "ku=sieye",
+    "kana": "クシエイェ",
+    "meaning": "I'm sick"
+  },
+  {
+    "word": "ku=iyunin",
+    "kana": "クイユニン",
+    "meaning": "I've been injured"
+  },
+  {
+    "word": "isanispa ku=hotuyekar yan",
+    "kana": "イサニㇱパ クホトゥイェカㇻ ヤン",
+    "meaning": "I need a doctor"
+  },
+  {
+    "word": "aeinup k=eiki yakka pirka ya",
+    "kana": "アエイヌㇷ゚ ケイキ ヤッカ ピㇼカ ヤ?",
+    "meaning": "can I use your phone?"
   }
 ]

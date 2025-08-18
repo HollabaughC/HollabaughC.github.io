@@ -53,6 +53,13 @@ body, html {
   z-index: 50;
 }
 
+.program-btn:hover {
+  box-shadow: 0 8px 24px rgba(0, 120, 212, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
 .program-btn img {
   width: 64px;
   height: 64px;
@@ -79,11 +86,59 @@ body, html {
 }
 
 #home-btn {
-  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
   cursor: pointer;
-  position: absolute;
-  left: 10px;
+  background: linear-gradient(to bottom, #f3f3f3, #e6e6e6);
+  border-radius: 4px;
+  border: 1px solid #cfcfcf;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  transition: background 0.2s, transform 0.1s;
 }
+
+#home-btn:hover {
+  background: linear-gradient(to bottom, #e6e6e6, #dcdcdc);
+  transform: translateY(-1px);
+}
+
+#home-btn:active {
+  background: linear-gradient(to bottom, #dcdcdc, #cfcfcf);
+  transform: translateY(1px);
+}
+
+#home-btn .logo {
+  display: grid;
+  grid-template-columns: repeat(3, 6px);
+  grid-template-rows: repeat(3, 6px);
+  gap: 2px;
+  margin-right: 6px;
+}
+
+#home-btn .logo div {
+  width: 6px;
+  height: 6px;
+}
+
+#home-btn .logo div:nth-child(1),
+#home-btn .logo div:nth-child(4),
+#home-btn .logo div:nth-child(7) {
+  background-color: #8e44ad;
+}
+
+#home-btn .logo div:nth-child(2),
+#home-btn .logo div:nth-child(5),
+#home-btn .logo div:nth-child(8) {
+  background-color: #a569bd;
+}
+
+#home-btn .logo div:nth-child(3),
+#home-btn .logo div:nth-child(6),
+#home-btn .logo div:nth-child(9) {
+  background-color: #bb8fce;
+}
+
 
 #taskbar-center {
   display: flex;

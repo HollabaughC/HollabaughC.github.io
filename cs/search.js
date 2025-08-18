@@ -3,6 +3,127 @@ function initBrowserSearch(win, programs) {
   const browserInput = browserHeader.querySelector('.browser-url');
   const tabsContainer = browserHeader.querySelector('.browser-tabs');
 
+  const browserData = {
+    history: [],
+    cookies: {},
+  };
+
+  function addToHistory(appTitle) {
+    browserData.history.unshift({
+      title: appTitle,
+      timestamp: new Date().toLocaleString(),
+    });
+    if (browserData.history.length > 50) browserData.history.pop();
+  }
+
+  function setCookie(name, value) { browserData.cookies[name] = value; }
+  function getCookie(name) { return browserData.cookies[name] || null; }
+  function clearCookies() { browserData.cookies = {}; }
+  function clearHistory() { browserData.history = []; }
+
+  function openHistoryTab(contentContainer, tabsContainer) {
+    const appTitle = 'History & Cookies';
+    const existingTab = Array.from(tabsContainer.children).find(t => t.dataset.title === appTitle);
+    if (existingTab) {
+      switchToTab(existingTab);
+      return;
+    }
+
+    const tab = document.createElement('div');
+    tab.dataset.title = appTitle;
+    tab.style.display = 'inline-block';
+    tab.style.padding = '5px 10px';
+    tab.style.cursor = 'pointer';
+    tab.style.borderRight = '1px solid #ccc';
+    tab.style.position = 'relative';
+
+    const tabLabel = document.createElement('span');
+    tabLabel.textContent = appTitle;
+    tab.appendChild(tabLabel);
+
+    const closeBtn = document.createElement('span');
+    closeBtn.textContent = '×';
+    closeBtn.style.marginLeft = '5px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const contentDiv = contentContainer.querySelector(`div[data-title="${appTitle}"]`);
+      if (contentDiv) contentDiv.remove();
+      tab.remove();
+      if (tabsContainer.lastChild) switchToTab(tabsContainer.lastChild);
+    });
+    tab.appendChild(closeBtn);
+    tabsContainer.appendChild(tab);
+
+    const contentDiv = document.createElement('div');
+    contentDiv.dataset.title = appTitle;
+    contentDiv.style.display = 'none';
+    contentDiv.style.width = '100%';
+    contentDiv.style.height = '100%';
+    contentDiv.style.padding = '10px';
+    contentDiv.style.overflowY = 'auto';
+
+    const historyTitle = document.createElement('h3');
+    historyTitle.textContent = 'History';
+    contentDiv.appendChild(historyTitle);
+
+    const historyList = document.createElement('ul');
+    historyList.style.listStyle = 'none';
+    historyList.style.padding = '0';
+    contentDiv.appendChild(historyList);
+
+    const updateHistoryList = () => {
+      historyList.innerHTML = '';
+      browserData.history.forEach(h => {
+        const li = document.createElement('li');
+        li.textContent = `${h.timestamp} → ${h.title}`;
+        historyList.appendChild(li);
+      });
+    };
+
+    const clearHistoryBtn = document.createElement('button');
+    clearHistoryBtn.textContent = 'Clear History';
+    clearHistoryBtn.style.marginTop = '5px';
+    clearHistoryBtn.addEventListener('click', () => {
+      clearHistory();
+      updateHistoryList();
+    });
+    contentDiv.appendChild(clearHistoryBtn);
+    updateHistoryList();
+
+    const cookiesTitle = document.createElement('h3');
+    cookiesTitle.textContent = 'Cookies';
+    cookiesTitle.style.marginTop = '20px';
+    contentDiv.appendChild(cookiesTitle);
+
+    const cookiesList = document.createElement('ul');
+    cookiesList.style.listStyle = 'none';
+    cookiesList.style.padding = '0';
+    contentDiv.appendChild(cookiesList);
+
+    const updateCookiesList = () => {
+      cookiesList.innerHTML = '';
+      Object.entries(browserData.cookies).forEach(([k, v]) => {
+        const li = document.createElement('li');
+        li.textContent = `${k}: ${v}`;
+        cookiesList.appendChild(li);
+      });
+    };
+
+    const clearCookiesBtn = document.createElement('button');
+    clearCookiesBtn.textContent = 'Clear Cookies';
+    clearCookiesBtn.style.marginTop = '5px';
+    clearCookiesBtn.addEventListener('click', () => {
+      clearCookies();
+      updateCookiesList();
+    });
+    contentDiv.appendChild(clearCookiesBtn);
+    updateCookiesList();
+
+    contentContainer.appendChild(contentDiv);
+    switchToTab(tab);
+  }
+
   // Create content container if missing
   let contentContainer = win.querySelector('.browser-content');
   if (!contentContainer) {
@@ -17,7 +138,6 @@ function initBrowserSearch(win, programs) {
   browserInput.setAttribute('autocomplete', 'off');
   browserInput.setAttribute('spellcheck', 'false');
 
-  // Wrap input for dropdown
   const inputWrapper = document.createElement('div');
   inputWrapper.style.position = 'relative';
   inputWrapper.style.flexGrow = '1';
@@ -69,7 +189,7 @@ function initBrowserSearch(win, programs) {
     const val = browserInput.value.toLowerCase();
     let matches;
     if (val === '') {
-      matches = programTitles.slice(-5); // Recommended
+      matches = programTitles.slice(-5);
     } else {
       matches = programTitles.filter(p => p.toLowerCase().startsWith(val));
     }
@@ -78,103 +198,84 @@ function initBrowserSearch(win, programs) {
   }
 
   function switchToTab(tab) {
-  // Deselect all tabs
-  Array.from(tabsContainer.children).forEach(t => {
-    t.style.background = '';
+    Array.from(tabsContainer.children).forEach(t => { t.style.background = ''; });
+    Array.from(contentContainer.children).forEach(c => { c.style.display = 'none'; });
+    tab.style.background = '#eee';
+    const appTitle = tab.dataset.title;
+    const contentDiv = contentContainer.querySelector(`div[data-title="${appTitle}"]`);
+    if (contentDiv) contentDiv.style.display = 'block';
+  }
+
+  tabsContainer.addEventListener('click', (e) => {
+    const tab = e.target.closest('div[data-title]');
+    if (tab) switchToTab(tab);
   });
-
-  // Hide all content divs
-  Array.from(contentContainer.children).forEach(c => {
-    c.style.display = 'none';
-  });
-
-  // Highlight selected tab
-  tab.style.background = '#eee';
-
-  // Show its content
-  const appTitle = tab.dataset.title;
-  const contentDiv = contentContainer.querySelector(`div[data-title="${appTitle}"]`);
-  if (contentDiv) contentDiv.style.display = 'block';
-}
-
-// Add click handler to switch tabs
-tabsContainer.addEventListener('click', (e) => {
-  const tab = e.target.closest('div[data-title]');
-  if (tab) switchToTab(tab);
-});
 
   function openAppInTab(appTitle) {
-  // Check if tab exists
-  const existingTab = Array.from(tabsContainer.children).find(t => t.dataset.title === appTitle);
-  if (existingTab) {
-    switchToTab(existingTab);
-    return;
-  }
+    addToHistory(appTitle);
 
-  // Create new tab
-  const tab = document.createElement('div');
-  tab.dataset.title = appTitle;
-  tab.style.display = 'inline-block';
-  tab.style.padding = '5px 10px';
-  tab.style.cursor = 'pointer';
-  tab.style.borderRight = '1px solid #ccc';
-  tab.style.position = 'relative';
-  tab.style.whiteSpace = 'nowrap';
-
-  const tabLabel = document.createElement('span');
-  tabLabel.textContent = appTitle;
-  tab.appendChild(tabLabel);
-
-  // Close button
-  const closeBtn = document.createElement('span');
-  closeBtn.textContent = '×';
-  closeBtn.style.marginLeft = '5px';
-  closeBtn.style.cursor = 'pointer';
-  closeBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const contentDiv = contentContainer.querySelector(`div[data-title="${appTitle}"]`);
-    if (contentDiv) contentDiv.remove();
-    tab.remove();
-
-    // Activate last tab if exists
-    if (tabsContainer.lastChild) switchToTab(tabsContainer.lastChild);
-  });
-  tab.appendChild(closeBtn);
-
-  tabsContainer.appendChild(tab);
-
-  // Create content div with iframe
-  const content = document.createElement('div');
-  content.dataset.title = appTitle;
-  content.style.display = 'none';
-  content.style.width = '100%';
-  content.style.height = '100%';
-
-  const appProgram = Array.from(programs).find(p => p.dataset.title === appTitle);
-  if (appProgram) {
-    const link = appProgram.dataset.link;
-    if (link) {
-      const iframe = document.createElement('iframe');
-      iframe.src = link;
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = 'none';
-      content.appendChild(iframe);
-    } else {
-      // If no link, just show icon and title
-      const fallback = document.createElement('div');
-      fallback.textContent = appTitle;
-      fallback.style.fontSize = '20px';
-      fallback.style.textAlign = 'center';
-      fallback.style.paddingTop = '50px';
-      content.appendChild(fallback);
+    const existingTab = Array.from(tabsContainer.children).find(t => t.dataset.title === appTitle);
+    if (existingTab) {
+      switchToTab(existingTab);
+      return;
     }
+
+    const tab = document.createElement('div');
+    tab.dataset.title = appTitle;
+    tab.style.display = 'inline-block';
+    tab.style.padding = '5px 10px';
+    tab.style.cursor = 'pointer';
+    tab.style.borderRight = '1px solid #ccc';
+    tab.style.position = 'relative';
+    tab.style.whiteSpace = 'nowrap';
+
+    const tabLabel = document.createElement('span');
+    tabLabel.textContent = appTitle;
+    tab.appendChild(tabLabel);
+
+    const closeBtn = document.createElement('span');
+    closeBtn.textContent = '×';
+    closeBtn.style.marginLeft = '5px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const contentDiv = contentContainer.querySelector(`div[data-title="${appTitle}"]`);
+      if (contentDiv) contentDiv.remove();
+      tab.remove();
+      if (tabsContainer.lastChild) switchToTab(tabsContainer.lastChild);
+    });
+    tab.appendChild(closeBtn);
+    tabsContainer.appendChild(tab);
+
+    const content = document.createElement('div');
+    content.dataset.title = appTitle;
+    content.style.display = 'none';
+    content.style.width = '100%';
+    content.style.height = '100%';
+
+    const appProgram = Array.from(programs).find(p => p.dataset.title === appTitle);
+    if (appProgram) {
+      const link = appProgram.dataset.link;
+      if (link) {
+        const iframe = document.createElement('iframe');
+        iframe.src = link;
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        content.appendChild(iframe);
+      } else {
+        const fallback = document.createElement('div');
+        fallback.textContent = appTitle;
+        fallback.style.fontSize = '20px';
+        fallback.style.textAlign = 'center';
+        fallback.style.paddingTop = '50px';
+        content.appendChild(fallback);
+      }
+    }
+
+    contentContainer.appendChild(content);
+    switchToTab(tab);
   }
-
-  contentContainer.appendChild(content);
-
-  switchToTab(tab);
-}
 
   browserInput.addEventListener('focus', showDropdown);
   browserInput.addEventListener('input', showDropdown);
@@ -209,7 +310,34 @@ tabsContainer.addEventListener('click', (e) => {
   document.addEventListener('click', e => {
     if (!inputWrapper.contains(e.target)) dropdown.style.display = 'none';
   });
+
+const historyBtn = document.createElement('button');
+
+historyBtn.style.width = '24px';
+historyBtn.style.height = '24px';
+historyBtn.style.padding = '0';
+historyBtn.style.marginLeft = '10px';
+historyBtn.style.border = 'none';
+historyBtn.style.background = 'transparent';
+historyBtn.style.cursor = 'pointer';
+historyBtn.style.display = 'flex';
+historyBtn.style.flexDirection = 'column';
+historyBtn.style.justifyContent = 'space-around';
+historyBtn.style.alignItems = 'center';
+
+for (let i = 0; i < 3; i++) {
+  const dot = document.createElement('span');
+  dot.style.width = '4px';
+  dot.style.height = '4px';
+  dot.style.background = '#000';
+  dot.style.borderRadius = '50%';
+  historyBtn.appendChild(dot);
 }
+
+historyBtn.addEventListener('click', () => openHistoryTab(contentContainer, tabsContainer));
+browserHeader.appendChild(historyBtn);
+}
+
 
 // Taskbar search bar
 function initDesktopSearch(programs) {

@@ -196,53 +196,77 @@ programs.forEach(btn => {
   let isDragging = false;
   let justDragged = false;
   let startX, startY, origX, origY;
+  let shadow;
+
+  const desktop = document.querySelector('.desktop');
+  const desktopWidth = desktop.clientWidth;
+  const desktopHeight = desktop.clientHeight - 60;
 
   btn.addEventListener('mousedown', e => {
     e.preventDefault();
-    isDragging = false;
     startX = e.clientX;
     startY = e.clientY;
     origX = btn.offsetLeft;
     origY = btn.offsetTop;
+    isDragging = false;
 
     const onMouseMove = eMove => {
       const dx = eMove.clientX - startX;
       const dy = eMove.clientY - startY;
 
-      if (!isDragging && Math.sqrt(dx*dx + dy*dy) > 5) {
+      if (!isDragging && Math.hypot(dx, dy) > 5) {
         isDragging = true;
         justDragged = true;
-        btn.style.position = 'absolute';
+
+        // Create shadow copy
+        shadow = btn.cloneNode(true);
+        shadow.style.position = 'absolute';
+        shadow.style.left = origX + 'px';
+        shadow.style.top = origY + 'px';
+        shadow.style.opacity = '0.5';
+        shadow.style.pointerEvents = 'none';
+        shadow.style.zIndex = 999;
+        desktop.appendChild(shadow);
       }
 
       if (isDragging) {
-        btn.style.left = origX + dx + 'px';
-        btn.style.top = origY + dy + 'px';
+        let newLeft = origX + dx;
+        let newTop = origY + dy;
+
+        // Keep within desktop bounds
+        newLeft = Math.max(0, Math.min(newLeft, desktopWidth - btn.offsetWidth));
+        newTop = Math.max(0, Math.min(newTop, desktopHeight - btn.offsetHeight));
+
+        shadow.style.left = newLeft + 'px';
+        shadow.style.top = newTop + 'px';
       }
     };
 
-    const onMouseUp = () => {
+    const onMouseUp = eUp => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+
       if (isDragging) {
         isDragging = false;
+        btn.style.opacity = '1';
+        // Snap to nearest grid (120px width, 100px height per original layout)
+        const col = Math.round(parseInt(shadow.style.left) / 120);
+        const row = Math.round(parseInt(shadow.style.top) / 100);
+        btn.style.left = col * 120 + 'px';
+        btn.style.top = row * 100 + 'px';
+        shadow.remove();
         setTimeout(() => { justDragged = false; }, 0);
+      } else {
+        // Not dragged, treat as click
+        openProgram(btn);
       }
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
-  btn.addEventListener('click', e => {
-    if (justDragged) {
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    } else {
-      openProgram(btn);
-    }
-  });
 });
+
 
 window.addEventListener('resize', arrangePrograms);
 arrangePrograms();

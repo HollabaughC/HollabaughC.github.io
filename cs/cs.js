@@ -52,16 +52,19 @@ function openProgram(btn) {
   }
 
   win.innerHTML = `
-    <div class="window-header">
+  <div class="window-header" style="display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:5px;">
+      <img src="${icon}" alt="${title} Icon" class="window-favicon" style="width:16px;height:16px;">
       <span>${title}</span>
-      <div class="window-buttons">
-        <span class="window-minimize">🗕</span>
-        <span class="window-maximize">🗖</span>
-        <span class="window-close">✖</span>
-      </div>
     </div>
-    ${contentHTML}
-  `;
+    <div class="window-buttons">
+      <span class="window-minimize">🗕</span>
+      <span class="window-maximize">🗖</span>
+      <span class="window-close">✖</span>
+    </div>
+  </div>
+  ${contentHTML}
+`;
   windowsContainer.appendChild(win);
 
   const minimizeBtn = win.querySelector('.window-minimize');

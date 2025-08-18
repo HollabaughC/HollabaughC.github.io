@@ -36,11 +36,13 @@ function openProgram(btn) {
     contentHTML = `
       <div class="browser-window">
         <div class="browser-header">
-          <img src="${icon}" alt="Browser Logo" class="browser-logo">
-          <input type="text" class="browser-url" placeholder="Search or enter URL">
-          <button class="browser-go">Go</button>
-        </div>
+        <img src="${icon}" alt="Browser Logo" class="browser-logo">
+        <input type="text" class="browser-url" placeholder="Search or enter URL">
+        <button class="browser-go">Go</button>
+        <div class="browser-tabs" style="overflow-x:auto; white-space:nowrap;"></div>
       </div>
+      <div class="browser-content" style="border-top:1px solid #ccc; padding:10px; height:400px; overflow:auto;"></div>
+    </div>
     `;
   } else if (title === "Notepad") {
     contentHTML = `
@@ -106,46 +108,45 @@ function openProgram(btn) {
   let offsetX, offsetY, dragging = false;
 
   header.addEventListener('mousedown', e => {
-  if (isMaximized) return;
-  dragging = true;
-  offsetX = e.clientX - win.offsetLeft;
-  offsetY = e.clientY - win.offsetTop;
-  win.style.zIndex = 100;
+    if (isMaximized) return;
+    dragging = true;
+    offsetX = e.clientX - win.offsetLeft;
+    offsetY = e.clientY - win.offsetTop;
+    win.style.zIndex = 100;
 
-  // Only move while mouse is held down
-  const onMouseMove = eMove => {
-    if (!dragging) return;
-    win.style.left = (eMove.clientX - offsetX) + 'px';
-    win.style.top = (eMove.clientY - offsetY) + 'px';
+    const onMouseMove = eMove => {
+      if (!dragging) return;
+      win.style.left = (eMove.clientX - offsetX) + 'px';
+      win.style.top = (eMove.clientY - offsetY) + 'px';
 
-    if (eMove.clientY < 10) {
-      win.style.top = '0';
-      win.style.left = '0';
-      win.style.width = '100%';
-      win.style.height = 'calc(100% + 40px)';
-    } else if (eMove.clientX < 10) {
-      win.style.top = '0';
-      win.style.left = '0';
-      win.style.width = '50%';
-      win.style.height = 'calc(100% - 40px)';
-    } else if (eMove.clientX > window.innerWidth - 10) {
-      win.style.top = '0';
-      win.style.left = '50%';
-      win.style.width = '50%';
-      win.style.height = 'calc(100% - 40px)';
-    }
-  };
+      if (eMove.clientY < 10) {
+        win.style.top = '0';
+        win.style.left = '0';
+        win.style.width = '100%';
+        win.style.height = 'calc(100% + 40px)';
+      } else if (eMove.clientX < 10) {
+        win.style.top = '0';
+        win.style.left = '0';
+        win.style.width = '50%';
+        win.style.height = 'calc(100% - 40px)';
+      } else if (eMove.clientX > window.innerWidth - 10) {
+        win.style.top = '0';
+        win.style.left = '50%';
+        win.style.width = '50%';
+        win.style.height = 'calc(100% - 40px)';
+      }
+    };
 
-  const onMouseUp = () => {
-    dragging = false;
-    win.style.zIndex = 10;
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-  };
+    const onMouseUp = () => {
+      dragging = false;
+      win.style.zIndex = 10;
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
 
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
-});
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
 
   // Taskbar icon click
   taskIcon.addEventListener('click', () => {
@@ -165,88 +166,11 @@ function openProgram(btn) {
     });
   }
 
-  // COS Browser autocomplete
+  // COS Browser autocomplete is now in search.js
   if (title === "COS Browser") {
-    const browserHeader = win.querySelector('.browser-header');
-    const browserInput = browserHeader.querySelector('.browser-url');
-    const dropdown = document.createElement('div');
-    dropdown.className = 'autocomplete-dropdown';
-    dropdown.style.cssText = 'position:relative;margin:0 auto;width:80%;max-height:200px;overflow-y:auto;display:none;border:1px solid #ccc;background:#fff;z-index:100;';
-    browserHeader.appendChild(dropdown);
-
-    const programTitles = Array.from(programs).map(p => p.dataset.title);
-    let autocompleteIndex = -1;
-
-    function updateDropdown(matches) {
-      dropdown.innerHTML = '';
-      if (matches.length === 0) {
-        dropdown.style.display = 'none';
-        return;
-      }
-      matches.forEach((m, i) => {
-        const item = document.createElement('div');
-        item.textContent = m;
-        item.style.padding = '5px';
-        item.style.cursor = 'pointer';
-        if (i === autocompleteIndex) item.style.background = '#eee';
-        item.addEventListener('mousedown', () => {
-          browserInput.value = m;
-          dropdown.style.display = 'none';
-          document.querySelector(`.program-btn[data-title="${m}"]`).click();
-        });
-        dropdown.appendChild(item);
-      });
-      dropdown.style.display = 'block';
-    }
-
-    browserInput.addEventListener('input', () => {
-      const val = browserInput.value.toLowerCase();
-      const matches = programTitles.filter(p => p.toLowerCase().startsWith(val));
-      autocompleteIndex = -1;
-      updateDropdown(matches);
-    });
-
-    browserInput.addEventListener('keydown', e => {
-      const visibleItems = Array.from(dropdown.children);
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (visibleItems.length === 0) return;
-        autocompleteIndex = (autocompleteIndex + 1) % visibleItems.length;
-        updateDropdown(programTitles.filter(p => p.toLowerCase().startsWith(browserInput.value.toLowerCase())));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (visibleItems.length === 0) return;
-        autocompleteIndex = (autocompleteIndex - 1 + visibleItems.length) % visibleItems.length;
-        updateDropdown(programTitles.filter(p => p.toLowerCase().startsWith(browserInput.value.toLowerCase())));
-      } else if (e.key === 'Tab') {
-        e.preventDefault();
-        if (visibleItems.length === 0) return;
-        autocompleteIndex = (autocompleteIndex + 1) % visibleItems.length;
-        browserInput.value = visibleItems[autocompleteIndex].textContent;
-        updateDropdown(programTitles.filter(p => p.toLowerCase().startsWith(browserInput.value.toLowerCase())));
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        const matchedProgram = programTitles.find(p => p.toLowerCase() === browserInput.value.trim().toLowerCase());
-        if (matchedProgram) document.querySelector(`.program-btn[data-title="${matchedProgram}"]`).click();
-        dropdown.style.display = 'none';
-        browserInput.value = '';
-      }
-    });
-
-    document.addEventListener('click', e => {
-      if (!win.contains(e.target)) dropdown.style.display = 'none';
-    });
+    initBrowserSearch(win, programs);
   }
 }
-
-// Search
-const searchBar = document.getElementById('search-bar');
-searchBar.addEventListener('input', () => {
-  const term = searchBar.value.toLowerCase();
-  programs.forEach(btn => {
-    btn.style.display = btn.dataset.title.toLowerCase().includes(term) ? 'flex' : 'none';
-  });
-});
 
 // Arrange programs in columns
 function arrangePrograms() {

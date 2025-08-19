@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WWOLL — NES Platformer Player</title>
+  <link rel="icon" type="image/x-icon" href="../img/wwoll.png">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky: #7ec0ff;
+      --cloud: #ffffff;
+      --hill: #6ab04c;
+      --ground: #c86b3c;
+      --ground-dark: #8b3d1e;
+      --accent: #ffcc00;
+      --ui: #1f1f1f;
+      --scanline: rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Press Start 2P', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', Helvetica, Arial, sans-serif;
+      background: var(--sky);
+      color: #111;
+      overflow-x: hidden;
+    }
+
+    .pixel {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 10% 15%, var(--cloud) 0 20px, transparent 22px),
+        radial-gradient(circle at 30% 25%, var(--cloud) 0 18px, transparent 20px),
+        radial-gradient(circle at 60% 18%, var(--cloud) 0 22px, transparent 24px),
+        radial-gradient(circle at 85% 30%, var(--cloud) 0 20px, transparent 22px),
+        var(--sky);
+      animation: drift 30s linear infinite;
+      background-size: 100% 100%;
+    }
+    @keyframes drift {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+      100% { background-position: 20px 0, 40px 0, 60px 0, 80px 0, 0 0; }
+    }
+
+    .hills {
+      position: fixed;
+      left: 0; right: 0; bottom: 64px;
+      height: 140px;
+      z-index: -1;
+      background:
+        radial-gradient(150px 70px at 15% 100%, var(--hill) 60%, transparent 61%),
+        radial-gradient(220px 90px at 45% 100%, var(--hill) 60%, transparent 61%),
+        radial-gradient(170px 80px at 75% 100%, var(--hill) 60%, transparent 61%);
+      filter: saturate(1.1);
+    }
+
+    .ground {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 64px;
+      background:
+        linear-gradient(var(--ground) 0 48px, var(--ground-dark) 48px 64px),
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.12) 0 8px, rgba(0,0,0,0) 8px 16px);
+      box-shadow: inset 0 6px 0 rgba(0,0,0,0.1);
+    }
+
+    .container {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 48px 16px 96px;
+    }
+
+    .crt {
+      position: relative;
+      width: min(900px, 92vw);
+      aspect-ratio: 16 / 9;
+      border: 8px solid #333;
+      background: #000;
+      border-radius: 12px;
+      box-shadow: 0 12px 0 #111, 0 24px 24px rgba(0,0,0,0.35);
+      overflow: hidden;
+    }
+
+    .crt::before, .crt::after {
+      content: '';
+      position: absolute;
+      width: 10px; height: 10px;
+      background: radial-gradient(circle at 30% 30%, #666 0 2px, #333 3px 10px);
+    }
+    .crt::before { left: 10px; top: 10px; }
+    .crt::after { right: 10px; top: 10px; }
+    .crt .screw { position: absolute; right: 10px; bottom: 10px; width: 10px; height: 10px; background: radial-gradient(circle at 30% 30%, #666 0 2px, #333 3px 10px); }
+
+    .scanlines {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0) 0px,
+        rgba(255,255,255,0) 2px,
+        var(--scanline) 3px,
+        var(--scanline) 4px
+      );
+      mix-blend-mode: multiply;
+      opacity: 0.35;
+    }
+
+    .crt video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #000;
+    }
+
+    .hud {
+      position: fixed;
+      top: 12px; left: 12px; right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 4px solid #111;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(2px);
+      border-radius: 10px;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .hud .brand { color: #111; }
+    .hud .brand span { color: var(--accent); }
+    .hud .tips { opacity: 0.8; }
+
+    .coins {
+      position: fixed;
+      top: 56px; right: 16px;
+      display: flex; gap: 8px;
+      filter: drop-shadow(0 2px 0 rgba(0,0,0,0.3));
+    }
+    .coin {
+      width: 18px; height: 18px;
+      background: radial-gradient(circle at 30% 30%, #fff 0 2px, var(--accent) 3px 8px, #b89400 9px 12px);
+      border: 2px solid #5a4700;
+      border-radius: 50%;
+      animation: bob 1.6s ease-in-out infinite;
+    }
+    .coin:nth-child(2) { animation-delay: .2s; }
+    .coin:nth-child(3) { animation-delay: .4s; }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    footer {
+      position: fixed;
+      bottom: 68px; left: 0; right: 0;
+      text-align: center;
+      font-size: 10px;
+      color: #222;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    @media (max-width: 380px) {
+      .hud { font-size: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene"></div>
+  <div class="hills"></div>
+  <div class="ground"></div>
+
+  <div class="hud">
+    <div class="brand">WWOLL <span>Trailer</span></div>
+    <div class="tips">SPACE: Play/Pause · M: Mute · F: Fullscreen</div>
+  </div>
+  <div class="coins" aria-hidden="true">
+    <div class="coin"></div>
+    <div class="coin"></div>
+    <div class="coin"></div>
+  </div>
+
+  <main class="container">
+    <div class="crt" role="region" aria-label="Video player">
+      <video id="player" class="pixel" controls preload="metadata">
+        <source src="wwoll.mp4" type="video/mp4" />
+        Sorry, your browser doesn't support embedded videos.
+      </video>
+      <div class="scanlines" aria-hidden="true"></div>
+      <div class="screw" aria-hidden="true"></div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const video = document.getElementById('player');
+
+      // Attempt to autoplay if allowed by the browser; fallback to controls only
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          await video.play();
+        } catch (err) {
+        }
+      });
+
+      // Keyboard shortcuts for a retro UX feel
+      window.addEventListener('keydown', (e) => {
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+        switch (e.key.toLowerCase()) {
+          case ' ': // Space toggles play/pause
+            e.preventDefault();
+            if (video.paused) video.play(); else video.pause();
+            break;
+          case 'm':
+            video.muted = !video.muted;
+            break;
+          case 'f':
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen().catch(()=>{});
+            }
+            break;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

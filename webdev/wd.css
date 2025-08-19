@@ -1,0 +1,83 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+.portfolio-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.portfolio-logo {
+  width: 60px;
+  height: 60px;
+  margin-right: 16px;
+}
+
+.portfolio-name {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a0dab;
+}
+
+.search-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+#search-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  outline: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#search-results {
+  margin-top: 20px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+
+.result-item:hover {
+  background-color: #e8f0fe;
+}
+
+.result-item img {
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+}
+
+.result-item .title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1a0dab;
+  text-decoration: none;
+}
+
+.result-item .title:hover {
+  text-decoration: underline;
+}
+
+.result-item .subtitle {
+  font-size: 14px;
+  color: #555;
+}

@@ -217,6 +217,14 @@ body, html {
   user-select: none;
 }
 
+.window-minimize:hover, .window-maximize:hover {
+  background-color: #8e44ad;
+}
+
+.window-close:hover {
+  background-color: red;
+}
+
 .window-content {
   flex-grow: 1;
   overflow: auto;

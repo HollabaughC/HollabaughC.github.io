@@ -1,129 +1,99 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const logo = document.querySelector('.logo');
-  const footerSecret = document.getElementById('footer-secret');
-  const overlay = document.getElementById('loading-overlay');
+function showLoadingAndRedirect(target) {
+  const overlay = document.getElementById("loading-overlay");
+  overlay.style.display = "flex";
+  overlay.innerHTML = `
+    <div class="reference-distort">SITE MALFUNCTION...</div>
+    <div class="reference-static"></div>
+    <div class="reference-scanlines"></div>
+  `;
+  setTimeout(() => {
+    window.location.href = target;
+  }, 2500);
+}
 
-  function showOverlayAndNavigate(url) {
-    overlay.style.display = 'flex';
+document.querySelector(".logo").addEventListener("click", (e) => {
+  const rect = e.target.getBoundingClientRect();
+  for (let i = 0; i < 5; i++) {
+    const mini = document.createElement("img");
+    mini.src = "img/cam.png";
+    mini.classList.add("mini-logo");
+    mini.style.left = rect.left + rect.width / 2 + "px";
+    mini.style.top = rect.bottom + "px";
+    document.body.appendChild(mini);
 
-    // Start fade-out just before navigation
+    let x = rect.left + rect.width / 2;
+    let y = rect.bottom;
+    let vx = (Math.random() - 0.5) * 6;
+    let vy = Math.random() * -8 - 4;
+    const gravity = 0.4;
+    const damping = 0.7;
+
+    const interval = setInterval(() => {
+      vy += gravity;
+      x += vx;
+      y += vy;
+
+      if (y + 40 > window.innerHeight) {
+        y = window.innerHeight - 40;
+        vy *= -damping;
+      }
+      if (x < 0 || x + 40 > window.innerWidth) {
+        vx *= -1;
+      }
+
+      mini.style.left = x + "px";
+      mini.style.top = y + "px";
+    }, 16);
+
     setTimeout(() => {
-      overlay.classList.add('fade-out');
-    }, 4700);
-
-    setTimeout(() => {
-      window.location.href = url;
-    }, 5000);
+      clearInterval(interval);
+      mini.remove();
+    }, 3000);
   }
-
-  if (logo) {
-    logo.addEventListener('click', () => {
-      createBouncingClones(logo, 5);
-      showOverlayAndNavigate('game.html');
-    });
-  }
-
-  if (footerSecret) {
-    footerSecret.addEventListener('click', () => {
-      footerSecret.classList.add('blowing-up');
-      showOverlayAndNavigate('secret.html');
-    });
-  }
+  setTimeout(() => showLoadingAndRedirect("game.html"), 1500);
 });
 
-function createBouncingClones(sourceLogo, count) {
-  const rect = sourceLogo.getBoundingClientRect();
-  const clones = [];
-
-  for (let i = 0; i < count; i++) {
-    const clone = sourceLogo.cloneNode(true);
-    clone.classList.add('falling-clone');
-    document.body.appendChild(clone);
-
-    const size = 50;
-    const pos = {
-      x: rect.left + rect.width / 2 + window.scrollX + (Math.random() * 200 - 100),
-      y: rect.top + rect.height / 2 + window.scrollY + (Math.random() * 100 - 50)
-    };
-
-    clone.style.position = 'absolute';
-    clone.style.left = `${pos.x}px`;
-    clone.style.top = `${pos.y}px`;
-    clone.style.width = `${size}px`;
-    clone.style.pointerEvents = 'none';
-    clone.style.opacity = '1';
-
-    const velocity = {
-      x: Math.random() * 6 - 3,
-      y: Math.random() * 6 + 6
-    };
-
-    clones.push({ el: clone, pos, velocity, size });
-  }
-
-  const gravity = 0.5;
-  const damping = 0.85;
-  const minBounceUpward = -8;
-  const bounds = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  };
-
-  const interval = setInterval(() => {
-    for (let i = 0; i < clones.length; i++) {
-      const clone = clones[i];
-      const { el, pos, velocity, size } = clone;
-
-      velocity.y += gravity;
-      pos.x += velocity.x;
-      pos.y += velocity.y;
-
-      if (pos.x <= 0 || pos.x + size >= bounds.width) {
-        velocity.x *= -damping;
-        pos.x = Math.max(0, Math.min(pos.x, bounds.width - size));
-      }
-
-      if (pos.y + size >= bounds.height) {
-        velocity.y *= -damping;
-        if (velocity.y > -minBounceUpward) velocity.y = minBounceUpward;
-        pos.y = bounds.height - size;
-      }
-
-      const trail = document.createElement('div');
-      trail.classList.add('trail-dot');
-      trail.style.left = `${pos.x + size / 2}px`;
-      trail.style.top = `${pos.y + size / 2}px`;
-      document.body.appendChild(trail);
-      setTimeout(() => trail.remove(), 1000);
-
-      for (let j = i + 1; j < clones.length; j++) {
-        const other = clones[j];
-        const dx = other.pos.x - pos.x;
-        const dy = other.pos.y - pos.y;
-        const dist = Math.hypot(dx, dy);
-        const minDist = size;
-
-        if (dist < minDist) {
-          const angle = Math.atan2(dy, dx);
-          const targetX = pos.x + Math.cos(angle) * minDist;
-          const targetY = pos.y + Math.sin(angle) * minDist;
-          const ax = (targetX - other.pos.x) * 0.05;
-          const ay = (targetY - other.pos.y) * 0.05;
-
-          velocity.x -= ax;
-          velocity.y -= ay;
-          other.velocity.x += ax;
-          other.velocity.y += ay;
-        }
-      }
-
-      el.style.left = `${pos.x}px`;
-      el.style.top = `${pos.y}px`;
-    }
-  }, 20);
-
+document.getElementById("footer-secret").addEventListener("click", () => {
+  const footer = document.querySelector("footer");
+  footer.style.animation = "footer-glitch-out 1s forwards";
   setTimeout(() => {
-    clearInterval(interval);
-    clones.forEach(c => c.el.remove());
-  }, 4000);
+    showLoadingAndRedirect("secret.html");
+  }, 1000);
+});
+
+const canvas = document.createElement("canvas");
+canvas.id = "matrix-bg";
+document.body.prepend(canvas);
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const letters = "アィイゥウェエオカキクケコサシスセソ0123456789";
+const fontSize = 16;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
+
+function draw() {
+  ctx.fillStyle = "rgba(0,0,0,0.1)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#0F0";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 50);

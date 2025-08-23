@@ -1,118 +1,146 @@
-/* General Styling */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #e6e1fa;
-    background: #1e1e1e;
-  }
-  
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2em;
-    background: radial-gradient(circle at center, #3a2a5d, #1c1b2a);
-    box-shadow: 0 4px 20px rgba(128, 90, 213, 0.5);
-    position: relative;
-  }
-  
-  .header-text {
-    display: flex;
-    align-items: center;
-    gap: 2em;
-  }
-  
-  .left-text, .right-text {
-    font-size: 4em;
-    font-weight: bold;
-    color: #c6b3f7;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), 0 0 20px #8a6fc9, 0 0 30px #b48ead;
-  }
-  
-  .logo {
-    height: 150px;
-    width: 150px;
-    border-radius: 50%;
-    background-color: #292838;
-    padding: 12px;
-    box-shadow: 0 0 20px #b48ead;
-    cursor: pointer;
-  }
-  
-  /* Main Game Container */
-  main {
-    padding: 4em 2em;
-    text-align: center;
-  }
-  
-  .game-container {
-    background: linear-gradient(to bottom, #2a2038, #1c1b2a);
-    padding: 3em;
-    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
-  }
-  
-  #game-area {
-    width: 400px;
-    height: 400px;
-    margin: 0 auto;
-    box-shadow: 0 0 20px rgba(200, 150, 255, 0.5);
-  }
-  
-  canvas {
-    background-color: #111;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  /* Buttons */
-  .button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 10px;
-  }
-  
-  .circle-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 200px;
-    height: 60px;
-    background-color: #3a3a4d;
-    border-radius: 30px;
-    color: #e6e1fa;
-    font-weight: bold;
-    font-size: 1.2em;
-    text-decoration: none;
-    margin: 0.5em;
-    box-shadow: 0 0 15px rgba(180, 142, 173, 0.4);
-    transition: background-color 0.3s, transform 0.3s;
-    cursor: pointer;
-  }
-  
-  .circle-btn:hover {
-    background-color: #7a6acf;
-    transform: scale(1.05);
-  }
-  
-  /* Game Over Notification */
-  .game-over {
-    display: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-  
-  /* Footer Styling */
-  footer {
-    text-align: center;
-    padding: 1.5em 1em;
-    background: radial-gradient(circle at top center, #2a2038, #1c1b2a);
-    box-shadow: 0 -4px 20px rgba(180, 142, 255, 0.2);
-    color: #d8c6ff;
-  }
-  
+  font-family: 'Orbitron', sans-serif;
+  min-height: 100vh;
+  background: #000;
+  color: #e6e1fa;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  background: radial-gradient(circle at center, #3a2a5d, #1c1b2a);
+  box-shadow: 0 4px 20px rgba(128, 90, 213, 0.5), 0 0 25px #ff00ff, 0 0 50px #00ffff inset;
+  position: relative;
+  z-index: 10;
+}
+
+.header-text {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  font-size: 4em;
+  font-weight: bold;
+  color: #c6b3f7;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5), 0 0 20px #8a6fc9, 0 0 30px #b48ead;
+  animation: cyberpunk-glitch 5s infinite;
+}
+
+.logo {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  background-color: #292838;
+  padding: 12px;
+  box-shadow: 0 0 20px #b48ead, 0 0 40px #ff00ff, 0 0 60px #00ffff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 90px #b48ead;
+}
+
+main {
+  padding: 4em 2em;
+  text-align: center;
+}
+
+.game-container {
+  background: linear-gradient(to bottom, #2a2038, #1c1b2a);
+  padding: 3em;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 25px #ff00ff;
+}
+
+#game-area {
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgba(200, 150, 255, 0.5), 0 0 30px #00ffff;
+}
+
+canvas {
+  background-color: #111;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 0 20px #ff33cc;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 10px;
+}
+
+.circle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 60px;
+  background-color: #3a3a4d;
+  border-radius: 30px;
+  color: #e6e1fa;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-decoration: none;
+  margin: 0.5em;
+  box-shadow: 0 0 15px rgba(180, 142, 173, 0.4), 0 0 25px #ff00ff, 0 0 40px #00ffff inset;
+  transition: background-color 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.circle-btn:hover {
+  background-color: #7a6acf;
+  transform: scale(1.05);
+  box-shadow: 0 0 30px #ff33cc, 0 0 50px #00ffff inset;
+}
+
+.game-over {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 0 25px #ff00ff, 0 0 50px #00ffff inset;
+  animation: flicker 6s infinite;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5em 1em;
+  background: radial-gradient(circle at top center, #2a2038, #1c1b2a);
+  box-shadow: 0 -4px 20px rgba(180, 142, 255, 0.2), 0 0 25px #00ffff, 0 0 50px #ff00ff inset;
+  color: #d8c6ff;
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes cyberpunk-glitch {
+  0%, 95%, 100% { transform: none; }
+  96% { transform: skewX(10deg) translateX(-5px); }
+  97% { transform: skewX(-10deg) translateX(5px); }
+  98% { transform: none; }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.3; }
+}

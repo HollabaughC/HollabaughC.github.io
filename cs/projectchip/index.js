@@ -4,15 +4,20 @@ let chip = {
   happiness: 80,
   energy: 80,
   health: 100,
-  age: 0, // days
+  age: 0,
   stage: "Baby",
-  lastUpdate: Date.now()
+  lastUpdate: Date.now(),
+  asleep: false
 };
+
+let miniGameActive = false; 
 
 if (localStorage.getItem("cos-chip")) {
   chip = JSON.parse(localStorage.getItem("cos-chip"));
   updateAll();
 }
+
+autoSleepCheck();
 
 function updateBar(id, value) {
   const bar = document.getElementById(id);
@@ -42,7 +47,9 @@ function updateClock() {
   const totalHours = chip.age * 24;
   const days = Math.floor(totalHours / 24);
   const hours = Math.floor(totalHours % 24);
-  clockEl.innerText = `Day ${days}, Hour ${hours}`;
+  const minutes = Math.floor((totalHours * 60) % 60);
+
+  clockEl.innerText = `Day ${days}, ${hours}h ${minutes}m old`;
 }
 
 function createClock() {
@@ -56,16 +63,29 @@ function decayStats() {
   const now = Date.now();
   const elapsed = (now - chip.lastUpdate) / 1000;
   if (elapsed > 0) {
-    const decay = elapsed * 0.05;
-    chip.hunger = Math.max(0, chip.hunger - decay);
-    chip.happiness = Math.max(0, chip.happiness - decay / 2);
-    chip.energy = Math.max(0, chip.energy - decay / 3);
+    const hungerDecay = 100 / (12 * 3600);
+    const happyDecay  = 100 / (24 * 3600);
+    const energyDecay = 100 / (16 * 3600);
+    const healthDecay = 100 / (24 * 3600);
 
-    if (chip.hunger === 0 || chip.energy === 0) {
-      chip.health = Math.max(0, chip.health - decay);
+    if (chip.asleep) {
+      const energyRestore = 100 / (8 * 3600);
+      chip.energy = Math.min(100, chip.energy + elapsed * energyRestore);
+
+      chip.hunger = Math.max(0, chip.hunger - elapsed * (hungerDecay / 2));
+
+      chip.happiness = Math.max(0, chip.happiness - elapsed * (happyDecay / 4));
+    } else {
+      chip.hunger = Math.max(0, chip.hunger - elapsed * hungerDecay);
+      chip.happiness = Math.max(0, chip.happiness - elapsed * happyDecay);
+      chip.energy = Math.max(0, chip.energy - elapsed * energyDecay);
     }
 
-    chip.age += elapsed / 60;
+    if (chip.hunger === 0 || chip.energy === 0) {
+      chip.health = Math.max(0, chip.health - elapsed * healthDecay);
+    }
+
+    chip.age += elapsed / 86400;
     updateStage();
 
     chip.lastUpdate = now;
@@ -168,12 +188,13 @@ document.getElementById("reset-btn").addEventListener("click", () => {
   location.reload();
 });
 
-let miniGameActive = false; 
 const chipImg = document.getElementById("chip-img");
 const display = document.getElementById("chip-display");
 
 setInterval(() => {
-  if (!miniGameActive) moveChipRandomly();
+  if (!miniGameActive && !chip.asleep) {
+    moveChipRandomly();
+  }
 }, 3000);
 
 function moveChipRandomly() {
@@ -291,4 +312,79 @@ function startMiniGame() {
     display.appendChild(winOverlay);
     setTimeout(() => winOverlay.remove(), 3000);
   }, 10000);
+}
+
+function autoSleepCheck() {
+  const hour = new Date().getHours();
+  if (hour >= 22 || hour < 7) {
+    if (!chip.asleep) toggleSleep(true);
+  } else {
+    if (chip.asleep) toggleSleep(false);
+  }
+}
+setInterval(autoSleepCheck, 60000);
+
+document.getElementById("sleep-btn").addEventListener("click", () => {
+  toggleSleep(!chip.asleep);
+});
+
+function toggleSleep(state) {
+  chip.asleep = state;
+
+  const overlay = document.getElementById("sleep-overlay") || createSleepOverlay();
+  overlay.style.display = state ? "block" : "none";
+
+  document.querySelectorAll("#actions button").forEach(btn => {
+    if (btn.id === "sleep-btn") return;
+    btn.disabled = state;
+  });
+
+  const display = document.getElementById("chip-display");
+  let zzz = document.getElementById("zzz-animation");
+
+  if (state) {
+    miniGameActive = true;
+
+    if (!zzz) {
+      zzz = document.createElement("div");
+      zzz.id = "zzz-animation";
+      zzz.innerText = "💤";
+      Object.assign(zzz.style, {
+        position: "absolute",
+        left: "60%",
+        top: "20%",
+        fontSize: "32px",
+        color: "white",
+        opacity: "0.8",
+        animation: "floatZzz 2s infinite",
+        zIndex: 400
+      });
+      display.appendChild(zzz);
+    }
+  } else {
+    miniGameActive = false;
+
+    if (zzz) zzz.remove();
+  }
+
+  updateAll();
+}
+
+function createSleepOverlay() {
+  const overlay = document.createElement("div");
+  overlay.id = "sleep-overlay";
+  Object.assign(overlay.style, {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    background: "rgba(0,0,0,0.85)",
+    zIndex: 300,
+    pointerEvents: "none",
+    display: "none",
+    transition: "opacity 1s ease"
+  });
+  document.getElementById("chip-app").appendChild(overlay);
+  return overlay;
 }

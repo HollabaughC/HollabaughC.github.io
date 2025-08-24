@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chip</title>
+<link rel="shortcut icon" href="img/chip_adult_happy.png" type="image/x-icon">
 <style>
     body {
         margin: 0;
@@ -47,23 +48,33 @@
     }
 
     .game-btn {
-        display: inline-block;
-        margin: 15px;
-        padding: 20px 20px;
-        font-size: 1.1em;
-        color: white;
-        background: linear-gradient(to top, #6b4226, #a0522d);
-        border: none;
-        border-radius: 50%;
-        width: 120px;
-        height: 120px;
-        cursor: pointer;
-        transition: transform 0.2s, background 0.2s;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        text-align: center;
-        line-height: 80px;
-        font-weight: bold;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+    padding: 10px;
+    font-size: clamp(0.8em, 2vw, 1.1em); /* scales text responsively */
+    color: white;
+    background: linear-gradient(to top, #6b4226, #a0522d);
+    border: none;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    text-align: center;
+    font-weight: bold;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
 
     .game-btn:hover {
         background: linear-gradient(to top, #8b5e3c, #d2691e);
@@ -110,8 +121,9 @@
         <img src="img/chip_elder_happy.png" alt="Beaver" class="beaver">
         <h1>Chip Games</h1>
         <p>Click a game to start playing!</p>
-        <div>
+        <div class="button-container">
             <button class="game-btn" onclick="goToGame('index.html')">Pet Chip</button>
+            <button class="game-btn" onclick="goToGame('ball.html')">Ball Chip</button>
         </div>
         <img src="img/tail.png" alt="Beaver Tail" class="tail">
     </div>

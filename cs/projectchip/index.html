@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Project Chip - COS Virtual Pet</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="index.js" defer></script>
+</head>
+<body>
+  <div id="chip-app">
+    <h1 id="chip-name">Chip the Beaver</h1>
+    <div id="chip-display">
+      <img id="chip-img" src="img/chip_baby.png" alt="Chip">
+    </div>
+
+    <div id="chip-stats">
+      <div class="stat">Hunger 🍖 <div class="bar"><div id="hunger-bar"></div></div></div>
+      <div class="stat">Happiness 🎮 <div class="bar"><div id="happy-bar"></div></div></div>
+      <div class="stat">Energy 😴 <div class="bar"><div id="energy-bar"></div></div></div>
+      <div class="stat">Health ❤️ <div class="bar"><div id="health-bar"></div></div></div>
+      <div class="stat">Age ⏳ <span id="age-display">0</span> days</div>
+      <div class="stat">Stage 🐾 <span id="life-stage">Baby</span></div>
+    </div>
+
+    <div id="actions">
+      <button id="feed-btn">🍖 Feed</button>
+      <button id="play-btn">🎮 Play</button>
+      <button id="sleep-btn">😴 Sleep</button>
+      <button id="clean-btn">🧼 Clean</button>
+    </div>
+
+    <button id="reset-btn">🔄 Reset Game</button>
+  </div>
+</body>
+</html>

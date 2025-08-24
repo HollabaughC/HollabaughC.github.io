@@ -10,12 +10,37 @@
 </head>
 <body>
   <header class="portfolio-header">
-    <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
-    <h1 class="portfolio-name">Cameron Hollabaugh</h1>
+    <a href="../index.html" class="header-link">
+      <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
+      <h1 class="portfolio-name">Cameron Hollabaugh</h1>
+    </a>
+    <div class="header-search">
+      <div class="search-wrapper">
+        <input type="text" id="search-input" placeholder="Search programs...">
+        <div class="search-icons">
+          <span class="clear-text" title="Clear">×</span>
+          <div class="separator"></div>
+          <span class="mic" title="Voice Search">🎤</span>
+          <span class="camera" title="Search by Image">📷</span>
+          <span class="search" title="Search">🔍</span>
+        </div>
+      </div>
+    </div>
   </header>
 
+  <nav class="search-tabs">
+    <ul>
+      <li class="active"><a href="#">All</a></li>
+      <li><a href="#">Images</a></li>
+      <li><a href="#">News</a></li>
+      <li><a href="#">Videos</a></li>
+      <li><a href="#">Maps</a></li>
+      <li><a href="#">More</a></li>
+    </ul>
+    <div class="tabs-underline"></div>
+  </nav>
+
   <div class="search-container">
-    <input type="text" id="search-input" placeholder="Search programs...">
     <div id="search-results"></div>
   </div>
 </body>

@@ -2,9 +2,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const items = document.querySelectorAll(".game-list li");
   let index = 0;
 
+  const preview = document.getElementById("game-preview");
+
   function setActive(i) {
     items.forEach(el => el.classList.remove("active"));
     items[i].classList.add("active");
+
+    const previewLink = items[i].dataset.preview;
+    if (preview && previewLink) {
+      preview.src = previewLink;
+      preview.onload = () => {
+        try {
+          const iframeDoc = preview.contentDocument || preview.contentWindow.document;
+          iframeDoc.querySelectorAll("video, audio").forEach(media => media.muted = true);
+        } catch {}
+      };
+    }
   }
 
   setActive(index);
@@ -36,6 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
       index = i;
       setActive(index);
       selectGame();
+    });
+    item.addEventListener("mouseenter", () => {
+      index = i;
+      setActive(index);
     });
   });
 });

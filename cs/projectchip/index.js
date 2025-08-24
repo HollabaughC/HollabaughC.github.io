@@ -1,4 +1,3 @@
-// --- Chip State ---
 let chip = {
   name: "Chip",
   hunger: 80,
@@ -10,13 +9,11 @@ let chip = {
   lastUpdate: Date.now()
 };
 
-// --- Load Saved State ---
 if (localStorage.getItem("cos-chip")) {
   chip = JSON.parse(localStorage.getItem("cos-chip"));
   updateAll();
 }
 
-// --- Update Bars ---
 function updateBar(id, value) {
   const bar = document.getElementById(id);
   bar.style.width = value + "%";
@@ -40,7 +37,6 @@ function updateAll() {
   localStorage.setItem("cos-chip", JSON.stringify(chip));
 }
 
-// --- Clock (in-game) ---
 function updateClock() {
   const clockEl = document.getElementById("game-clock") || createClock();
   const totalHours = chip.age * 24;
@@ -56,10 +52,9 @@ function createClock() {
   return clock;
 }
 
-// --- Stat Decay / Real-Time Aging ---
 function decayStats() {
   const now = Date.now();
-  const elapsed = (now - chip.lastUpdate) / 1000; // seconds
+  const elapsed = (now - chip.lastUpdate) / 1000;
   if (elapsed > 0) {
     const decay = elapsed * 0.05;
     chip.hunger = Math.max(0, chip.hunger - decay);
@@ -70,7 +65,7 @@ function decayStats() {
       chip.health = Math.max(0, chip.health - decay);
     }
 
-    chip.age += elapsed / 60; // 1 min = 1 day
+    chip.age += elapsed / 60;
     updateStage();
 
     chip.lastUpdate = now;
@@ -79,7 +74,6 @@ function decayStats() {
 }
 setInterval(decayStats, 1000);
 
-// --- Life Stages ---
 function updateStage() {
   const prevStage = chip.stage;
   if (chip.age < 1) chip.stage = "Baby";
@@ -101,7 +95,6 @@ function updateStage() {
   }
 }
 
-// --- Mood & Age Image Mapping ---
 function updateMoodImage() {
   const img = document.getElementById("chip-img");
   if (chip.health <= 0) {
@@ -131,16 +124,13 @@ function disableActions() {
 }
 
 function actionWithImage(stat, amount, imageSuffix, duration = 1200) {
-  // Increase the stat
   chip[stat] = Math.min(100, chip[stat] + amount);
 
   const img = document.getElementById("chip-img");
   const display = document.getElementById("chip-display");
 
-  // Change Chip image
   img.src = getStagePrefix() + "_" + imageSuffix + ".png";
 
-  // Hardcoded emoji based on action
   let emojiChar = "";
   if (imageSuffix === "eating") emojiChar = "🍖";
   else if (imageSuffix === "sleep") emojiChar = "😴";
@@ -162,10 +152,8 @@ function actionWithImage(stat, amount, imageSuffix, duration = 1200) {
     }, duration);
   }
 
-  // Revert Chip image after duration
   setTimeout(updateMoodImage, duration);
 
-  // Update UI
   updateAll();
 }
 
@@ -174,14 +162,12 @@ document.getElementById("play-btn").addEventListener("click", startMiniGame);
 document.getElementById("sleep-btn").addEventListener("click", () => actionWithImage("energy", 30, "sleep", 2000));
 document.getElementById("clean-btn").addEventListener("click", () => actionWithImage("health", 15, "clean", 1000));
 
-// --- Reset Game ---
 document.getElementById("reset-btn").addEventListener("click", () => {
   localStorage.removeItem("cos-chip");
   localStorage.removeItem("chip-highscore");
-  location.reload(); // full page reload
+  location.reload();
 });
 
-// --- Tamagotchi-style random movement ---
 let miniGameActive = false; 
 const chipImg = document.getElementById("chip-img");
 const display = document.getElementById("chip-display");
@@ -199,14 +185,12 @@ function moveChipRandomly() {
   chipImg.style.top = `${y}px`;
 }
 
-// --- Mini-game ---
 function startMiniGame() {
   miniGameActive = true;
   const game = document.createElement("div");
   game.id = "mini-game";
   display.appendChild(game);
 
-  // Score displays
   let score = 0;
   const highScoreKey = "chip-highscore";
   let highScore = parseInt(localStorage.getItem(highScoreKey)) || 0;
@@ -226,18 +210,15 @@ function startMiniGame() {
   const gameWidth = display.clientWidth;
   const gameHeight = display.clientHeight;
 
-  // Place Chip at bottom center
   chipImg.style.left = (gameWidth - chipImg.clientWidth) / 2 + "px";
   chipImg.style.top = (gameHeight - chipImg.clientHeight) + "px";
 
-  // Handle keyboard movement
   const keys = { left: false, right: false };
   function keyDown(e) { if (e.key === "ArrowLeft") keys.left = true; if (e.key === "ArrowRight") keys.right = true; }
   function keyUp(e) { if (e.key === "ArrowLeft") keys.left = false; if (e.key === "ArrowRight") keys.right = false; }
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
 
-  // Spawn sticks
   const spawnInterval = setInterval(() => {
     const stick = document.createElement("div");
     stick.className = "stick";
@@ -248,14 +229,12 @@ function startMiniGame() {
   }, 800);
 
   const moveInterval = setInterval(() => {
-    // Move Chip
     let chipLeft = parseFloat(chipImg.style.left);
     if (keys.left) chipLeft -= 30;
     if (keys.right) chipLeft += 30;
     chipLeft = Math.max(0, Math.min(gameWidth - chipImg.clientWidth, chipLeft));
     chipImg.style.left = chipLeft + "px";
 
-    // Move sticks and detect collisions
     sticks.forEach((stick, i) => {
       let top = parseFloat(stick.style.top);
       top += 5;
@@ -281,7 +260,6 @@ function startMiniGame() {
     });
   }, 50);
 
-  // End game
   setTimeout(() => {
     miniGameActive = false;
     clearInterval(spawnInterval);
@@ -291,14 +269,11 @@ function startMiniGame() {
     sticks.forEach(s => s.remove());
     game.remove();
 
-    // Update high score
     if (score > highScore) localStorage.setItem(highScoreKey, score);
 
-    // Increase happiness
     chip.happiness = Math.min(100, chip.happiness + score * 5);
     updateAll();
 
-    // Show "You Win" overlay
     const winOverlay = document.createElement("div");
     winOverlay.id = "win-overlay";
     winOverlay.innerText = `🎉 You scored ${score}! 🎉`;

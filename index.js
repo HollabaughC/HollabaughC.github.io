@@ -66,17 +66,30 @@ canvas.id = "matrix-bg";
 document.body.prepend(canvas);
 const ctx = canvas.getContext("2d");
 
+const letters = "アィイゥウェエオカキクケコサシスセソ0123456789";
+const fontSize = 16;
+let columns;
+let drops;
+
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+
+  const newColumns = Math.floor(canvas.width / fontSize);
+
+  if (!drops) {
+    drops = Array(newColumns).fill(1);
+  } else if (newColumns > drops.length) {
+    drops = drops.concat(Array(newColumns - drops.length).fill(1));
+  } else {
+    drops = drops.slice(0, newColumns);
+  }
+
+  columns = newColumns;
 }
+
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
-
-const letters = "アィイゥウェエオカキクケコサシスセソ0123456789";
-const fontSize = 16;
-let columns = Math.floor(canvas.width / fontSize);
-let drops = Array(columns).fill(1);
 
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.1)";

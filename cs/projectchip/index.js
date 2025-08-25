@@ -227,8 +227,10 @@ function moveChipRandomly() {
 }
 
 function startMiniGame() {
+  if (miniGameActive) return; // Prevent double start
   miniGameActive = true;
   document.getElementById("play-btn").disabled = true;
+
   const game = document.createElement("div");
   game.id = "mini-game";
   display.appendChild(game);
@@ -256,9 +258,10 @@ function startMiniGame() {
   const offset = gameHeight - chipImg.clientHeight - gameHeight / 6;
   chipImg.style.top = offset + "px";
 
+  // Keys
   const keys = { left: false, right: false };
-  function keyDown(e) { if (e.key === "ArrowLeft") keys.left = true; if (e.key === "ArrowRight") keys.right = true; }
-  function keyUp(e) { if (e.key === "ArrowLeft") keys.left = false; if (e.key === "ArrowRight") keys.right = false; }
+  const keyDown = e => { if (e.key === "ArrowLeft") keys.left = true; if (e.key === "ArrowRight") keys.right = true; };
+  const keyUp = e => { if (e.key === "ArrowLeft") keys.left = false; if (e.key === "ArrowRight") keys.right = false; };
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
 
@@ -304,13 +307,15 @@ function startMiniGame() {
   }, 50);
 
   setTimeout(() => {
-    miniGameActive = false;
+    // Cleanup
     clearInterval(spawnInterval);
     clearInterval(moveInterval);
     document.removeEventListener("keydown", keyDown);
     document.removeEventListener("keyup", keyUp);
     sticks.forEach(s => s.remove());
     game.remove();
+    miniGameActive = false;
+    document.getElementById("play-btn").disabled = false;
 
     if (score > highScore) localStorage.setItem(highScoreKey, score);
 
@@ -419,3 +424,91 @@ window.addEventListener("load", () => {
   chipImg.style.left = `${x}px`;
   chipImg.style.top = `${baseY}px`;
 });
+
+let babyActive = false;
+
+function spawnBabyChip() {
+  if (babyActive) return;
+  babyActive = true;
+
+  const baby = document.createElement("img");
+  baby.src = "img/chip_baby_happy.png";
+  baby.style.position = "absolute";
+  baby.style.width = "60px";
+  const baseY = display.clientHeight - chipImg.clientHeight - display.clientHeight / 6;
+  baby.style.top = baseY + "px";
+  baby.style.left = "0px";
+  baby.style.transition = "left 3s linear";
+  display.appendChild(baby);
+
+  const followInterval = setInterval(() => {
+    const babyLeft = parseFloat(baby.style.left);
+    const chipLeft = parseFloat(chipImg.style.left);
+    const step = 2;
+    if (Math.abs(chipLeft - babyLeft) > step) {
+      chipImg.style.left = chipLeft < babyLeft ? chipLeft + step + "px" : chipLeft - step + "px";
+    }
+  }, 20);
+
+  setTimeout(() => baby.style.left = (display.clientWidth - 60) + "px", 100);
+
+  setTimeout(() => {
+    clearInterval(followInterval);
+    baby.remove();
+    babyActive = false;
+  }, 3000);
+}
+
+function spawnElderChip() {
+  const elder = document.createElement("img");
+  elder.src = "img/chip_elder_happy.png";
+  elder.style.position = "absolute";
+  elder.style.width = "60px";
+
+  const baseY = display.clientHeight - chipImg.clientHeight - display.clientHeight / 6;
+  elder.style.top = baseY + "px";
+  elder.style.left = "0px";
+  display.appendChild(elder);
+
+  let jumps = 0;
+
+  const jump = () => {
+    if (jumps > 5) {
+      elder.remove();
+      return;
+    }
+
+    const currentX = parseFloat(elder.style.left);
+    const currentY = parseFloat(elder.style.top);
+
+    const targetX = Math.random() * (display.clientWidth - 60);
+    const targetY = baseY - Math.random() * 50;
+
+    const dx = targetX - currentX;
+    const dy = targetY - currentY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    const speed = 0.5 * 4;
+    const duration = Math.max(0.2, distance * speed / 1000);
+
+    elder.style.transition = `left ${duration}s ease, top ${duration / 2}s ease`;
+
+    elder.style.left = targetX + "px";
+    elder.style.top = targetY + "px";
+
+    setTimeout(() => {
+      elder.style.top = baseY + "px";
+      jumps++;
+      setTimeout(jump, 200);
+    }, duration * 1000);
+  };
+
+  jump();
+}
+
+setInterval(() => {
+  if (miniGameActive || chip.asleep || babyActive) return;
+  const rand = Math.random();
+  if (rand < 0.002) spawnBabyChip();
+  else if (rand < 0.004) spawnElderChip();
+}, 3000);

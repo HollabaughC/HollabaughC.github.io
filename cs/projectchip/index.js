@@ -227,7 +227,7 @@ function moveChipRandomly() {
 }
 
 function startMiniGame() {
-  if (miniGameActive) return; // Prevent double start
+  if (miniGameActive) return;
   miniGameActive = true;
   document.getElementById("play-btn").disabled = true;
 
@@ -258,7 +258,6 @@ function startMiniGame() {
   const offset = gameHeight - chipImg.clientHeight - gameHeight / 6;
   chipImg.style.top = offset + "px";
 
-  // Keys
   const keys = { left: false, right: false };
   const keyDown = e => { if (e.key === "ArrowLeft") keys.left = true; if (e.key === "ArrowRight") keys.right = true; };
   const keyUp = e => { if (e.key === "ArrowLeft") keys.left = false; if (e.key === "ArrowRight") keys.right = false; };
@@ -307,7 +306,6 @@ function startMiniGame() {
   }, 50);
 
   setTimeout(() => {
-    // Cleanup
     clearInterval(spawnInterval);
     clearInterval(moveInterval);
     document.removeEventListener("keydown", keyDown);

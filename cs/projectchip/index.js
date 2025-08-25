@@ -179,7 +179,6 @@ function actionWithImage(stat, amount, imageSuffix, duration = 1200) {
 
 document.getElementById("feed-btn").addEventListener("click", () => actionWithImage("hunger", 20, "eating"));
 document.getElementById("play-btn").addEventListener("click", startMiniGame);
-document.getElementById("sleep-btn").addEventListener("click", () => actionWithImage("energy", 30, "sleep", 2000));
 document.getElementById("clean-btn").addEventListener("click", () => actionWithImage("health", 15, "clean", 1000));
 
 document.getElementById("reset-btn").addEventListener("click", () => {
@@ -193,21 +192,43 @@ const display = document.getElementById("chip-display");
 
 setInterval(() => {
   if (!miniGameActive && !chip.asleep) {
-    moveChipRandomly();
+    const action = Math.random();
+
+    if (action < 0.7) {
+      moveChipRandomly();
+
+      const playful = Math.random();
+      if (playful < 0.3) {
+        chipImg.style.transform = "translateY(-30px)";
+        setTimeout(() => chipImg.style.transform = "translateY(0)", 500);
+      } else if (playful < 0.5) {
+        chipImg.style.transform = "rotate(10deg)";
+        setTimeout(() => chipImg.style.transform = "rotate(-10deg)", 200);
+        setTimeout(() => chipImg.style.transform = "rotate(0deg)", 400);
+      }
+    } else if (action < 0.85) {
+      chipImg.style.transform = "translateY(-30px)";
+      setTimeout(() => chipImg.style.transform = "translateY(0)", 500);
+    } else {
+      chipImg.style.transform = "rotate(10deg)";
+      setTimeout(() => chipImg.style.transform = "rotate(-10deg)", 200);
+      setTimeout(() => chipImg.style.transform = "rotate(0deg)", 400);
+    }
   }
 }, 3000);
 
 function moveChipRandomly() {
   const maxX = display.clientWidth - chipImg.clientWidth;
-  const maxY = display.clientHeight - chipImg.clientHeight;
+  const baseY = display.clientHeight - chipImg.clientHeight - display.clientHeight / 6;
+
   const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
   chipImg.style.left = `${x}px`;
-  chipImg.style.top = `${y}px`;
+  chipImg.style.top = `${baseY}px`;
 }
 
 function startMiniGame() {
   miniGameActive = true;
+  document.getElementById("play-btn").disabled = true;
   const game = document.createElement("div");
   game.id = "mini-game";
   display.appendChild(game);
@@ -232,7 +253,8 @@ function startMiniGame() {
   const gameHeight = display.clientHeight;
 
   chipImg.style.left = (gameWidth - chipImg.clientWidth) / 2 + "px";
-  chipImg.style.top = (gameHeight - chipImg.clientHeight) + "px";
+  const offset = gameHeight - chipImg.clientHeight - gameHeight / 6;
+  chipImg.style.top = offset + "px";
 
   const keys = { left: false, right: false };
   function keyDown(e) { if (e.key === "ArrowLeft") keys.left = true; if (e.key === "ArrowRight") keys.right = true; }
@@ -388,3 +410,12 @@ function createSleepOverlay() {
   document.getElementById("chip-app").appendChild(overlay);
   return overlay;
 }
+
+window.addEventListener("load", () => {
+  const maxX = display.clientWidth - chipImg.clientWidth;
+  const baseY = display.clientHeight - chipImg.clientHeight - display.clientHeight / 6;
+
+  const x = Math.random() * maxX;
+  chipImg.style.left = `${x}px`;
+  chipImg.style.top = `${baseY}px`;
+});

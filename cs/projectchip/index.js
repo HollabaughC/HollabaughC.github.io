@@ -10,7 +10,8 @@ let chip = {
   asleep: false
 };
 
-let miniGameActive = false; 
+let miniGameActive = false;
+const isTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 if (localStorage.getItem("cos-chip")) {
   chip = JSON.parse(localStorage.getItem("cos-chip"));
@@ -263,6 +264,44 @@ function startMiniGame() {
   const keyUp = e => { if (e.key === "ArrowLeft") keys.left = false; if (e.key === "ArrowRight") keys.right = false; };
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
+
+  if (isTouchScreen) {
+  const gameControls = document.createElement("div");
+  gameControls.id = "touch-controls";
+  Object.assign(gameControls.style, {
+    position: "absolute",
+    bottom: "10px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    display: "flex",
+    gap: "20px",
+    zIndex: 500
+  });
+
+  const leftBtn = document.createElement("button");
+  leftBtn.innerText = "◀";
+  const rightBtn = document.createElement("button");
+  rightBtn.innerText = "▶";
+
+  [leftBtn, rightBtn].forEach(btn => {
+    Object.assign(btn.style, {
+      fontSize: "24px",
+      padding: "10px 20px",
+      borderRadius: "10px",
+      background: "rgba(255,255,255,0.8)",
+      border: "none"
+    });
+  });
+
+  gameControls.appendChild(leftBtn);
+  gameControls.appendChild(rightBtn);
+  display.appendChild(gameControls);
+
+  leftBtn.addEventListener("touchstart", () => keys.left = true);
+  leftBtn.addEventListener("touchend", () => keys.left = false);
+  rightBtn.addEventListener("touchstart", () => keys.right = true);
+  rightBtn.addEventListener("touchend", () => keys.right = false);
+}
 
   const spawnInterval = setInterval(() => {
     const stick = document.createElement("div");

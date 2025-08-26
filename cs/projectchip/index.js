@@ -454,12 +454,48 @@ function createSleepOverlay() {
 }
 
 window.addEventListener("load", () => {
+  const now = new Date();
+  const lastUpdate = new Date(chip.lastUpdate);
+
+  const SLEEP_START = 22;
+  const SLEEP_END = 7;
+
+  function isSleepHour(hour) {
+    return (hour >= SLEEP_START || hour < SLEEP_END);
+  }
+
+  let elapsedMs = now - lastUpdate;
+  if (elapsedMs > 0) {
+    let sleptMs = 0;
+
+    let checkTime = new Date(lastUpdate);
+    while (checkTime < now) {
+      if (isSleepHour(checkTime.getHours())) {
+        sleptMs += 60 * 1000;
+      }
+      checkTime = new Date(checkTime.getTime() + 60 * 1000);
+    }
+
+    if (sleptMs > 0) {
+      const energyRestorePerSec = 100 / (8 * 3600);
+      chip.energy = Math.min(100, chip.energy + (sleptMs / 1000) * energyRestorePerSec);
+    }
+  }
+
+  if (isSleepHour(now.getHours())) {
+    toggleSleep(true);
+    setTimeout(() => {
+      if (isSleepHour(new Date().getHours())) toggleSleep(true);
+    }, 5 * 60 * 1000);
+  }
+
   const maxX = display.clientWidth - chipImg.clientWidth;
   const baseY = display.clientHeight - chipImg.clientHeight - display.clientHeight / 6;
-
   const x = Math.random() * maxX;
   chipImg.style.left = `${x}px`;
   chipImg.style.top = `${baseY}px`;
+
+  updateAll();
 });
 
 let babyActive = false;

@@ -110,3 +110,71 @@ function draw() {
 }
 
 setInterval(draw, 50);
+
+let idleTimer;
+const idleTime = 60000;
+
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(logoWalkAway, idleTime);
+}
+
+function logoWalkAway() {
+  const logo = document.querySelector(".logo");
+  const footer = document.querySelector("footer");
+  if (!logo || !footer) return;
+
+  const rect = logo.getBoundingClientRect();
+  const scrollX = window.scrollX || window.pageXOffset;
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  let x = rect.left + scrollX;
+  let y = rect.top + scrollY;
+
+  document.body.appendChild(logo);
+  logo.style.position = "absolute";
+  logo.style.left = x + "px";
+  logo.style.top = y + "px";
+  logo.style.margin = "0";
+
+  const footerRect = footer.getBoundingClientRect();
+  const targetY = footerRect.top + scrollY - rect.height - 10;
+
+  let speedY = 4;
+  let speedX = 3;
+  let bounce = -12;
+  let bouncing = false;
+  let angle = 0;
+  let angleDir = 1;
+
+  const dropInterval = setInterval(() => {
+    if (!bouncing) {
+      y += speedY;
+      if (y >= targetY) {
+        y = targetY;
+        bouncing = true;
+      }
+    } else {
+      y += bounce;
+      bounce += 1.5;
+      if (y >= targetY) {
+        y = targetY;
+        clearInterval(dropInterval);
+        const walkInterval = setInterval(() => {
+          x += speedX;
+          angle += angleDir * 5;
+          if (angle > 15 || angle < -15) angleDir *= -1;
+          logo.style.left = x + "px";
+          logo.style.transform = `rotate(${angle}deg)`;
+          if (x > window.scrollX + window.innerWidth) {
+            clearInterval(walkInterval);
+            logo.style.display = "none";
+          }
+        }, 16);
+      }
+    }
+    logo.style.top = y + "px";
+  }, 16);
+}
+
+resetIdleTimer();

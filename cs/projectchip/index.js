@@ -148,34 +148,73 @@ function actionWithImage(stat, amount, imageSuffix, duration = 1200) {
   chip[stat] = Math.min(100, chip[stat] + amount);
 
   const img = document.getElementById("chip-img");
-  const display = document.getElementById("chip-display");
 
   img.src = getStagePrefix() + "_" + imageSuffix + ".png";
 
-  let emojiChar = "";
-  if (imageSuffix === "eating") emojiChar = "🍖";
-  else if (imageSuffix === "sleep") emojiChar = "😴";
-  else if (imageSuffix === "clean") emojiChar = "🧼";
+  if (imageSuffix === "clean") {
+    spawnBubbles(duration);
+  } else {
+    let emojiChar = "";
+    if (imageSuffix === "eating") emojiChar = "🍖";
+    else if (imageSuffix === "sleep") emojiChar = "😴";
 
-  if (emojiChar) {
-    const emojiEl = document.createElement("div");
-    emojiEl.innerText = emojiChar;
-    emojiEl.style.position = "absolute";
-    emojiEl.style.left = "50%";
-    emojiEl.style.top = "10%";
-    emojiEl.style.transform = "translateX(-50%)";
-    emojiEl.style.fontSize = "32px";
-    emojiEl.style.zIndex = "200";
-    display.appendChild(emojiEl);
+    if (emojiChar) {
+      const display = document.getElementById("chip-display");
+      const emojiEl = document.createElement("div");
+      emojiEl.innerText = emojiChar;
+      emojiEl.style.position = "absolute";
+      emojiEl.style.left = "50%";
+      emojiEl.style.top = "10%";
+      emojiEl.style.transform = "translateX(-50%)";
+      emojiEl.style.fontSize = "32px";
+      emojiEl.style.zIndex = "200";
+      display.appendChild(emojiEl);
 
-    setTimeout(() => {
-      emojiEl.remove();
-    }, duration);
+      setTimeout(() => {
+        emojiEl.remove();
+      }, duration);
+    }
   }
 
   setTimeout(updateMoodImage, duration);
-
   updateAll();
+}
+
+function spawnBubbles(duration = 2000) {
+  const container = document.getElementById("chip-display");
+  const bubbles = [];
+
+  for (let i = 0; i < 60; i++) {
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    bubble.style.left = Math.random() * container.clientWidth + "px";
+    bubble.style.top = container.clientHeight + "px";
+
+    const size = 10 + Math.random() * 40;
+    bubble.style.width = bubble.style.height = size + "px";
+
+    bubble.style.opacity = (0.3 + Math.random() * 0.5).toFixed(2);
+
+    container.appendChild(bubble);
+    bubbles.push(bubble);
+
+    const driftX = (Math.random() - 0.5) * 150;
+    const riseY = container.clientHeight + 150;
+    const scale = 0.5 + Math.random();
+
+    const speed = 2 + Math.random() * 3;
+
+    setTimeout(() => {
+      bubble.style.transform = `translate(${driftX}px, -${riseY}px) scale(${scale})`;
+      bubble.style.opacity = "0";
+      bubble.style.transition = `transform ${speed}s linear, opacity ${speed}s ease-out`;
+    }, 50);
+  }
+
+  setTimeout(() => {
+    bubbles.forEach(b => b.remove());
+  }, duration + 4000);
 }
 
 document.getElementById("feed-btn").addEventListener("click", () => actionWithImage("hunger", 20, "eating"));

@@ -45,34 +45,57 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 1rem 0;
+  padding: 0.5rem 1rem;
   border-bottom: 3px solid #ff00ff;
   background: rgba(20, 0, 40, 0.9);
   box-shadow: 0 0 25px #ff00ff, 0 0 50px #00ffff inset;
   z-index: 10;
-}
 
-.header-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.2rem;
-  letter-spacing: 3px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.header-text {
+  font-size: clamp(1.2rem, 4vw, 2.2rem);
+  letter-spacing: 2px;
   color: #00ffff;
+  text-align: center;
   text-shadow: 0 0 8px #00ffff, 0 0 25px #ff00ff, 0 0 40px #ff33cc;
   animation: cyberpunk-glitch 5s infinite;
+  max-width: 90%;
+  word-break: break-word;
 }
 
 .logo {
-  width: 90px;
-  height: 90px;
-  margin: 0 1rem;
+  width: clamp(50px, 15vw, 90px);
+  height: clamp(50px, 15vw, 90px);
+  margin: 0 0.5rem;
   cursor: pointer;
   border-radius: 50%;
   background: radial-gradient(circle, #ff00ff33, #000);
   box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+@media (max-width: 600px) {
+  header {
+    padding: 0.5rem;
+    flex-direction: column;
+  }
+
+  .header-text {
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    letter-spacing: 1px;
+  }
+
+  .logo {
+    margin-bottom: 0.5rem;
+  }
+}
+
 .logo:hover {
   transform: scale(1.1) rotate(5deg);
   box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 90px #ff33cc;

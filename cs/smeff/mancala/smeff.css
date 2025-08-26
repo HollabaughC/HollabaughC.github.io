@@ -179,3 +179,102 @@
       margin-top:12px;
       color:var(--muted)
     }
+
+@media (max-width: 768px) {
+  .container {
+    margin: 12px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  header img.logo {
+    height: 60px;
+  }
+
+  header .title {
+    font-size: 22px;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .store {
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  .pits {
+    gap: 10px;
+  }
+
+  .pit-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .pit {
+    min-width: 64px;
+    min-height: 72px;
+    border-radius: 10px;
+    padding: 6px;
+  }
+
+  .pit .count {
+    right: 6px;
+    top: 4px;
+    font-size: 14px;
+  }
+
+  .stones {
+    gap: 4px;
+  }
+
+  .stone {
+    width: 14px;
+    height: 14px;
+  }
+
+  .meta {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  header .title {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .pit {
+    min-width: 56px;
+    min-height: 64px;
+  }
+
+  .stone {
+    width: 12px;
+    height: 12px;
+  }
+}

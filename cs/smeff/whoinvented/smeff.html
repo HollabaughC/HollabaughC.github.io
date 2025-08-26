@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Invented Smeff?</title>
+<link rel="shortcut icon" href="../img/smeff.png" type="image/x-icon">
+<style>
+:root{
+  --board-bg: #d4c0a1;
+  --pit-bg: #b08a5a;
+  --accent: #6a4324;
+  --muted: #3b2a1a;
+}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:'Papyrus',serif;
+  background:linear-gradient(135deg,#f0e0c2 0%, #d4c0a1 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{
+  width:100%;
+  max-width:980px;
+  margin:28px;padding:20px;
+  box-sizing:border-box;background:rgba(255,255,255,0.04);
+  border-radius:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.35) inset;
+  text-align:center;
+}
+header img.logo{
+  height:80px;
+  width:auto;
+  display:block;
+  margin:0 auto 8px;
+}
+header .title{
+  font-size:32px;
+  font-weight:700;
+  color:var(--muted);
+  text-shadow:2px 2px #e8d6b6;
+}
+.board{
+  display:flex;
+  justify-content:space-around;
+  gap:40px;
+  background:var(--board-bg);
+  border-radius:20px;
+  padding:60px 20px;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.28),0 12px 40px rgba(0,0,0,0.45);
+}
+.box{
+  width:350px;
+  height:200px;
+  background:linear-gradient(180deg,var(--pit-bg), #a47a4e);
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
+  font-weight:700;
+  color:var(--muted);
+  text-shadow:2px 2px #e8d6b6;
+  position:relative;
+  user-select: none;
+}
+#smeff-container{
+  margin-top:30px;
+  display:flex;
+  justify-content:center;
+}
+#smeff{
+  width:160px;
+  cursor:pointer;
+  touch-action: none;
+  user-select: none;
+}
+.meta{
+  margin-top:20px;
+  display:flex;
+  justify-content:space-around;
+  font-weight:700;
+  color:var(--muted);
+  flex-wrap:wrap;
+  gap:10px;
+}
+button{
+  background:var(--accent);
+  border:none;color:white;
+  padding:12px 20px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+  margin-top:20px;
+}
+.flying{
+  position:absolute;
+  width:50px;
+  height:50px;
+  transition: all 0.7s ease-out;
+  pointer-events:none;
+  z-index:999;
+}
+.final-score{
+  font-size:28px;
+  font-weight:700;
+  margin-top:20px;
+  color:var(--muted);
+}
+@media (max-width:768px){
+  .board{flex-direction:column;align-items:center;}
+  .box{width:90%;height:150px;font-size:36px;}
+  #smeff{width:120px;}
+}
+@media (max-width:480px){
+  .box{font-size:28px;height:130px;}
+  #smeff{width:100px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <img src="../img/smeff.png" class="logo" alt="Smeff Logo">
+    <div class="title">Who Invented Smeff?</div>
+  </header>
+
+  <div class="board">
+    <div class="box" id="box1">Neil</div>
+    <div class="box" id="box2">Cameron</div>
+  </div>
+
+  <div id="smeff-container">
+    <img src="../img/smeff.png" id="smeff" alt="Smeff Logo" draggable="false">
+  </div>
+
+  <div class="meta">
+    <div>Score: <span id="score">0</span></div>
+    <div>High Score: <span id="highScore">0</span></div>
+    <div>Time Left: <span id="timer">10</span>s</div>
+  </div>
+
+  <button id="startBtn">Start Game</button>
+  <div class="final-score" id="finalScore"></div>
+</div>
+
+<script>
+let score = 0;
+let highScore = localStorage.getItem('smeffHighScore') || 0;
+let time = 10;
+let timerInterval;
+let gameActive = false;
+
+const smeff = document.getElementById('smeff');
+const boxes = [document.getElementById('box1'), document.getElementById('box2')];
+const scoreEl = document.getElementById('score');
+const timerEl = document.getElementById('timer');
+const highScoreEl = document.getElementById('highScore');
+const startBtn = document.getElementById('startBtn');
+const finalScoreEl = document.getElementById('finalScore');
+
+highScoreEl.textContent = highScore;
+
+function shuffleBoxes() {
+  if(Math.random()<0.5){
+    boxes[0].textContent = "Neil";
+    boxes[1].textContent = "Cameron";
+  } else {
+    boxes[0].textContent = "Cameron";
+    boxes[1].textContent = "Neil";
+  }
+}
+
+function resetGame() {
+  score = 0;
+  time = 10;
+  gameActive = true;
+  scoreEl.textContent = score;
+  timerEl.textContent = time.toFixed(1);
+  finalScoreEl.textContent = "";
+  shuffleBoxes();
+  startTimer();
+}
+
+function endGame(message){
+  gameActive = false;
+  clearInterval(timerInterval);
+  finalScoreEl.textContent = message + " Final Score: " + score;
+  if(score > highScore){
+    highScore = score;
+    localStorage.setItem('smeffHighScore', highScore);
+    highScoreEl.textContent = highScore;
+  }
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  timerInterval = setInterval(()=>{
+    if(!gameActive) return;
+    time -= 0.1;
+    if(time<=0){
+      endGame("Time's up!");
+    }
+    timerEl.textContent = time.toFixed(1);
+  },100);
+}
+
+let offsetX, offsetY;
+smeff.addEventListener('pointerdown', e => {
+  if(!gameActive) return;
+  offsetX = e.clientX - smeff.getBoundingClientRect().left;
+  offsetY = e.clientY - smeff.getBoundingClientRect().top;
+  smeff.setPointerCapture(e.pointerId);
+});
+smeff.addEventListener('pointermove', e => {
+  if(!gameActive) return;
+  if(e.pressure>0 || e.buttons>0){
+    smeff.style.position = 'absolute';
+    smeff.style.left = e.clientX - offsetX + 'px';
+    smeff.style.top = e.clientY - offsetY + 'px';
+  }
+});
+smeff.addEventListener('pointerup', e => {
+  smeff.releasePointerCapture(e.pointerId);
+  if(gameActive) checkDrop();
+  else resetGame();
+});
+
+function createFlyingSmeff(box){
+  const clone = smeff.cloneNode(true);
+  clone.classList.add('flying');
+  document.body.appendChild(clone);
+  const rect = box.getBoundingClientRect();
+  clone.style.left = smeff.getBoundingClientRect().left + 'px';
+  clone.style.top = smeff.getBoundingClientRect().top + 'px';
+  setTimeout(()=> {
+    clone.style.left = rect.left + rect.width/2 - clone.width/2 + 'px';
+    clone.style.top = rect.top + rect.height/2 - clone.height/2 + 'px';
+    clone.style.opacity = 0;
+  }, 50);
+  setTimeout(()=> clone.remove(),800);
+}
+
+function checkDrop(){
+  const smeffRect = smeff.getBoundingClientRect();
+  let dropped = false;
+  boxes.forEach(box=>{
+    const rect = box.getBoundingClientRect();
+    if(smeffRect.left + smeffRect.width/2 > rect.left &&
+       smeffRect.left + smeffRect.width/2 < rect.right &&
+       smeffRect.top + smeffRect.height/2 > rect.top &&
+       smeffRect.top + smeffRect.height/2 < rect.bottom){
+         dropped = true;
+         if(box.textContent === "Cameron"){
+           score++;
+           time = Math.max(time-0.5,3);
+           scoreEl.textContent = score;
+           createFlyingSmeff(box);
+           shuffleBoxes();
+         } else {
+           endGame("You picked Neil! Game over.");
+         }
+    }
+  });
+  smeff.style.left = '';
+  smeff.style.top = '';
+  smeff.style.position = '';
+  if(!gameActive && dropped){
+    gameActive = true;
+    startTimer();
+  }
+}
+
+startBtn.addEventListener('click', ()=>{
+  resetGame();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smeff</title>
+  <link rel="shortcut icon" href="img/smeff.png" type="image/x-icon">
+  <link rel="stylesheet" href="smeff.css">
+  <script src="smeff.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img class="logo" src="img/smeff.png" alt="Logo">
+      <div class="title">Old Man Smeff's Mancala</div>
+      <div style="font-size:16px;color:var(--muted);">Relive the first game.</div>
+    </header>
+
+    <div class="controls">
+      <button id="newBtn">New Game</button>
+      <label style="color:var(--muted);font-weight:600">Seeds:
+        <select id="seedCount">
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </label>
+      <div class="message" id="message">Your turn.</div>
+    </div>
+
+    <div class="board">
+      <div class="row">
+        <div class="store" id="storeB">
+          <div style="font-size:12px;">Opponent</div>
+          <div id="scoreB" style="font-size:22px;font-weight:800;">0</div>
+        </div>
+
+        <div class="pits">
+          <div class="pit-row" id="topRow"></div>
+          <div class="pit-row" id="bottomRow"></div>
+        </div>
+
+        <div class="store" id="storeA">
+          <div style="font-size:12px;">You</div>
+          <div id="scoreA" style="font-size:22px;font-weight:800;">0</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="turn" id="turnDisplay">Turn: You</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay"></div>
+</body>
+</html>

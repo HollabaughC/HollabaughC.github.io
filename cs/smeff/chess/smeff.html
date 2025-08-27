@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1D Chess</title>
+<link rel="shortcut icon" href="../img/smeff.png" type="image/x-icon">
+<style>
+:root{
+  --board-bg: #d4c0a1;
+  --pit-bg: #b08a5a;
+  --white-piece: #ffffff;
+  --black-piece: #000000;
+  --accent: #6a4324;
+  --muted: #3b2a1a;
+}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:'Papyrus',serif;
+  background:linear-gradient(135deg,#f0e0c2 0%, #d4c0a1 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.container{
+  width:100%;
+  max-width:600px;
+  margin:28px;padding:20px;
+  box-sizing:border-box;background:rgba(255,255,255,0.04);
+  border-radius:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.35) inset;
+  text-align:center;
+}
+header{
+  text-align:center;
+  margin-bottom:20px;
+}
+header img.logo{
+  height:80px;
+  width:auto;
+  display:block;
+  margin:0 auto 8px;
+}
+header .title{
+  font-size:28px;
+  font-weight:700;
+  color:var(--muted);
+  text-shadow:2px 2px #e8d6b6;
+}
+.board{
+  display:flex;
+  gap:8px;
+  background:var(--board-bg);
+  border-radius:20px;
+  padding:16px;
+  justify-content:center;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.28),0 12px 40px rgba(0,0,0,0.45);
+  margin-bottom:16px;
+}
+.cell{
+  width:60px;
+  height:60px;
+  background:linear-gradient(180deg,var(--pit-bg), #a47a4e);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.28);
+  cursor:pointer;
+  transition:transform 0.25s;
+}
+.cell:hover{
+  transform:scale(1.05);
+}
+.piece{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:white;
+  font-size:18px;
+  text-shadow:1px 1px rgba(0,0,0,0.5);
+}
+.white{
+  background:var(--white-piece);
+  color:black;
+}
+.black{
+  background:var(--black-piece);
+  color:white;
+}
+.message{
+  font-size:20px;
+  font-weight:700;
+  color:var(--muted);
+  margin-top:12px;
+  min-height:24px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <img src="../img/smeff.png" alt="Logo" class="logo">
+    <div class="title">1D Chess</div>
+  </header>
+  <div class="board" id="board"></div>
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+const boardEl = document.getElementById('board');
+const messageEl = document.getElementById('message');
+
+let board = [
+  {piece:'king', color:'white'},
+  {piece:'pawn', color:'white'},
+  null,
+  null,
+  {piece:'pawn', color:'black'},
+  {piece:'king', color:'black'}
+];
+
+let selectedIndex = null;
+
+function renderBoard() {
+  boardEl.innerHTML = '';
+  board.forEach((cell, index) => {
+    const cellEl = document.createElement('div');
+    cellEl.className = 'cell';
+    if(cell){
+      const pieceEl = document.createElement('div');
+      pieceEl.className = 'piece ' + cell.color;
+      pieceEl.textContent = cell.piece === 'king' ? 'K' : 'P';
+      cellEl.appendChild(pieceEl);
+    }
+    cellEl.addEventListener('click', () => handleClick(index));
+    boardEl.appendChild(cellEl);
+  });
+}
+
+function handleClick(index) {
+  const cell = board[index];
+  if(selectedIndex !== null) {
+    if(isValidMove(selectedIndex,index)){
+      movePiece(selectedIndex,index);
+      selectedIndex = null;
+      renderBoard();
+      if(checkWin()) return;
+      setTimeout(aiMove,300);
+    } else {
+      selectedIndex = null;
+      showMessage("Invalid move");
+    }
+  } else {
+    if(cell && cell.color === 'white') {
+      selectedIndex = index;
+      showMessage("Piece selected");
+    }
+  }
+}
+
+function isValidMove(from,to){
+  const piece = board[from];
+  if(!piece) return false;
+  const dir = piece.color === 'white' ? 1 : -1;
+  if(piece.piece === 'pawn'){
+    if(to === from + dir && !board[to]) return true;
+    if(to === from + dir && board[to] && board[to].color !== piece.color) return true;
+    return false;
+  }
+  if(piece.piece === 'king'){
+    return Math.abs(to - from) === 1 && (!board[to] || board[to].color !== piece.color);
+  }
+  return false;
+}
+
+function movePiece(from,to){
+  board[to] = board[from];
+  board[from] = null;
+  showMessage('');
+}
+
+function aiMove(){
+  const aiIndices = board.map((c,i)=>c && c.color==='black'?i:null).filter(i=>i!==null);
+  for(let i=0;i<aiIndices.length;i++){
+    const index = aiIndices[i];
+    const moves = [];
+    const dir = -1;
+    const piece = board[index];
+    if(piece.piece==='pawn'){
+      if(index+dir >=0 && (!board[index+dir] || board[index+dir].color !== 'black')) moves.push(index+dir);
+    } else if(piece.piece==='king'){
+      if(index+1<board.length && (!board[index+1] || board[index+1].color!=='black')) moves.push(index+1);
+      if(index-1>=0 && (!board[index-1] || board[index-1].color!=='black')) moves.push(index-1);
+    }
+    if(moves.length>0){
+      const to = moves[Math.floor(Math.random()*moves.length)];
+      board[to] = piece;
+      board[index] = null;
+      renderBoard();
+      if(checkWin()) return;
+      return;
+    }
+  }
+}
+
+function checkWin(){
+  const whiteKing = board.find(c=>c && c.piece==='king' && c.color==='white');
+  const blackKing = board.find(c=>c && c.piece==='king' && c.color==='black');
+  if(!whiteKing){
+    showMessage("You lose!");
+    boardEl.style.pointerEvents = 'none';
+    return true;
+  }
+  if(!blackKing){
+    showMessage("You win!");
+    boardEl.style.pointerEvents = 'none';
+    return true;
+  }
+  return false;
+}
+
+function showMessage(msg){
+  messageEl.textContent = msg;
+}
+
+renderBoard();
+</script>
+</body>
+</html>

@@ -15,9 +15,10 @@
       topRow.innerHTML = '';
       bottomRow.innerHTML = '';
 
-      for(let i=pitsPerSide-1;i>=0;i--){
+      for(let i=0;i<pitsPerSide;i++){
         topRow.appendChild(createPit('B', i, pitsB[i], pitsBColors[i]));
-      }
+    }
+
       for(let i=0;i<pitsPerSide;i++){
         bottomRow.appendChild(createPit('A', i, pitsA[i], pitsAColors[i]));
       }
@@ -80,9 +81,8 @@
       return 'body';
     }
 
-    function nextDropPos(player,pos){
-      do{ pos = (pos+1)%14; }
-      while((player==='A' && pos===13) || (player==='B' && pos===6));
+    function nextDropPos(player, pos){
+      pos = (pos+1) % 14;
       return pos;
     }
 

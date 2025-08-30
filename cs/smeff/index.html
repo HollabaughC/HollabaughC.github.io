@@ -118,7 +118,6 @@ header .subtitle{
   box-shadow:0 3px 0 #3b2313;
 }
 
-/* Mobile adjustments */
 @media(max-width:600px){
   .container{
     margin:10px;
@@ -148,6 +147,40 @@ header .subtitle{
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(20px);}
   to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes rainbow {
+  0%{color:red;}
+  16%{color:orange;}
+  32%{color:yellow;}
+  48%{color:green;}
+  64%{color:blue;}
+  80%{color:indigo;}
+  100%{color:violet;}
+}
+#smeff-name {
+  position:fixed;
+  top:50%;
+  left:50%;
+  font-size:80px;
+  font-weight:900;
+  transform:translate(-50%,-50%);
+  animation:rainbow 2s linear infinite;
+  pointer-events:none;
+  display:none;
+  z-index:9999;
+}
+#who-btn {
+  display:block;
+  margin:40px auto 0;
+  padding:16px 28px;
+  font-size:22px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  background:linear-gradient(180deg,var(--accent),var(--muted));
+  color:#fff;
+  box-shadow:0 6px 12px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -186,6 +219,35 @@ header .subtitle{
       <a href="quiz/smeff.html">▶ Play Now</a>
     </div>
   </section>
+
+  <button id="who-btn">Who Invented Smeff?</button>
 </div>
+
+<div id="smeff-name">CAMERON</div>
+
+<script>
+const btn = document.getElementById("who-btn");
+const nameDiv = document.getElementById("smeff-name");
+
+btn.addEventListener("click", () => {
+  nameDiv.style.display = "block";
+  let x = window.innerWidth / 2, y = window.innerHeight / 2;
+  let dx = 3, dy = 2;
+
+  function animate() {
+    x += dx;
+    y += dy;
+
+    if (x < 0 || x > window.innerWidth - nameDiv.offsetWidth) dx *= -1;
+    if (y < 0 || y > window.innerHeight - nameDiv.offsetHeight) dy *= -1;
+
+    nameDiv.style.left = x + "px";
+    nameDiv.style.top = y + "px";
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+});
+</script>
 </body>
 </html>

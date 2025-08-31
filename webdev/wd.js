@@ -4,7 +4,8 @@ const programs = [
   { title: "D&D Creator (2023)", link: "../cs/DND/static/index.html", icon: "../cs/img/dnd.png", subtitle: "Click here to create a D&D character in just 2 easy steps!" },
   { title: "Costco Picker (2024)", link: "../cs/costco/index.html", icon: "../cs/img/costco.png", subtitle: "Can't decide what to eat at Costco? Click here!" },
   { title: "Irankarapte (2025)", link: "../irankarapte/index.html", icon: "../irankarapte/icon.png", subtitle: "Learn Ainu here!" },
-  { title: "Project Chip (2025)", link: "../cs/projectchip/index.html", icon: "../cs/img/chip.png", subtitle: "A portal for games based on Chip the Beaver." },
+  { title: "Project Chip (2025)", link: "../cs/projectchip/index.html", icon: "../cs/img/chip.png", subtitle: "A digital pet where you take care of Chip the Beaver." },
+  { title: "Explain it With Smeff (2025)", link: "../cs/smeff/index.html", icon: "../cs/img/smeff.png", subtitle: "The site full of web games from ancient Mesopotamia." },
   { title: "Sapporo (2025)", link: "../cs/sapporo/index.html", icon: "../cs/img/sapporo.png", subtitle: "A web-based text adventure game!" }
 ];
 

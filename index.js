@@ -2,10 +2,20 @@ function showLoadingAndRedirect(target) {
   const overlay = document.getElementById("loading-overlay");
   overlay.style.display = "flex";
   overlay.innerHTML = `
-    <div class="reference-distort">SITE MALFUNCTION...</div>
+    <div class="reference-distort">SYSTEM MALFUNCTION...</div>
     <div class="reference-static"></div>
     <div class="reference-scanlines"></div>
   `;
+
+  overlay.animate(
+    [
+      { filter: "hue-rotate(0deg) blur(0px)" },
+      { filter: "hue-rotate(90deg) blur(2px)" },
+      { filter: "hue-rotate(0deg) blur(0px)" }
+    ],
+    { duration: 600, iterations: 4 }
+  );
+
   setTimeout(() => {
     window.location.href = target;
   }, 2500);
@@ -178,3 +188,15 @@ function logoWalkAway() {
 }
 
 resetIdleTimer();
+
+document.querySelectorAll("button, .logo").forEach(el => {
+  el.addEventListener("click", e => {
+    const ripple = document.createElement("span");
+    ripple.className = "cyber-ripple";
+    ripple.style.left = e.clientX + "px";
+    ripple.style.top = e.clientY + "px";
+    document.body.appendChild(ripple);
+
+    setTimeout(() => ripple.remove(), 1000);
+  });
+});

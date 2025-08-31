@@ -122,6 +122,7 @@ header {
   justify-content: center;
   align-items: center;
   z-index: 999;
+  animation: reference-flicker 0.4s infinite, neon-shift 1.8s infinite alternate;
   background: repeating-linear-gradient(
     0deg,
     rgba(128, 0, 128, 0.1),
@@ -131,6 +132,12 @@ header {
   backdrop-filter: blur(2px);
   flex-direction: column;
   overflow: hidden;
+}
+
+@keyframes neon-shift {
+  0%   { filter: hue-rotate(0deg) blur(0px); }
+  50%  { filter: hue-rotate(90deg) blur(2px); }
+  100% { filter: hue-rotate(0deg) blur(0px); }
 }
 
 .reference-distort {
@@ -313,4 +320,68 @@ footer {
   60% { opacity: 0.3; transform: translateX(20px); }
   80% { opacity: 0.1; transform: translateX(-20px); }
   100% { opacity: 0; transform: scale(0.9); }
+}
+
+.cyber-ripple {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #0ff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-expand 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 2000;
+  box-shadow: 0 0 10px #0ff, 0 0 20px #ff00ff;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: translate(-50%, -50%) scale(12);
+    opacity: 0;
+  }
+}
+
+.reference-distort::before,
+.reference-distort::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.reference-distort::before {
+  color: #f0f;
+  clip: rect(0, 900px, 0, 0);
+  animation: glitch-top 1s infinite linear alternate-reverse;
+}
+
+.reference-distort::after {
+  color: #0ff;
+  clip: rect(0, 900px, 0, 0);
+  animation: glitch-bottom 1.3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-top {
+  0% { clip: rect(10px, 9999px, 50px, 0); transform: translate(-2px, -2px); }
+  50% { clip: rect(60px, 9999px, 80px, 0); transform: translate(2px, 2px); }
+  100% { clip: rect(20px, 9999px, 70px, 0); transform: translate(-2px, 0); }
+}
+
+@keyframes glitch-bottom {
+  0% { clip: rect(80px, 9999px, 100px, 0); transform: translate(2px, 2px); }
+  50% { clip: rect(10px, 9999px, 40px, 0); transform: translate(-2px, -1px); }
+  100% { clip: rect(60px, 9999px, 90px, 0); transform: translate(1px, 1px); }
+}
+
+.mini-logo {
+  filter: drop-shadow(0 0 6px #ff00ff) drop-shadow(0 0 12px #00ffff);
+  animation: mini-flicker 2s infinite, trail-glow 0.8s infinite alternate;
+}
+
+@keyframes trail-glow {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.2); }
 }

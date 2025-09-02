@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Desert Nim</title>
+<link rel="shortcut icon" href="../img/smeff.png" type="image/x-icon">
+<style>
+:root{
+  --board-bg: #d4c0a1;
+  --pit-bg: #b08a5a;
+  --stone1: #7c3f2c;
+  --stone2: #c47f3e;
+  --stone3: #4e6b3a;
+  --stone4: #b14e6a;
+  --accent: #6a4324;
+  --muted: #3b2a1a;
+}
+html,body{
+    height:100%;
+    margin:0;
+    font-family:'Papyrus',serif;
+    background:linear-gradient(135deg,#f0e0c2 0%, #d4c0a1 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.container{
+    width:100%;
+    max-width:980px;
+    margin:28px;padding:20px;
+    box-sizing:border-box;background:rgba(255,255,255,0.04);
+    border-radius:20px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.35) inset
+}
+header{
+    text-align:center;
+    margin-bottom:20px
+}
+header img.logo{
+    height:80px;
+    width:auto;
+    display:block;
+    margin:0 auto 8px
+}
+header .title{
+    font-size:28px;
+    font-weight:700;
+    color:var(--muted);
+    text-shadow:2px 2px #e8d6b6;
+}
+
+.controls{
+    display:flex;
+    gap:8px;margin-bottom:16px;
+    align-items:center;
+    flex-wrap:wrap;
+    justify-content:center
+}
+button{
+    background:var(--accent);
+    border:none;color:white;
+    padding:10px 14px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    transition:transform 0.15s
+}
+button:hover{
+    transform:translateY(-2px)
+}
+
+.board{
+  background:var(--board-bg);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.28),0 12px 40px rgba(0,0,0,0.45)
+}
+.row{
+  display:flex;
+  gap:12px;
+  align-items:stretch
+}
+
+.store{
+  width:90px;
+  min-width:90px;
+  background:linear-gradient(180deg,#e4cfad,#c7a97a);
+  border-radius:16px;
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  box-shadow:inset 0 3px 10px rgba(0,0,0,0.3)
+}
+.pits{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:12px
+}
+.pit-row{
+  display:flex;
+  gap:12px;
+  justify-content:space-between
+}
+.pit{
+  flex:1;
+  min-width:72px;
+  min-height:84px;
+  background:linear-gradient(180deg,var(--pit-bg), #a47a4e);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;padding:8px;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.28);
+  cursor:pointer;
+  transition:transform 0.25s
+}
+.pit.disabled{
+  opacity:0.55;
+  pointer-events:none
+}
+.pit:hover{
+  transform:scale(1.04)
+}
+.pit .count{
+  position:absolute;
+  right:8px;
+  top:6px;
+  font-weight:700;
+  color:var(--muted)
+}
+.stones{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  align-items:center;
+  transition:all 0.3s ease
+}
+.stone{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  box-shadow:0 3px 6px rgba(0,0,0,0.35);
+  position:relative
+}
+
+.overlay{
+  position:fixed;
+  left:0;top:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:9999
+}
+.pile{
+  position:fixed;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:white;
+  box-shadow:0 6px 14px rgba(0,0,0,0.45);
+  transform:translate(-50%,-50%);
+}
+.flying{
+  position:fixed;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  box-shadow:0 6px 12px rgba(0,0,0,0.4);
+  transform:translate(-50%,-50%);
+}
+
+.meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:12px;
+  color:var(--muted)
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 12px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  header img.logo {
+    height: 60px;
+  }
+
+  header .title {
+    font-size: 22px;
+  }
+
+  .controls {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .store {
+    width: 100%;
+    min-width: unset;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  .pits {
+    gap: 10px;
+  }
+
+  .pit-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .pit {
+    min-width: 64px;
+    min-height: 72px;
+    border-radius: 10px;
+    padding: 6px;
+  }
+
+  .pit .count {
+    right: 6px;
+    top: 4px;
+    font-size: 14px;
+  }
+
+  .stones {
+    gap: 4px;
+  }
+
+  .stone {
+    width: 14px;
+    height: 14px;
+  }
+
+  .meta {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  header .title {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .pit {
+    min-width: 56px;
+    min-height: 64px;
+  }
+
+  .stone {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.store .who { font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+.store .score { font-size: 24px; font-weight: 800; color: var(--muted); }
+.badge { background:#00000022; padding:4px 8px; border-radius:8px; }
+.pit.selected { outline:3px dashed #ffffff77; outline-offset:2px; }
+.choice {
+  display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap;
+  margin-top:10px;
+}
+.choice input[type="range"]{ width:220px; accent-color: var(--accent); }
+.choice .num { min-width: 2ch; text-align:center; font-weight:700; color:var(--muted); }
+.hidden { display:none !important; }
+footer.smallprint{ color:#5a452f; font-size:12px; text-align:center; margin-top:10px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img class="logo" src="../img/smeff.png" alt="Smeff logo" />
+      <div class="title">Desert Nim</div>
+    </header>
+
+    <div class="controls" role="group" aria-label="Game controls">
+      <button id="newGameBtn">New Game</button>
+      <button id="undoBtn">Undo</button>
+      <button id="hintBtn">Hint</button>
+      <label class="badge">
+        AI:
+        <select id="aiMode">
+          <option value="optimal">Optimal</option>
+          <option value="easy">Easy</option>
+          <option value="off">Off (2P)</option>
+        </select>
+      </label>
+      <label class="badge">First:
+        <select id="firstPlayer">
+          <option value="human">You</option>
+          <option value="ai">AI</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="board" aria-live="polite">
+      <div class="row">
+        <div class="store" id="leftStore" aria-label="Player store">
+          <div class="who">You</div>
+          <div class="score" id="scoreHuman">0</div>
+          <div class="badge" id="turnBadgeYou">Your turn</div>
+        </div>
+
+        <div class="pits" style="justify-content:center;">
+          <div class="pit-row" id="pitRow">
+            <!-- Pits injected here -->
+          </div>
+
+          <!-- Choice panel appears when you click a pit -->
+          <div id="choicePanel" class="choice hidden" aria-live="polite">
+            <span>Remove</span>
+            <button id="minusBtn" title="Decrease">−</button>
+            <span class="num" id="choiceNum">1</span>
+            <button id="plusBtn" title="Increase">+</button>
+            <span>stone(s)</span>
+            <input type="range" id="choiceRange" min="1" max="7" value="1" />
+            <button id="confirmBtn">Confirm</button>
+            <button id="cancelBtn">Cancel</button>
+          </div>
+        </div>
+
+        <div class="store" id="rightStore" aria-label="AI store">
+          <div class="who" id="aiLabel">AI</div>
+          <div class="score" id="scoreAI">0</div>
+          <div class="badge" id="turnBadgeAI">Waiting…</div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <div id="status">Welcome! Remove any number from exactly one pit on your turn.</div>
+        <div>Total stones: <span id="totalStones">0</span></div>
+      </div>
+    </div>
+
+    <footer class="smallprint">Rules: Be the last person to take a stone from the board. Person who takes the last stone wins.</footer>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+<script>
+(function(){
+  const pitRow = document.getElementById('pitRow');
+  const overlay = document.getElementById('overlay');
+  const statusEl = document.getElementById('status');
+  const totalEl = document.getElementById('totalStones');
+
+  const scoreHumanEl = document.getElementById('scoreHuman');
+  const scoreAIEl = document.getElementById('scoreAI');
+  const badgeYou = document.getElementById('turnBadgeYou');
+  const badgeAI  = document.getElementById('turnBadgeAI');
+
+  const newGameBtn = document.getElementById('newGameBtn');
+  const undoBtn = document.getElementById('undoBtn');
+  const hintBtn = document.getElementById('hintBtn');
+  const aiModeSel = document.getElementById('aiMode');
+  const firstSel = document.getElementById('firstPlayer');
+
+  const choicePanel = document.getElementById('choicePanel');
+  const choiceNum = document.getElementById('choiceNum');
+  const choiceRange = document.getElementById('choiceRange');
+  const minusBtn = document.getElementById('minusBtn');
+  const plusBtn = document.getElementById('plusBtn');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  const MAX_PITS = 6;
+  const MIN_STONES = 1, MAX_STONES = 9;
+
+  let heaps = [];
+  let turn = 'human';
+  let scores = { human: 0, ai: 0 };
+  let history = [];
+  let selectedPit = null;
+  let plannedRemove = 1;
+  let gameOver = false;
+
+  const stoneColors = ['var(--stone1)','var(--stone2)','var(--stone3)','var(--stone4)'];
+
+  function clone(arr){ return arr.slice(); }
+  function saveState(){
+    history.push({
+      heaps: clone(heaps),
+      turn,
+      scores: { human: scores.human, ai: scores.ai }
+    });
+  }
+  function restoreState(){
+    const prev = history.pop();
+    if (!prev) return;
+    heaps = clone(prev.heaps);
+    turn = prev.turn;
+    scores = { ...prev.scores };
+    gameOver = false;
+    selectedPit = null;
+    plannedRemove = 1;
+    render();
+    announceTurn();
+  }
+  function totalStones(){ return heaps.reduce((a,b)=>a+b,0); }
+
+  function render(){
+    pitRow.innerHTML = '';
+    heaps.forEach((count, idx)=>{
+      const pit = document.createElement('div');
+      pit.className = 'pit';
+      pit.dataset.index = idx;
+      if (gameOver || (turn !== 'human')) pit.classList.add('disabled');
+
+      const countEl = document.createElement('div');
+      countEl.className = 'count';
+      countEl.textContent = count;
+      pit.appendChild(countEl);
+
+      const stones = document.createElement('div');
+      stones.className = 'stones';
+      for (let i=0;i<count;i++){
+        const s = document.createElement('div');
+        s.className = 'stone';
+        s.style.background = stoneColors[i % stoneColors.length];
+        stones.appendChild(s);
+      }
+      pit.appendChild(stones);
+
+      pit.addEventListener('click', ()=> onPitClick(idx, pit));
+      pitRow.appendChild(pit);
+    });
+    totalEl.textContent = totalStones();
+    scoreHumanEl.textContent = scores.human;
+    scoreAIEl.textContent = scores.ai;
+    updateBadges();
+    updateChoicePanel();
+  }
+
+  function updateBadges(){
+    if (gameOver){
+      badgeYou.textContent = '—';
+      badgeAI.textContent = '—';
+      return;
+    }
+    badgeYou.textContent = (turn==='human') ? 'Your turn' : 'Waiting…';
+    badgeAI.textContent  = (turn==='ai') ? 'Thinking…' : 'Waiting…';
+  }
+
+  function selectPitDom(idx, on){
+    const pit = [...pitRow.children][idx];
+    if (!pit) return;
+    pit.classList.toggle('selected', !!on);
+  }
+
+  function updateChoicePanel(){
+    if (selectedPit == null){
+      choicePanel.classList.add('hidden');
+      return;
+    }
+    const max = heaps[selectedPit];
+    choiceRange.max = String(max);
+    if (plannedRemove > max) plannedRemove = max;
+    choiceRange.value = String(plannedRemove);
+    choiceNum.textContent = plannedRemove;
+    choicePanel.classList.remove('hidden');
+  }
+
+  function flyStones(fromEl, toEl, count){
+    const rectFrom = fromEl.getBoundingClientRect();
+    const rectTo   = toEl.getBoundingClientRect();
+
+    for (let i=0;i<count;i++){
+      const dot = document.createElement('div');
+      dot.className = 'flying';
+      dot.style.background = stoneColors[i % stoneColors.length];
+      const startX = rectFrom.left + rectFrom.width/2 + (Math.random()*16 - 8);
+      const startY = rectFrom.top  + rectFrom.height/2 + (Math.random()*16 - 8);
+      const endX   = rectTo.left + rectTo.width/2 + (Math.random()*20 - 10);
+      const endY   = rectTo.top  + rectTo.height/2 + (Math.random()*20 - 10);
+
+      dot.style.left = startX + 'px';
+      dot.style.top  = startY + 'px';
+      overlay.appendChild(dot);
+
+      const duration = 350 + Math.random()*200;
+      const t0 = performance.now();
+      function step(t){
+        const p = Math.min(1, (t-t0)/duration);
+        const ease = 1 - Math.pow(1-p, 3);
+        dot.style.left = (startX + (endX-startX)*ease) + 'px';
+        dot.style.top  = (startY + (endY-startY)*ease) + 'px';
+        dot.style.opacity = String(1 - p*0.2);
+        if (p < 1) requestAnimationFrame(step);
+        else overlay.removeChild(dot);
+      }
+      requestAnimationFrame(step);
+    }
+  }
+
+  function nimSum(arr){ return arr.reduce((x,y)=> x ^ y, 0); }
+
+  function optimalMove(){
+    const x = nimSum(heaps);
+    if (x === 0){
+      const idx = heaps.findIndex(h=>h>0);
+      return [idx, 1];
+    }
+    for (let i=0;i<heaps.length;i++){
+      const target = heaps[i] ^ x;
+      if (target < heaps[i]){
+        return [i, heaps[i]-target];
+      }
+    }
+    const idx = heaps.findIndex(h=>h>0);
+    return [idx, 1];
+  }
+
+  function easyMove(){
+    const nonEmpty = heaps.map((v,i)=>[v,i]).filter(([v])=>v>0);
+    const [, idx] = nonEmpty[Math.floor(Math.random()*nonEmpty.length)];
+    const take = Math.max(1, Math.min(heaps[idx], Math.ceil(Math.random()*3)));
+    return [idx, take];
+  }
+
+  function applyMove(player, idx, take, animate=true){
+    if (gameOver) return;
+    if (idx==null || take<1 || heaps[idx]<take) return;
+    saveState();
+
+    const pitEl = pitRow.children[idx];
+    const storeEl = (player==='human') ? document.getElementById('leftStore') : document.getElementById('rightStore');
+    if (animate && pitEl && storeEl) flyStones(pitEl, storeEl, take);
+
+    heaps[idx] -= take;
+    scores[player] += take;
+
+    selectPitDom(selectedPit, false);
+    selectedPit = null;
+    plannedRemove = 1;
+
+    if (totalStones() === 0){
+      gameOver = true;
+      const winner = player;
+      statusEl.textContent = (winner==='human') ? 'You took the last stones — You win! 🎉'
+                                                : 'AI took the last stones — AI wins! 🤖';
+      render();
+      return;
+    }
+
+    turn = (player==='human') ? 'ai' : 'human';
+    render();
+    announceTurn();
+    if (turn==='ai') setTimeout(aiTurn, 450);
+  }
+
+  function aiTurn(){
+    if (gameOver) return;
+    const mode = aiModeSel.value;
+    if (mode === 'off'){
+      turn = 'human';
+      render();
+      announceTurn();
+      return;
+    }
+    const [idx, take] = (mode==='optimal') ? optimalMove() : easyMove();
+    statusEl.textContent = `AI removes ${take} from pit ${idx+1}.`;
+    applyMove('ai', idx, take);
+  }
+
+  function onPitClick(idx){
+    if (turn !== 'human' || gameOver) return;
+    if (heaps[idx] === 0) return;
+    if (selectedPit !== null) selectPitDom(selectedPit, false);
+    selectedPit = idx;
+    plannedRemove = Math.min(heaps[idx], plannedRemove || 1);
+    selectPitDom(selectedPit, true);
+    updateChoicePanel();
+    statusEl.textContent = `Selected pit ${idx+1}. Choose how many stones to remove.`;
+  }
+
+  function hint(){
+    if (gameOver) return;
+    const [idx, take] = optimalMove();
+    statusEl.textContent = `Hint: remove ${take} from pit ${idx+1}.`;
+    [...pitRow.children].forEach((p,i)=>p.style.outline = (i===idx)?'3px solid #ffffffaa':'');
+    setTimeout(()=>[...pitRow.children].forEach(p=>p.style.outline=''), 900);
+  }
+
+  function newGame(){
+    const first = firstSel.value;
+    heaps = Array.from({length: MAX_PITS}, ()=> MIN_STONES + Math.floor(Math.random()*(MAX_STONES - MIN_STONES + 1)));
+    scores = { human: 0, ai: 0 };
+    history = [];
+    gameOver = false;
+    selectedPit = null;
+    plannedRemove = 1;
+    turn = first === 'ai' && aiModeSel.value !== 'off' ? 'ai' : 'human';
+    render();
+    statusEl.textContent = 'Game started. Take any number from a single pit.';
+    if (turn==='ai') setTimeout(aiTurn, 450);
+  }
+
+  function announceTurn(){
+    if (gameOver) return;
+    statusEl.textContent = (turn==='human') ? 'Your move.' : 'AI is thinking…';
+  }
+
+  function setPlanned(n){
+    if (selectedPit==null) return;
+    plannedRemove = Math.max(1, Math.min(heaps[selectedPit], n|0));
+    choiceRange.value = String(plannedRemove);
+    choiceNum.textContent = plannedRemove;
+  }
+
+  choiceRange.addEventListener('input', e=>{
+    setPlanned(parseInt(e.target.value,10));
+  });
+  minusBtn.addEventListener('click', ()=> setPlanned(plannedRemove-1));
+  plusBtn.addEventListener('click', ()=> setPlanned(plannedRemove+1));
+  confirmBtn.addEventListener('click', ()=>{
+    if (selectedPit==null) return;
+    applyMove('human', selectedPit, plannedRemove);
+  });
+  cancelBtn.addEventListener('click', ()=>{
+    selectPitDom(selectedPit, false);
+    selectedPit = null;
+    plannedRemove = 1;
+    updateChoicePanel();
+    statusEl.textContent = 'Selection canceled.';
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if (gameOver || turn!=='human') return;
+    if (selectedPit==null) return;
+    if (e.key>='1' && e.key<='9') { setPlanned(parseInt(e.key,10)); }
+    if (e.key==='Enter') { applyMove('human', selectedPit, plannedRemove); }
+    if (e.key==='Escape') { cancelBtn.click(); }
+  });
+
+  newGameBtn.addEventListener('click', newGame);
+  undoBtn.addEventListener('click', restoreState);
+  hintBtn.addEventListener('click', hint);
+  aiModeSel.addEventListener('change', ()=>{
+    if (aiModeSel.value==='off' && turn==='ai'){ turn='human'; render(); }
+  });
+
+  newGame();
+})();
+</script>
+</body>
+</html>

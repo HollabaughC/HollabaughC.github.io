@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const items = document.querySelectorAll(".game-list li");
+  const items = Array.from(document.querySelectorAll(".game-list li"));
   let index = 0;
 
   const preview = document.getElementById("game-preview");
@@ -31,9 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.key === "ArrowDown") {
       index = (index + 1) % items.length;
       setActive(index);
+      items[index].scrollIntoView({ block: "nearest", behavior: "smooth" });
     } else if (e.key === "ArrowUp") {
       index = (index - 1 + items.length) % items.length;
       setActive(index);
+      items[index].scrollIntoView({ block: "nearest", behavior: "smooth" });
     } else if (e.key === "Enter") {
       selectGame();
     }
@@ -45,14 +47,37 @@ document.addEventListener("DOMContentLoaded", () => {
       setActive(index);
       selectGame();
     });
-    item.addEventListener("touchstart", () => {
-      index = i;
-      setActive(index);
-      selectGame();
-    });
+
     item.addEventListener("mouseenter", () => {
       index = i;
       setActive(index);
     });
+
+    let startX = 0;
+    let startY = 0;
+    let moved = false;
+
+    item.addEventListener("touchstart", (ev) => {
+      const t = ev.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      moved = false;
+
+      index = i;
+      setActive(index);
+    }, { passive: true });
+
+    item.addEventListener("touchmove", (ev) => {
+      const t = ev.touches[0];
+      const dx = Math.abs(t.clientX - startX);
+      const dy = Math.abs(t.clientY - startY);
+      if (dx > 10 || dy > 10) moved = true;
+    }, { passive: true });
+
+    item.addEventListener("touchend", (ev) => {
+      if (!moved) {
+        selectGame();
+      }
+    }, { passive: true });
   });
 });

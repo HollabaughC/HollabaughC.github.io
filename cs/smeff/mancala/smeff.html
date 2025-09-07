@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smeff</title>
   <link rel="shortcut icon" href="../img/smeff.png" type="image/x-icon">
-  <link rel="stylesheet" href="smeff.css">
+  <link id="theme-link" rel="stylesheet" href="smeff.css">
   <script src="smeff.js" defer></script>
 </head>
 <body>
   <div class="container">
     <header>
-      <img class="logo" src="../img/smeff.png" alt="Logo">
-      <div class="title">Old Man Smeff's Mancala</div>
-      <div style="font-size:16px;color:var(--muted);">Relive the first game.</div>
+      <img id="logo" class="logo" src="../img/smeff.png" alt="Logo">
+      <div id="title" class="title">Old Man Smeff's Mancala</div>
+      <div id="subtitle" style="font-size:16px;color:var(--muted);">Relive the first game.</div>
     </header>
 
     <div class="controls">
@@ -26,6 +26,7 @@
           <option value="6">6</option>
         </select>
       </label>
+      <button id="themeBtn">Switch Theme</button>
       <div class="message" id="message">Your turn.</div>
     </div>
 
@@ -53,5 +54,52 @@
   </div>
 
   <div id="overlay" class="overlay"></div>
+
+  <script>
+    const themeBtn = document.getElementById('themeBtn');
+    const themeLink = document.getElementById('theme-link');
+    const logo = document.getElementById('logo');
+    const title = document.getElementById('title');
+    const subtitle = document.getElementById('subtitle');
+
+    const states = [
+      {
+        css: 'smeff.css',
+        logo: '../img/smeff.png',
+        title: "Old Man Smeff's Mancala",
+        subtitle: 'Relive the first game.'
+      },
+      {
+        css: 'evil.css',
+        logo: '../img/neil.png',
+        title: 'Literally Objectively Factually Mancala',
+        subtitle: 'Those with deceit in their heart have stolen your title, reclaim it through victory!'
+      },
+      {
+        css: 'holy.css',
+        logo: '../../img/cam.png',
+        title: 'The One True Mancala',
+        subtitle: 'Smite the liars who covet your title as creator of Smeff!'
+      },
+      {
+        css: 'tom.css',
+        logo: '../img/tom.png',
+        title: 'This is the Best Game of Mancala',
+        subtitle: 'Oh my god, Tom Scott!'
+      }
+    ];
+
+    let currentState = 0;
+
+    themeBtn.addEventListener('click', () => {
+      currentState = (currentState + 1) % states.length;
+      const state = states[currentState];
+
+      themeLink.setAttribute('href', state.css);
+      logo.setAttribute('src', state.logo);
+      title.textContent = state.title;
+      subtitle.textContent = state.subtitle;
+    });
+  </script>
 </body>
 </html>

@@ -101,15 +101,98 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
+const easterEggs = [
+  {
+    startDate: "02-07",
+    endDate: "02-10",
+    text: "Happy Valentine's!♥✤",
+    colors: ["#ffc5e6", "#ff257e", "#ff2644"]
+  },
+  {
+    startDate: "02-11",
+    endDate: "02-11",
+    text: "お誕生日おめでとう、日本！",
+    colors: ["#FFFFFF", "#ff2644"]
+  },
+  {
+    startDate: "02-12",
+    endDate: "02-14",
+    text: "Happy Valentine's!♥✤",
+    colors: ["#ffc5e6", "#ff257e", "#ff2644"]
+  },
+  {
+    startDate: "04-29",
+    endDate: "05-05",
+    text: "ゴールデンウィーク黄金週間",
+    colors: ["#FFD700"]
+  },
+  {
+    startDate: "06-06",
+    endDate: "06-06",
+    text: "Viva Sverige!+",
+    colors: ["#235789", "#F1D302"]
+  },
+  {
+    startDate: "08-09",
+    endDate: "08-09",
+    text: "先住民",
+    colors: ["#264653", "#9B2226", "#F4EBD0"]
+  },
+  {
+    startDate: "10-09",
+    endDate: "10-09",
+    text: "キャメロン",
+    colors: ["#7349AC", "#a982b4", "#d4c0d9"]
+  },
+  {
+    startDate: "10-24",
+    endDate: "10-31",
+    text: "Happy Halloween!☠☾",
+    colors: ["#7349AC", "#FF9900", "#FFFFFF"]
+  },
+  {
+    startDate: "12-18",
+    endDate: "12-25",
+    text: "Merry Christmas!❄",
+    colors: ["#ff0000", "#ffffff", "#378b29"]
+  }
+];
+
+function getEasterEggForToday() {
+  const today = new Date();
+  const monthDay = (date) => `${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  const todayMD = monthDay(today);
+
+  return easterEggs.find(egg => {
+    if (egg.startDate <= egg.endDate) {
+      return todayMD >= egg.startDate && todayMD <= egg.endDate;
+    } else {
+      return todayMD >= egg.startDate || todayMD <= egg.endDate;
+    }
+  }) || null;
+}
+
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.1)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#0F0";
-  ctx.font = fontSize + "px monospace";
+  const egg = getEasterEggForToday();
 
   for (let i = 0; i < drops.length; i++) {
-    const text = letters.charAt(Math.floor(Math.random() * letters.length));
+    let text, color;
+
+    if (egg) {
+      const charIndex = Math.floor(Math.random() * egg.text.length);
+      text = egg.text.charAt(charIndex);
+      color = egg.colors[Math.floor(Math.random() * egg.colors.length)];
+    } else {
+      text = letters.charAt(Math.floor(Math.random() * letters.length));
+      color = "#0F0";
+    }
+
+    ctx.fillStyle = color;
+    ctx.font = fontSize + "px monospace";
     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
     if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {

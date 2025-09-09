@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+body, header, footer, .circle-btn, main h1, main p, .header-text, #footer-secret {
+  transition: background-color 1s ease, color 1s ease, box-shadow 1s ease, border-color 1s ease, text-shadow 1s ease;
+}
+
 body {
   font-family: 'Orbitron', sans-serif;
   min-height: 100vh;

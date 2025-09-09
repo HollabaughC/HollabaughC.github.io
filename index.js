@@ -106,57 +106,127 @@ const easterEggs = [
     startDate: "02-07",
     endDate: "02-10",
     text: "Happy Valentine's!♥✤",
-    colors: ["#ffc5e6", "#ff257e", "#ff2644"]
+    colors: ["#ffc5e6", "#ff257e", "#ff2644"],
+    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"]
   },
   {
     startDate: "02-11",
     endDate: "02-11",
     text: "お誕生日おめでとう、日本！",
-    colors: ["#FFFFFF", "#ff2644"]
+    colors: ["#FFFFFF", "#ff2644"],
+    cssColors: ["#ff2644", "#FFFFFF", "#ff2644"]
   },
   {
     startDate: "02-12",
     endDate: "02-14",
     text: "Happy Valentine's!♥✤",
-    colors: ["#ffc5e6", "#ff257e", "#ff2644"]
+    colors: ["#ffc5e6", "#ff257e", "#ff2644"],
+    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"]
   },
   {
     startDate: "04-29",
     endDate: "05-05",
     text: "ゴールデンウィーク黄金週間",
-    colors: ["#FFD700"]
+    colors: ["#FFD700"],
+    cssColors: ["#FFD700", "#FFFFFF", "#B59410"]
+  },
+  {
+    startDate: "06-01",
+    endDate: "06-05",
+    text: "LGBTQ",
+    colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982"],
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
   },
   {
     startDate: "06-06",
     endDate: "06-06",
     text: "Viva Sverige!+",
-    colors: ["#235789", "#F1D302"]
+    colors: ["#235789", "#F1D302"],
+    cssColors: ["#F1D302", "#FFFFFF", "#235789"]
+  },
+  {
+    startDate: "06-07",
+    endDate: "06-30",
+    text: "LGBTQ",
+    colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982",],
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
   },
   {
     startDate: "08-09",
     endDate: "08-09",
     text: "先住民",
-    colors: ["#264653", "#9B2226", "#F4EBD0"]
+    colors: ["#264653", "#9B2226", "#F4EBD0"],
+    cssColors: ["#264653", "#F4EBD0", "#9B2226"]
+  },
+  {
+    startDate: "09-30",
+    endDate: "09-30",
+    text: "Phillip",
+    colors: ["#264653", "#004CFF", "#5BCEFA"],
+    cssColors: ["#264653", "#5BCEFA", "#004CFF"]
   },
   {
     startDate: "10-09",
     endDate: "10-09",
     text: "キャメロン",
-    colors: ["#7349AC", "#a982b4", "#d4c0d9"]
+    colors: ["#7349AC", "#a982b4", "#d4c0d9"],
+    cssColors: ["#a982b4", "#d4c0d9", "#7349AC"]
   },
   {
     startDate: "10-24",
     endDate: "10-31",
     text: "Happy Halloween!☠☾",
-    colors: ["#7349AC", "#FF9900", "#FFFFFF"]
+    colors: ["#7349AC", "#FF9900", "#FFFFFF"],
+    cssColors: ["#7349AC", "#FFFFFF", "#FF9900"]
+  },
+  {
+    startDate: "11-20",
+    endDate: "11-20",
+    text: "Trans Rights!",
+    colors: ["#5BCEFA", "#F5A9B8", "#FFFFFF"],
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
   },
   {
     startDate: "12-18",
     endDate: "12-25",
     text: "Merry Christmas!❄",
-    colors: ["#ff0000", "#ffffff", "#378b29"]
+    colors: ["#ff0000", "#ffffff", "#378b29"],
+    cssColors: ["#ff0000", "#ffffff", "#378b29"]
   }
 ];
+
+function applyColorScheme(colors) {
+  if (!colors || colors.length === 0) return;
+
+  const root = document.documentElement;
+
+  colors.forEach((c, i) => {
+    root.style.setProperty(`--color-${i}`, c);
+  });
+
+  const primary = colors[0] || "#0f0";
+  const secondary = colors[1] || "#ff00ff";
+  const accent = colors[2] || "#00ffff";
+
+  document.body.style.backgroundColor = primary;
+  document.body.style.color = secondary;
+
+  document.querySelectorAll("header, footer").forEach(el => {
+    el.style.backgroundColor = (accent || primary) + "80";
+    el.style.boxShadow = `0 0 25px ${accent || secondary}, 0 0 50px ${secondary} inset`;
+    el.style.borderColor = secondary;
+  });
+
+  document.querySelectorAll(".circle-btn").forEach(btn => {
+    btn.style.borderColor = secondary;
+    btn.style.boxShadow = `0 0 20px ${secondary}, 0 0 35px ${accent}, inset 0 0 15px ${primary}`;
+  });
+
+  document.querySelectorAll("main h1, main p, .header-text, #footer-secret").forEach(el => {
+    el.style.color = secondary;
+    el.style.textShadow = colors.map(c => `0 0 10px ${c}`).join(", ");
+  });
+}
 
 function getEasterEggForToday() {
   const today = new Date();
@@ -183,6 +253,7 @@ function draw() {
     let text, color;
 
     if (egg) {
+      applyColorScheme(egg.cssColors);
       const charIndex = Math.floor(Math.random() * egg.text.length);
       text = egg.text.charAt(charIndex);
       color = egg.colors[Math.floor(Math.random() * egg.colors.length)];

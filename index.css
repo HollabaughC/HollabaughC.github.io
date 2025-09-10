@@ -42,6 +42,7 @@ body {
   padding: 2rem;
   padding-top: 140px;
   padding-bottom: 100px;
+  background: transparent;
 }
 
 header {
@@ -388,4 +389,41 @@ footer {
 @keyframes trail-glow {
   0% { opacity: 1; transform: scale(1); }
   100% { opacity: 0.7; transform: scale(1.2); }
+}
+
+.h1-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.flavor-text {
+  position: absolute;
+  top: -40%;
+  left: -6rem;
+  transform: translateY(-50%) rotate(-20deg);
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.9rem, 3vw, 1.5rem);
+  font-weight: 700;
+  color: #ffdd33;
+  text-shadow:
+    0 0 6px #ff00ff,
+    0 0 12px #00ffff,
+    0 0 20px #ff33cc,
+    0 0 30px #39ff14;
+  animation: splash-bounce 2s infinite ease-in-out;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .flavor-text {
+    left: -1rem;
+    font-size: clamp(0.7rem, 4vw, 1rem);
+  }
+}
+
+@keyframes splash-bounce {
+  0%, 100% { transform: rotate(-20deg) scale(1); }
+  50% { transform: rotate(-20deg) scale(1.1); }
 }

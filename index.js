@@ -107,91 +107,104 @@ const easterEggs = [
     endDate: "02-10",
     text: "Happy Valentine's!♥✤",
     colors: ["#ffc5e6", "#ff257e", "#ff2644"],
-    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"]
+    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"],
+    fText: "Happy Valentine's!"
   },
   {
     startDate: "02-11",
     endDate: "02-11",
     text: "お誕生日おめでとう、日本！",
     colors: ["#FFFFFF", "#ff2644"],
-    cssColors: ["#ff2644", "#FFFFFF", "#ff2644"]
+    cssColors: ["#ff2644", "#FFFFFF", "#ff2644"],
+    fText: "お誕生日おめでとう、日本！"
   },
   {
     startDate: "02-12",
     endDate: "02-14",
     text: "Happy Valentine's!♥✤",
     colors: ["#ffc5e6", "#ff257e", "#ff2644"],
-    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"]
+    cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"],
+    fText: "Happy Valentine's!"
   },
   {
     startDate: "04-29",
     endDate: "05-05",
     text: "ゴールデンウィーク黄金週間",
     colors: ["#FFD700"],
-    cssColors: ["#FFD700", "#FFFFFF", "#B59410"]
+    cssColors: ["#FFD700", "#FFFFFF", "#B59410"],
+    fText: "ゴールデンウィーク"
   },
   {
     startDate: "06-01",
     endDate: "06-05",
     text: "LGBTQ",
     colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982"],
-    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
+    fText: "Happy Pride!"
   },
   {
     startDate: "06-06",
     endDate: "06-06",
     text: "Viva Sverige!+",
     colors: ["#235789", "#F1D302"],
-    cssColors: ["#F1D302", "#FFFFFF", "#235789"]
+    cssColors: ["#F1D302", "#FFFFFF", "#235789"],
+    fText: "Long live the king!"
   },
   {
     startDate: "06-07",
     endDate: "06-30",
     text: "LGBTQ",
     colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982",],
-    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
+    fText: "Happy Pride!"
   },
   {
     startDate: "08-09",
     endDate: "08-09",
     text: "先住民",
     colors: ["#264653", "#9B2226", "#F4EBD0"],
-    cssColors: ["#264653", "#F4EBD0", "#9B2226"]
+    cssColors: ["#264653", "#F4EBD0", "#9B2226"],
+    fText: "Save the Ainu!"
   },
   {
     startDate: "09-30",
     endDate: "09-30",
     text: "Phillip",
     colors: ["#264653", "#004CFF", "#5BCEFA"],
-    cssColors: ["#264653", "#5BCEFA", "#004CFF"]
+    cssColors: ["#264653", "#5BCEFA", "#004CFF"],
+    fText: "Happy birthday Phillip!"
   },
   {
     startDate: "10-09",
     endDate: "10-09",
     text: "キャメロン",
     colors: ["#7349AC", "#a982b4", "#d4c0d9"],
-    cssColors: ["#a982b4", "#d4c0d9", "#7349AC"]
+    cssColors: ["#a982b4", "#d4c0d9", "#7349AC"],
+    fText: "It's my birthday!"
   },
   {
     startDate: "10-24",
     endDate: "10-31",
     text: "Happy Halloween!☠☾",
     colors: ["#7349AC", "#FF9900", "#FFFFFF"],
-    cssColors: ["#7349AC", "#FFFFFF", "#FF9900"]
+    cssColors: ["#7349AC", "#FFFFFF", "#FF9900"],
+    fText: "Happy Halloween!"
   },
   {
     startDate: "11-20",
     endDate: "11-20",
     text: "Trans Rights!",
     colors: ["#5BCEFA", "#F5A9B8", "#FFFFFF"],
-    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"]
+    cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
+    fText: "Protect the dolls"
   },
   {
     startDate: "12-18",
     endDate: "12-25",
     text: "Merry Christmas!❄",
     colors: ["#ff0000", "#ffffff", "#378b29"],
-    cssColors: ["#ff0000", "#ffffff", "#378b29"]
+    cssColors: ["#ff0000", "#ffffff", "#378b29"],
+    fText: "Merry Christmas!"
   }
 ];
 
@@ -199,7 +212,6 @@ function applyColorScheme(colors) {
   if (!colors || colors.length === 0) return;
 
   const root = document.documentElement;
-
   colors.forEach((c, i) => {
     root.style.setProperty(`--color-${i}`, c);
   });
@@ -208,7 +220,6 @@ function applyColorScheme(colors) {
   const secondary = colors[1] || "#ff00ff";
   const accent = colors[2] || "#00ffff";
 
-  document.body.style.backgroundColor = primary;
   document.body.style.color = secondary;
 
   document.querySelectorAll("header, footer").forEach(el => {
@@ -243,17 +254,31 @@ function getEasterEggForToday() {
   }) || null;
 }
 
+function updateHolidayFlavorText() {
+  const egg = getEasterEggForToday();
+  const flavorText = document.getElementById("holiday-flavor-text");
+
+  if (egg) {
+    flavorText.textContent = egg.fText;
+    flavorText.style.display = "block";
+  } else {
+    flavorText.style.display = "none";
+  }
+}
+
+updateHolidayFlavorText();
+
 function draw() {
   ctx.fillStyle = "rgba(0,0,0,0.1)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const egg = getEasterEggForToday();
+  if (egg) applyColorScheme(egg.cssColors);
 
   for (let i = 0; i < drops.length; i++) {
     let text, color;
 
     if (egg) {
-      applyColorScheme(egg.cssColors);
       const charIndex = Math.floor(Math.random() * egg.text.length);
       text = egg.text.charAt(charIndex);
       color = egg.colors[Math.floor(Math.random() * egg.colors.length)];

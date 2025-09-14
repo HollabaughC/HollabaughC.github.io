@@ -317,18 +317,23 @@ function logoWalkAway() {
   const scrollX = window.scrollX || window.pageXOffset;
   const scrollY = window.scrollY || window.pageYOffset;
 
+  logo.style.visibility = "hidden";
+
+  const animLogo = document.createElement("img");
+  animLogo.src = logo.src;
+  animLogo.style.width = rect.width + "px";
+  animLogo.style.height = rect.height + "px";
+  animLogo.style.position = "absolute";
+  animLogo.style.left = rect.left + scrollX + "px";
+  animLogo.style.top = rect.top + scrollY + "px";
+  animLogo.style.zIndex = 9999;
+  animLogo.style.transition = "";
+  document.body.appendChild(animLogo);
+
+  const targetY = footer.getBoundingClientRect().top + scrollY - rect.height - 10;
+
   let x = rect.left + scrollX;
   let y = rect.top + scrollY;
-
-  document.body.appendChild(logo);
-  logo.style.position = "absolute";
-  logo.style.left = x + "px";
-  logo.style.top = y + "px";
-  logo.style.margin = "0";
-
-  const footerRect = footer.getBoundingClientRect();
-  const targetY = footerRect.top + scrollY - rect.height - 10;
-
   let speedY = 4;
   let speedX = 3;
   let bounce = -12;
@@ -353,16 +358,39 @@ function logoWalkAway() {
           x += speedX;
           angle += angleDir * 5;
           if (angle > 15 || angle < -15) angleDir *= -1;
-          logo.style.left = x + "px";
-          logo.style.transform = `rotate(${angle}deg)`;
+          animLogo.style.left = x + "px";
+          animLogo.style.top = y + "px";
+          animLogo.style.transform = `rotate(${angle}deg)`;
+
           if (x > window.scrollX + window.innerWidth) {
             clearInterval(walkInterval);
-            logo.style.display = "none";
+            animLogo.remove();
+
+            const newLogo = document.createElement("img");
+            newLogo.src = "img/chip.png";
+            newLogo.className = "logo";
+            newLogo.style.position = "fixed";
+            newLogo.style.left = rect.left + "px";
+            newLogo.style.top = rect.top + "px";
+            newLogo.style.width = rect.width + "px";
+            newLogo.style.height = rect.height + "px";
+            newLogo.style.zIndex = 9999;
+            newLogo.style.opacity = "0";
+            newLogo.style.transition = "opacity 1s ease";
+            document.body.appendChild(newLogo);
+
+            requestAnimationFrame(() => {
+              newLogo.style.opacity = "1";
+            });
+
+            newLogo.addEventListener("click", () => {
+              showLoadingAndRedirect("game.html");
+            });
           }
         }, 16);
       }
     }
-    logo.style.top = y + "px";
+    animLogo.style.top = y + "px";
   }, 16);
 }
 

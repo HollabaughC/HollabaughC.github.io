@@ -76,7 +76,7 @@ canvas.id = "matrix-bg";
 document.body.prepend(canvas);
 const ctx = canvas.getContext("2d");
 
-const letters = "アィイゥウェエオカキクケコサシスセソ0123456789";
+const letters = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲンァィゥェォッャュョㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ";
 const fontSize = 16;
 let columns;
 let drops;
@@ -102,6 +102,14 @@ resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
 const easterEggs = [
+  {
+    startDate: "01-20",
+    endDate: "01-20",
+    text: "Literally",
+    colors: ["#ffffff", "#800000", "#008080"],
+    cssColors: ["#800000", "#ffffff", "#008080"],
+    fText: "Happy Birthday Neil!"
+  },
   {
     startDate: "02-07",
     endDate: "02-10",
@@ -205,6 +213,14 @@ const easterEggs = [
     colors: ["#ff0000", "#ffffff", "#378b29"],
     cssColors: ["#ff0000", "#ffffff", "#378b29"],
     fText: "Merry Christmas!"
+  },
+  {
+    startDate: "12-26",
+    endDate: "01-01",
+    text: "1234567890",
+    colors: ["#ffd376", "#fffff0", "#14054c"],
+    cssColors: ["#14054c", "#fffff0", "#ffd376"],
+    fText: "Happy New Years!"
   }
 ];
 

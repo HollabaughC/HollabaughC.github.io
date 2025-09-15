@@ -1,0 +1,46 @@
+@keyframes rainbowColor {
+  0%   { color: #ff0000; text-shadow: 0 0 0 #ff0000; }
+  14%  { color: #ff7f00; text-shadow: 0 0 6px #ff7f00; }
+  28%  { color: #ffff00; text-shadow: 0 0 6px #ffff00; }
+  42%  { color: #00ff00; text-shadow: 0 0 6px #00ff00; }
+  56%  { color: #0000ff; text-shadow: 0 0 6px #0000ff; }
+  70%  { color: #4b0082; text-shadow: 0 0 6px #4b0082; }
+  84%  { color: #8b00ff; text-shadow: 0 0 6px #8b00ff; }
+  100% { color: #ff0000; text-shadow: 0 0 6px #ff0000; }
+}
+
+@keyframes hueShift {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+@keyframes rainbowGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.rainbow-mode * {
+  animation: rainbowColor 4s linear infinite;
+  transition: none !important;
+  will-change: color, text-shadow;
+}
+
+.rainbow-mode img,
+.rainbow-mode .logo,
+.rainbow-mode .spinner-logo {
+  animation: hueShift 6s linear infinite;
+  will-change: filter;
+}
+
+.rainbow-mode .circle-btn {
+  background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+  background-size: 200% 200%;
+  animation: rainbowGradient 6s linear infinite, rainbowColor 4s linear infinite;
+  color: white;
+}
+
+.rainbow-mode footer,
+.rainbow-mode small {
+  animation-duration: 6s;
+}

@@ -183,6 +183,14 @@ const easterEggs = [
     fText: "Save the Ainu!"
   },
   {
+    startDate: "08-19",
+    endDate: "08-19",
+    text: "Chip",
+    colors: ["#964B00", "#d0ab8bff", "#B5651D"],
+    cssColors: ["#964B00", "#F4EBD0", "#B5651D"],
+    fText: "Happy birthday Chip!"
+  },
+  {
     startDate: "09-30",
     endDate: "09-30",
     text: "Phillip",

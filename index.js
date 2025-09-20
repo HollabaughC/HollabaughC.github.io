@@ -111,6 +111,14 @@ const easterEggs = [
     fText: "Happy Birthday Neil!"
   },
   {
+    startDate: "02-01",
+    endDate: "02-01",
+    text: "ඞSusFeed.com",
+    colors: ["#ffffff", "#ff2644", "#ff2644"],
+    cssColors: ["#ff2644", "#ffffff", "#ffffff"],
+    fText: "Journalism rocks!"
+  },
+  {
     startDate: "02-07",
     endDate: "02-10",
     text: "Happy Valentine's!♥✤",

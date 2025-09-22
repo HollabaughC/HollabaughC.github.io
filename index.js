@@ -439,3 +439,51 @@ document.querySelectorAll("button, .logo").forEach(el => {
     setTimeout(() => ripple.remove(), 1000);
   });
 });
+const langToggle = document.getElementById("lang-toggle");
+
+    const textContent = {
+      en: {
+        welcome: "Welcome to My Site!",
+        intro: "Below are portals to my work in Computer Programming, Japanese Linguistics, and Ainu Culture and Language.",
+        cs: "All Programming Work",
+        gd: "Game Dev Work",
+        wd: "Web Dev Work",
+        jp: "Japanese Linguistics Work",
+        ainu: "Ainu Research Work",
+        btn: "日本語",
+        footer: "©2025 Cameron Hollabaugh",
+        left: "Cameron",
+        right: "Hollabaugh"
+      },
+      jp: {
+        welcome: "私のサイトへようこそ！",
+        intro: "以下は、私のコンピュータープログラミング、日本語学、アイヌ文化と言語に関する研究へのポータルです。",
+        cs: "プログラミング作品",
+        gd: "ゲーム開発作品",
+        wd: "ウェブ開発作品",
+        jp: "日本語学の研究",
+        ainu: "アイヌ研究",
+        btn: "English",
+        footer: "©2025 キャメロン・ホーラボー",
+        left: "キャメロン",
+        right: "ホーラボー"
+      }
+    };
+
+    let currentLang = "en";
+
+    langToggle.addEventListener("click", () => {
+      currentLang = currentLang === "en" ? "jp" : "en";
+      const t = textContent[currentLang];
+      document.getElementById("welcome-text").textContent = t.welcome;
+      document.getElementById("intro-text").textContent = t.intro;
+      document.getElementById("btn-cs").textContent = t.cs;
+      document.getElementById("btn-gd").textContent = t.gd;
+      document.getElementById("btn-wd").textContent = t.wd;
+      document.getElementById("btn-jp").textContent = t.jp;
+      document.getElementById("btn-ainu").textContent = t.ainu;
+      document.getElementById("footer-secret").textContent = t.footer;
+      document.querySelector(".left-text").textContent = t.left;
+      document.querySelector(".right-text").textContent = t.right;
+      langToggle.textContent = t.btn;
+    });

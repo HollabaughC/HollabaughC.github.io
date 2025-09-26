@@ -487,3 +487,5 @@ const langToggle = document.getElementById("lang-toggle");
       document.querySelector(".right-text").textContent = t.right;
       langToggle.textContent = t.btn;
     });
+
+    document.getElementById("year").textContent = new Date().getFullYear();

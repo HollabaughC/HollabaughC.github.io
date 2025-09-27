@@ -85,6 +85,22 @@ header .subtitle{
   transform:translateY(-6px) scale(1.03);
   box-shadow:0 12px 28px rgba(0,0,0,0.35);
 }
+.game-card a{
+  display:block;
+}
+.game-card img{
+  max-width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.25);
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.game-card img:hover{
+  transform:scale(1.05);
+  box-shadow:0 8px 16px rgba(0,0,0,0.4);
+}
 .game-card h3{
   margin:12px 0 8px;
   font-size:22px;
@@ -93,32 +109,7 @@ header .subtitle{
 .game-card p{
   font-size:15px;
   color:#4a3322;
-  margin-bottom:16px;
-}
-
-.game-card a{
-  display:block;
-  background:linear-gradient(180deg,var(--accent),#4a2b16);
-  color:white;
-  padding:14px;
-  border-radius:16px;
-  cursor:pointer;
-  font-weight:700;
-  text-decoration:none;
-  font-size:18px;
-  box-shadow:0 6px 0 #3b2313,
-             0 6px 14px rgba(0,0,0,0.4);
-  transition:transform 0.15s, box-shadow 0.15s, background 0.2s;
-}
-.game-card a:hover{
-  transform:translateY(-3px);
-  box-shadow:0 9px 0 #3b2313,
-             0 10px 20px rgba(0,0,0,0.5);
-  background:linear-gradient(180deg,#7a4b2e,#3a1f0f);
-}
-.game-card a:active{
-  transform:translateY(2px);
-  box-shadow:0 3px 0 #3b2313;
+  margin-bottom:0;
 }
 
 @media(max-width:600px){
@@ -140,10 +131,6 @@ header .subtitle{
   }
   .game-card p{
     font-size:13px;
-  }
-  .game-card a{
-    font-size:16px;
-    padding:12px;
   }
 }
 
@@ -240,10 +227,8 @@ footer:hover {
   height:100%;
   background:rgba(0,0,0,0.7);
   z-index:30000;
-
   pointer-events: all;  
 }
-
 #cookie-consent .cookie-box {
   background:#fff8e6;
   color:#3b2a1a;
@@ -253,16 +238,8 @@ footer:hover {
   border-radius:16px;
   box-shadow:0 10px 30px rgba(0,0,0,0.5);
   text-align:center;
-
   pointer-events:auto;
 }
-
-#cookie-consent h2 {
-  margin-top:0;
-  font-size:22px;
-  color:var(--muted);
-}
-
 #cookie-consent button {
   margin-top:16px;
   padding:12px 24px;
@@ -296,39 +273,44 @@ footer:hover {
   
   <section class="games">
     <div class="game-card">
+      <a href="mancala/smeff.html"><img src="mancala/img.png" alt="Mancala"></a>
       <h3>Old Man Smeff's Mancala</h3>
       <p>Relive the first game of mancala forever!</p>
-      <a href="mancala/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="whoinvented/smeff.html"><img src="whoinvented/img.png" alt="Who Invented Smeff"></a>
       <h3>Who Invented Smeff?</h3>
       <p>Find out who literally objectively factually invented Smeff!</p>
-      <a href="whoinvented/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="drawing/smeff.html"><img src="drawing/img.png" alt="Bead Drawing"></a>
       <h3>Bead Drawing</h3>
       <p>Draw using mancala beads!</p>
-      <a href="drawing/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="chess/smeff.html"><img src="chess/img.png" alt="1D Chess"></a>
       <h3>1D Chess</h3>
       <p>Enjoy the second oldest game, now so much simpler!</p>
-      <a href="chess/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="quiz/smeff.html"><img src="quiz/img.png" alt="Quiz"></a>
       <h3>Smeff's Quiz</h3>
       <p>You are the star of a quiz show!</p>
-      <a href="quiz/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="crypt/smeff.html"><img src="crypt/img.png" alt="Crypt"></a>
       <h3>The Crypt</h3>
       <p>Weclome to the crypt...</p>
-      <a href="crypt/smeff.html">▶ Play Now</a>
     </div>
     <div class="game-card">
+      <a href="nim/smeff.html"><img src="nim/img.png" alt="Nim"></a>
       <h3>Desert Nim</h3>
       <p>Play nim at the ancient site of the first game of mancala.</p>
-      <a href="nim/smeff.html">▶ Play Now</a>
+    </div>
+    <div class="game-card">
+      <a href="liar/smeff.html"><img src="liar/img.png" alt="Destroy All Liars"></a>
+      <h3>Destroy All Liars</h3>
+      <p>Defeat every single liar who claims Smeff as their own.</p>
     </div>
   </section>
 
@@ -345,22 +327,11 @@ footer:hover {
   <div class="modal-content">
     <span class="close-btn">&times;</span>
     <h2>Legal Notice</h2>
-    <p>
-      All content, games, and assets on this site are protected under applicable intellectual property laws. 
-      Unauthorized reproduction, distribution, joke stealing, or modification is strictly prohibited.
-    </p>
-    <p>
-      Cameron Hollabaugh is the sole creator, owner, and operator of the names Smeff and the Explain it With Smeff brand.
-    </p>
-    <p>
-      Cameron Hollabaugh is the originator of the Smeff name and concept.
-    </p>
-    <p>
-      Cameron Hollabaugh is the sole creator of the original Smeff joke.
-    </p>
-    <p>
-      By using this website, you agree to abide by these terms and conditions and the fact the Cameron created Smeff.
-    </p>
+    <p>All content, games, and assets on this site are protected under applicable intellectual property laws. Unauthorized reproduction, distribution, joke stealing, or modification is strictly prohibited.</p>
+    <p>Cameron Hollabaugh is the sole creator, owner, and operator of the names Smeff and the Explain it With Smeff brand.</p>
+    <p>Cameron Hollabaugh is the originator of the Smeff name and concept.</p>
+    <p>Cameron Hollabaugh is the sole creator of the original Smeff joke.</p>
+    <p>By using this website, you agree to abide by these terms and conditions and the fact the Cameron created Smeff.</p>
   </div>
 </div>
 
@@ -410,12 +381,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const consentPopup = document.getElementById("cookie-consent");
   const acceptBtn = document.getElementById("accept-cookies");
 
-  consentPopup.style.display = "block";
-  document.body.style.overflow = "hidden";
+  if (!localStorage.getItem("smeffConsent")) {
+    consentPopup.style.display = "block";
+    document.body.style.overflow = "hidden";
+  }
 
   acceptBtn.addEventListener("click", () => {
     consentPopup.style.display = "none";
     document.body.style.overflow = "";
+    localStorage.setItem("smeffConsent", "true");
   });
 });
 </script>

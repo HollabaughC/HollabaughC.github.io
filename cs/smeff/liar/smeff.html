@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liars</title>
+<link rel="shortcut icon" href="../img/smeff.png" type="image/x-icon">
+<style>
+:root{
+  --bg: #000;
+  --text: #0f0;
+}
+html,body{
+  height:100%;
+  margin:0;
+  font-family:'Papyrus',serif;
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  overflow:hidden;
+}
+.container{
+  width:100%;
+  max-width:800px;
+  margin:10px;
+  padding:10px;
+  box-sizing:border-box;
+  background:rgba(255,255,255,0.04);
+  border-radius:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.35) inset;
+  text-align:center;
+}
+header{
+  text-align:center;
+  margin-bottom:10px;
+}
+header img.logo{
+  height:60px;
+  width:auto;
+  display:block;
+  margin:0 auto 8px;
+}
+header .title{
+  font-size:22px;
+  font-weight:700;
+  color:var(--text);
+  text-shadow:2px 2px #030;
+}
+canvas{
+  background:#111;
+  display:block;
+  margin:0 auto;
+  border-radius:16px;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,0.8),0 12px 40px rgba(0,0,0,0.8);
+  width:100%;
+  height:auto;
+  touch-action:none;
+}
+.info{
+  color:var(--text);
+  font-size:16px;
+  margin-top:6px;
+}
+.controls{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:10px;
+}
+button.ctrl{
+  flex:1;
+  max-width:100px;
+  padding:14px;
+  font-size:20px;
+  border:none;
+  border-radius:12px;
+  background:#222;
+  color:var(--text);
+  box-shadow:0 4px 8px rgba(0,0,0,0.6);
+  user-select:none;
+}
+button.ctrl:active{
+  background:#333;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <img src="../img/smeff.png" alt="Logo" class="logo">
+    <div class="title">Destroy All Liars</div>
+  </header>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
+  <div class="info" id="info"></div>
+  <div class="controls">
+    <button class="ctrl" id="leftBtn">◀</button>
+    <button class="ctrl" id="shootBtn">⦿</button>
+    <button class="ctrl" id="rightBtn">▶</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const infoEl = document.getElementById("info");
+
+const shipImg = new Image();
+shipImg.src = "../img/smeff.png";
+
+let ship = { x: canvas.width/2 - 20, y: canvas.height - 60, w: 40, h: 40, speed: 4 };
+let bullets = [];
+let alienBullets = [];
+let aliens = [];
+let alienDir = 1;
+let alienSpeed = 0.6;
+let gameOver = false;
+let score = 0;
+let highScore = localStorage.getItem("neilHighScore") || 0;
+let level = 1;
+let lastShot = 0;
+let shotCooldown = 400;
+let lastAlienShot = 0;
+let alienShotCooldown = 3000;
+let keys = {};
+let lives = 3;
+
+document.addEventListener("keydown", e=> keys[e.key] = true);
+document.addEventListener("keyup", e=> keys[e.key] = false);
+
+let leftPressed=false,rightPressed=false,shootPressed=false;
+function setupBtn(id, onPress){
+  const btn = document.getElementById(id);
+
+  function press(){ onPress(true); }
+  function release(){ onPress(false); }
+
+  btn.addEventListener("mousedown", press);
+  btn.addEventListener("mouseup", release);
+  btn.addEventListener("mouseleave", release);
+
+  btn.addEventListener("touchstart", e=>{ e.preventDefault(); press(); }, {passive:false});
+  btn.addEventListener("touchend", e=>{ e.preventDefault(); release(); }, {passive:false});
+}
+
+setupBtn("leftBtn", state=> leftPressed=state);
+setupBtn("rightBtn", state=> rightPressed=state);
+setupBtn("shootBtn", state=> shootPressed=state);
+
+function resetAliens(){
+  aliens = [];
+  for(let r=0; r<5; r++){
+    for(let c=0; c<10; c++){
+      aliens.push({x:50*c+20,y:30*r+20,w:40,h:20,alive:true});
+    }
+  }
+  alienSpeed = 0.6 + level*0.2;
+}
+
+function shoot(){
+  let now = Date.now();
+  if(now - lastShot > shotCooldown){
+    bullets.push({x:ship.x+ship.w/2-2,y:ship.y,w:4,h:10,speed:6});
+    lastShot = now;
+  }
+}
+
+function update(){
+  if(gameOver) return;
+
+  if(keys["ArrowLeft"] || leftPressed){ if(ship.x>0) ship.x -= ship.speed; }
+  if(keys["ArrowRight"] || rightPressed){ if(ship.x+ship.w<canvas.width) ship.x += ship.speed; }
+  if(keys[" "] || shootPressed) shoot();
+
+  let edge = false;
+  aliens.forEach(a=>{
+    if(a.alive){
+      a.x += alienDir*alienSpeed;
+      if(a.x+a.w>canvas.width-10 || a.x<10) edge = true;
+    }
+  });
+  if(edge){
+    alienDir *= -1;
+    aliens.forEach(a=>a.y += 15);
+  }
+
+  let now = Date.now();
+  if(now - lastAlienShot > alienShotCooldown){
+    let shooters = aliens.filter(a=>a.alive);
+    if(shooters.length>0){
+      let a = shooters[Math.floor(Math.random()*shooters.length)];
+      alienBullets.push({x:a.x+a.w/2,y:a.y,h:12,w:3,speed:2.5});
+      lastAlienShot = now;
+    }
+  }
+
+  bullets.forEach(b=> b.y -= b.speed);
+  bullets = bullets.filter(b=>b.y>0);
+
+  alienBullets.forEach(b=> b.y += b.speed);
+  alienBullets = alienBullets.filter(b=>b.y<canvas.height);
+
+  bullets.forEach(b=>{
+    aliens.forEach(a=>{
+      if(a.alive && b.x < a.x+a.w && b.x+b.w > a.x && b.y < a.y+a.h && b.y+b.h > a.y){
+        a.alive = false;
+        b.y = -10;
+        score += 10;
+      }
+    });
+  });
+
+  alienBullets.forEach(b=>{
+    if(b.x < ship.x+ship.w && b.x+b.w > ship.x && b.y < ship.y+ship.h && b.y+b.h > ship.y){
+      loseLife();
+      b.y = canvas.height+10;
+    }
+  });
+
+  aliens.forEach(a=>{
+    if(a.alive && a.y+a.h >= ship.y){
+      gameOver = true;
+    }
+  });
+
+  if(aliens.every(a=>!a.alive)){
+    level++;
+    resetAliens();
+  }
+}
+
+function loseLife(){
+  lives--;
+  if(lives<=0){
+    gameOver=true;
+  } else {
+    ship.x = canvas.width/2 - 20;
+    bullets=[];
+    alienBullets=[];
+  }
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.drawImage(shipImg, ship.x, ship.y, ship.w, ship.h);
+
+  ctx.fillStyle = "red";
+  bullets.forEach(b=> ctx.fillRect(b.x,b.y,b.w,b.h));
+
+  ctx.fillStyle = "yellow";
+  alienBullets.forEach(b=> ctx.fillRect(b.x,b.y,b.w,b.h));
+
+  ctx.fillStyle = "#0f0";
+  ctx.font = "16px Papyrus";
+  aliens.forEach(a=>{
+    if(a.alive){
+      ctx.fillText("Neil",a.x,a.y+15);
+    }
+  });
+
+  if(gameOver){
+    ctx.fillStyle="white";
+    ctx.font="28px Papyrus";
+    ctx.fillText("GAME OVER",canvas.width/2-90,canvas.height/2);
+    ctx.font="18px Papyrus";
+    ctx.fillText("Tap or Press R to Restart",canvas.width/2-110,canvas.height/2+30);
+
+    if(score > highScore){
+      highScore = score;
+      localStorage.setItem("neilHighScore",highScore);
+    }
+  }
+
+  infoEl.textContent = `Score: ${score} | High Score: ${highScore} | Level: ${level} | Lives: ${lives}`;
+}
+
+function loop(){
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function restart(){
+  score=0;
+  level=1;
+  lives=3;
+  gameOver=false;
+  ship.x = canvas.width/2 - 20;
+  bullets=[];
+  alienBullets=[];
+  resetAliens();
+}
+
+document.addEventListener("keydown", e=>{
+  if(gameOver && e.key.toLowerCase()==="r"){ restart(); }
+});
+canvas.addEventListener("touchstart", ()=>{
+  if(gameOver) restart();
+});
+
+shipImg.onload = ()=> {
+  resetAliens();
+  loop();
+};
+</script>
+</body>
+</html>

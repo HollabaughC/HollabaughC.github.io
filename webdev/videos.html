@@ -3,26 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COS Browser</title>
+  <title>COS Browser – Videos</title>
   <link rel="icon" type="image/x-icon" href="wd.png">
   <link rel="stylesheet" href="wd.css">
-  <script src="wd.js" defer></script>
+  <style>
+    .video-wrapper {
+      width: 90%;
+      max-width: 900px;
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+    }
+    video {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: #000;
+    }
+  </style>
 </head>
 <body>
   <header class="portfolio-header">
-    <a href="../index.html" class="header-link">
+    <a href="wd.html" class="header-link">
       <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
       <h1 class="portfolio-name">Cameron Hollabaugh</h1>
     </a>
     <div class="header-search">
       <div class="search-wrapper">
-        <input type="text" id="search-input" placeholder="Search programs...">
+        <input type="text" placeholder="Search videos... (disabled)">
         <div class="search-icons">
-          <span class="clear-text" title="Clear">×</span>
+          <span class="clear-text">×</span>
           <div class="separator"></div>
-          <span class="mic" title="Voice Search">🎤</span>
-          <span class="camera" title="Search by Image">📷</span>
-          <span class="search" title="Search">🔍</span>
+          <span class="search">🔍</span>
         </div>
       </div>
     </div>
@@ -30,18 +42,21 @@
 
   <nav class="search-tabs">
     <ul>
-      <li class="active"><a href="#">All</a></li>
+      <li><a href="wd.html">All</a></li>
       <li><a href="images.html">Images</a></li>
       <li><a href="news.html">News</a></li>
-      <li><a href="videos.html">Videos</a></li>
+      <li class="active"><a href="videos.html">Videos</a></li>
       <li><a href="maps.html">Maps</a></li>
       <li><a href="#">More</a></li>
     </ul>
     <div class="tabs-underline"></div>
   </nav>
 
-  <div class="search-container">
-    <div id="search-results"></div>
+  <div class="video-wrapper">
+    <video controls>
+      <source src="../cs/wwoll/wwoll.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </div>
 </body>
 </html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Images</title>
+  <link rel="icon" type="image/x-icon" href="wd.png">
+  <link rel="stylesheet" href="wd.css">
+  <style>
+    .image-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 20px;
+    }
+    .image-card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .image-card:hover {
+      transform: scale(1.03);
+    }
+    .image-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    .image-caption {
+      padding: 6px 8px;
+      font-size: 0.8rem;
+      color: #444;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      flex-direction: column;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .modal-caption {
+      margin-top: 12px;
+      color: #fff;
+      font-size: 1rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 32px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .close-btn:hover {
+      color: #ddd;
+    }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 48px;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      font-weight: bold;
+      padding: 10px;
+    }
+    .arrow:hover {
+      color: #ddd;
+    }
+    .arrow.left {
+      left: 20px;
+    }
+    .arrow.right {
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header class="portfolio-header">
+    <a href="../index.html" class="header-link">
+      <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
+      <h1 class="portfolio-name">Cameron Hollabaugh</h1>
+    </a>
+    <div class="header-search">
+      <div class="search-wrapper">
+        <input type="text" id="search-input" placeholder="Search images...">
+        <div class="search-icons">
+          <span class="clear-text" title="Clear">×</span>
+          <div class="separator"></div>
+          <span class="mic" title="Voice Search">🎤</span>
+          <span class="camera" title="Search by Image">📷</span>
+          <span class="search" title="Search">🔍</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="search-tabs">
+    <ul>
+      <li><a href="wd.html">All</a></li>
+      <li class="active"><a href="images.html">Images</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="maps.html">Maps</a></li>
+      <li><a href="#">More</a></li>
+    </ul>
+    <div class="tabs-underline"></div>
+  </nav>
+
+  <div class="search-container">
+    <div id="search-results" class="image-results"></div>
+  </div>
+
+  <div id="image-modal" class="modal">
+    <span class="close-btn">&times;</span>
+    <span class="arrow left">&#10094;</span>
+    <img id="modal-img" src="" alt="">
+    <span class="arrow right">&#10095;</span>
+    <div id="modal-caption" class="modal-caption"></div>
+  </div>
+
+  <script>
+    const images = [
+      { src: "../cs/img/github.png", caption: "GitHub Logo" },
+      { src: "../cs/img/dnd.png", caption: "D&D Creator" },
+      { src: "../cs/img/costco.png", caption: "Costco Picker" },
+      { src: "../cs/img/chip.png", caption: "Project Chip" },
+      { src: "../cs/img/smeff.png", caption: "Explain it With Smeff" },
+      { src: "../cs/img/sapporo.png", caption: "Sapporo" },
+      { src: "../img/cam.png", caption: "This Site Icon" },
+      { src: "../irankarapte/icon.png", caption: "Irankarapte" }
+    ];
+
+    const resultsContainer = document.getElementById('search-results');
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.querySelector('.clear-text');
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalCaption = document.getElementById('modal-caption');
+    const closeBtn = document.querySelector('.close-btn');
+    const leftArrow = document.querySelector('.arrow.left');
+    const rightArrow = document.querySelector('.arrow.right');
+    let currentIndex = 0;
+
+    function renderImageResults(items) {
+      resultsContainer.innerHTML = '';
+      items.forEach((img, index) => {
+        const card = document.createElement('div');
+        card.className = 'image-card';
+        card.innerHTML = `
+          <img src="${img.src}" alt="${img.caption}">
+          <div class="image-caption">${img.caption}</div>
+        `;
+        card.addEventListener('click', () => openModal(index));
+        resultsContainer.appendChild(card);
+      });
+    }
+
+    function openModal(index) {
+      currentIndex = index;
+      modalImg.src = images[currentIndex].src;
+      modalCaption.textContent = images[currentIndex].caption;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      openModal(currentIndex);
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      openModal(currentIndex);
+    }
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+      const filtered = images.filter(i => i.caption.toLowerCase().includes(query));
+      renderImageResults(filtered);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchInput.focus();
+      renderImageResults(images);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+    leftArrow.addEventListener('click', showPrev);
+    rightArrow.addEventListener('click', showNext);
+
+    renderImageResults(images);
+  </script>
+</body>
+</html>

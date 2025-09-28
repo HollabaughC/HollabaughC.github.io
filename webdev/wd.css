@@ -1,14 +1,12 @@
-/* Full page and responsive layout */
 html, body {
   height: 100%;
   width: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
-  overflow-x: hidden; /* prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* Header */
 .portfolio-header {
   display: flex;
   flex-wrap: wrap;
@@ -46,7 +44,6 @@ html, body {
   font-weight: bold;
 }
 
-/* Search Bar */
 .header-search {
   flex: 1;
   min-width: 300px;
@@ -60,7 +57,7 @@ html, body {
 
 .search-wrapper input {
   width: 100%;
-  padding: 10px 150px 10px 16px; /* space for icons inside */
+  padding: 10px 150px 10px 16px;
   font-size: 1.2vw;
   border: 1px solid #ccc;
   border-radius: 24px;
@@ -102,7 +99,6 @@ html, body {
   font-size: 1.5vw;
 }
 
-/* Tabs */
 .search-tabs {
   width: 100%;
   background-color: #fff;
@@ -146,7 +142,6 @@ html, body {
   margin-top: -3px;
 }
 
-/* Search Results */
 .search-container {
   width: 80%;
   max-width: 800px;
@@ -201,7 +196,6 @@ html, body {
   line-height: 1.4;
 }
 
-/* Responsive adjustments */
 @media(max-width: 768px) {
   .portfolio-header {
     flex-direction: column;

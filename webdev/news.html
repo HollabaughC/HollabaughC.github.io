@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News by SusFeed.com</title>
+  <link rel="icon" type="image/x-icon" href="wd.png">
+  <link rel="stylesheet" href="wd.css">
+  <style>
+    .news-container {
+      width: 80%;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .news-item {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    .news-item:hover {
+      transform: scale(1.02);
+    }
+    .news-thumb {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: #f1f1f1;
+    }
+    .news-content {
+      padding: 10px;
+    }
+    .news-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #1a0dab;
+      text-decoration: none;
+    }
+    .news-title:hover {
+      text-decoration: underline;
+    }
+    .load-more {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 24px;
+      background: #1a0dab;
+      color: white;
+      cursor: pointer;
+    }
+    .load-more:hover {
+      background: #0c0786;
+    }
+    @media (max-width: 768px) {
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+      .news-title { font-size: 16px; }
+    }
+    .news-date {
+        font-size: 0.8rem;
+        color: #6a6a6a;
+        margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="portfolio-header">
+    <a href="../index.html" class="header-link">
+      <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
+      <h1 class="portfolio-name">Cameron Hollabaugh</h1>
+    </a>
+    <div class="header-search">
+      <div class="search-wrapper">
+        <input type="text" id="search-input" placeholder="Search news...">
+        <div class="search-icons">
+          <span class="clear-text" title="Clear">×</span>
+          <div class="separator"></div>
+          <span class="mic" title="Voice Search">🎤</span>
+          <span class="camera" title="Search by Image">📷</span>
+          <span class="search" title="Search">🔍</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="search-tabs">
+    <ul>
+      <li><a href="wd.html">All</a></li>
+      <li><a href="images.html">Images</a></li>
+      <li class="active"><a href="news.html">News</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li><a href="maps.html">Maps</a></li>
+      <li><a href="#">More</a></li>
+    </ul>
+    <div class="tabs-underline"></div>
+  </nav>
+
+  <div class="news-container">
+    <div class="news-grid" id="news-grid"></div>
+    <button id="load-more" class="load-more" style="display:none;">Load More</button>
+  </div>
+
+  <script>
+    let allItems = [];
+    let filteredItems = [];
+    let currentPage = 0;
+    const itemsPerPage = 10;
+
+    function formatTitle(fileName) {
+      return fileName.replace(/_/g, " ").replace(".html", "");
+    }
+
+    function weightedShuffle(array) {
+      return array
+        .map((item, index) => ({
+          item,
+          weight: Math.random() * (index + 1)
+        }))
+        .sort((a, b) => b.weight - a.weight)
+        .map(x => x.item);
+    }
+
+    async function fetchData() {
+      try {
+        const [articlesRes, quizzesRes] = await Promise.all([
+          fetch("https://susfeed.com/articles/index.json"),
+          fetch("https://susfeed.com/quizzes/index.json")
+        ]);
+
+        const [articles, quizzes] = await Promise.all([
+          articlesRes.json(),
+          quizzesRes.json()
+        ]);
+
+        const combined = [
+          ...articles.map(a => ({
+            ...a,
+            type: "article",
+            url: `https://susfeed.com/articles/${a.folder}/${a.file}`,
+            title: formatTitle(a.file),
+            thumb: `https://susfeed.com/articles/${a.folder}/cover.webp`
+          })),
+          ...quizzes.map(q => ({
+            ...q,
+            type: "quiz",
+            url: `https://susfeed.com/quizzes/${q.folder}/${q.file}`,
+            title: formatTitle(q.file),
+            thumb: `https://susfeed.com/quizzes/${q.folder}/cover.webp`
+          }))
+        ];
+
+        allItems = weightedShuffle(combined);
+        filteredItems = allItems;
+        currentPage = 0;
+        renderPage();
+      } catch (err) {
+        document.getElementById("news-grid").innerHTML = "Failed to load news.";
+        console.error(err);
+      }
+    }
+
+    async function fetchDate(url) {
+  try {
+    const res = await fetch(url);
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const dateEl = doc.querySelector(".article-date");
+    return dateEl ? dateEl.textContent.trim() : "";
+  } catch {
+    return "";
+  }
+}
+
+function renderPage() {
+  const grid = document.getElementById("news-grid");
+  if (currentPage === 0) grid.innerHTML = "";
+
+  const start = currentPage * itemsPerPage;
+  const end = start + itemsPerPage;
+  const pageItems = filteredItems.slice(start, end);
+
+  pageItems.forEach(async item => {
+    const div = document.createElement("div");
+    div.className = "news-item";
+    div.innerHTML = `
+      <img src="${item.thumb}" alt="${item.title}" class="news-thumb" 
+           onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+      <div class="news-content">
+        <a href="${item.url}" target="_blank" class="news-title">${item.title}</a>
+        <div class="news-date">Loading date...</div>
+      </div>
+    `;
+    grid.appendChild(div);
+
+    const date = await fetchDate(item.url);
+    const dateEl = div.querySelector(".news-date");
+    if (date) {
+      dateEl.textContent = date;
+    } else {
+      dateEl.remove();
+    }
+  });
+
+  currentPage++;
+  document.getElementById("load-more").style.display =
+    currentPage * itemsPerPage < filteredItems.length ? "block" : "none";
+}
+
+    document.getElementById("load-more").addEventListener("click", renderPage);
+
+    document.getElementById("search-input").addEventListener("input", e => {
+      const query = e.target.value.toLowerCase();
+      filteredItems = allItems.filter(item => item.title.toLowerCase().includes(query));
+      currentPage = 0;
+      renderPage();
+    });
+
+    document.querySelector(".clear-text").addEventListener("click", () => {
+      const input = document.getElementById("search-input");
+      input.value = "";
+      filteredItems = allItems;
+      currentPage = 0;
+      renderPage();
+      input.focus();
+    });
+
+    fetchData();
+  </script>
+</body>
+</html>

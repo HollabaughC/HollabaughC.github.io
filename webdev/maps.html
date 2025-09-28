@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COS Browser – Maps</title>
+  <link rel="icon" type="image/x-icon" href="wd.png">
+  <link rel="stylesheet" href="wd.css">
+  <style>
+    .map-wrapper {
+      width: 100%;
+      height: calc(100vh - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .loading {
+      font-size: 1.2rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header class="portfolio-header">
+    <a href="wd.html" class="header-link">
+      <img src="../cs/browser.png" alt="Portfolio Logo" class="portfolio-logo">
+      <h1 class="portfolio-name">Cameron Hollabaugh</h1>
+    </a>
+    <div class="header-search">
+      <div class="search-wrapper">
+        <input type="text" placeholder="Search maps... (disabled)">
+        <div class="search-icons">
+          <span class="clear-text">×</span>
+          <div class="separator"></div>
+          <span class="search">🔍</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="search-tabs">
+    <ul>
+      <li><a href="wd.html">All</a></li>
+      <li><a href="images.html">Images</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="videos.html">Videos</a></li>
+      <li class="active"><a href="maps.html">Maps</a></li>
+      <li><a href="#">More</a></li>
+    </ul>
+    <div class="tabs-underline"></div>
+  </nav>
+
+  <div class="map-wrapper" id="map-wrapper">
+    <div class="loading">Requesting your location...</div>
+  </div>
+
+  <script>
+    const dqCountries = [
+      "United States", "Canada", "Mexico", "China", "Thailand", "South Korea",
+      "Philippines", "Indonesia", "Vietnam", "Saudi Arabia", "Kuwait",
+      "Qatar", "United Arab Emirates", "Bahrain", "Oman", "Egypt"
+    ];
+
+    function loadMap(lat, lng, query) {
+      const mapWrapper = document.getElementById("map-wrapper");
+      mapWrapper.innerHTML = `
+        <iframe
+          src="https://www.google.com/maps?q=${encodeURIComponent(query)}&ll=${lat},${lng}&z=12&output=embed"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      `;
+    }
+
+    async function determineQuery(lat, lng) {
+      const inJapan =
+        lat >= 24 && lat <= 46 &&
+        lng >= 123 && lng <= 146;
+
+      if (inJapan) return "hokkaido ice cream";
+
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+        );
+        const data = await res.json();
+        const country = data.address.country;
+
+        if (dqCountries.includes(country)) {
+          return "dairy queen";
+        } else {
+          return "ice cream";
+        }
+      } catch (e) {
+        return "ice cream";
+      }
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async position => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const query = await determineQuery(lat, lng);
+          loadMap(lat, lng, query);
+        },
+        error => {
+          document.getElementById("map-wrapper").innerHTML =
+            "<div class='loading'>Location denied. Showing generic ice cream search.</div>" +
+            `<iframe src="https://www.google.com/maps?q=ice+cream&output=embed" allowfullscreen loading="lazy"></iframe>`;
+        }
+      );
+    } else {
+      document.getElementById("map-wrapper").innerHTML =
+        "<div class='loading'>Geolocation not supported. Showing generic ice cream search.</div>" +
+        `<iframe src="https://www.google.com/maps?q=ice+cream&output=embed" allowfullscreen loading="lazy"></iframe>`;
+    }
+  </script>
+</body>
+</html>

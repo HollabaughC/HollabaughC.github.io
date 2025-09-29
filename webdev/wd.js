@@ -31,14 +31,12 @@ function renderResults(items) {
   });
 }
 
-// Filter results as user types
 searchInput.addEventListener('input', () => {
   const query = searchInput.value.toLowerCase();
   const filtered = programs.filter(p => p.title.toLowerCase().includes(query));
   renderResults(filtered);
 });
 
-// Clear text button functionality
 clearBtn.addEventListener('click', () => {
   searchInput.value = '';
   searchInput.focus();
@@ -46,3 +44,71 @@ clearBtn.addEventListener('click', () => {
 });
 
 renderResults(programs);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("search-input");
+  const micBtn = document.querySelector(".mic");
+  const camBtn = document.querySelector(".camera");
+  const searchBtn = document.querySelector(".search");
+  const searchResults = document.getElementById("search-results");
+
+  micBtn.addEventListener("click", () => {
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Sorry, your browser doesn't support voice recognition.");
+      return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      searchInput.value = transcript;
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+    };
+  });
+
+  camBtn.addEventListener("click", async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.createElement("video");
+      video.srcObject = stream;
+      await video.play();
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0);
+
+      stream.getTracks().forEach(track => track.stop());
+
+      const img = document.createElement("img");
+      img.src = canvas.toDataURL("image/png");
+      img.style.maxWidth = "200px";
+
+      searchResults.innerHTML = "";
+      searchResults.appendChild(img);
+
+    } catch (err) {
+      console.error("Camera error:", err);
+      alert("Unable to access camera.");
+    }
+  });
+
+  searchBtn.addEventListener("click", () => {
+    const firstLink = searchResults.querySelector("a");
+    if (firstLink) {
+      window.location.href = firstLink.href;
+    } else {
+      alert("No search results available to open.");
+    }
+  });
+});

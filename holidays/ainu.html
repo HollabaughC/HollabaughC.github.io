@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jump</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #264653;
+      color: #F4EBD0;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #9B2226;
+      background: rgba(20, 0, 40, 0.9);
+      box-shadow: 0 0 25px #9B2226, 0 0 50px #F4EBD0 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #F4EBD0;
+      text-align: center;
+      text-shadow: 0 0 8px #F4EBD0, 0 0 25px #9B2226;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #264653aa, #000);
+      box-shadow: 0 0 20px #9B2226, 0 0 40px #F4EBD0;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #F4EBD0;
+      background: rgba(0, 20, 40, 0.9);
+      box-shadow: 0 0 25px #F4EBD0, 0 0 50px #9B2226 inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #F4EBD0;
+      text-shadow: 0 0 8px #9B2226, 0 0 25px #F4EBD0;
+    }
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #F4EBD0; text-shadow: 0 0 10px #9B2226; }
+    #gameCanvas {
+      border: 3px solid #F4EBD0;
+      background: #264653;
+      box-shadow: 0 0 20px #9B2226 inset;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      height: 400px;
+    }
+    #status { margin-top: 1rem; font-size: 1.2rem; }
+    .controls { margin-top: 1rem; }
+    .controls button {
+      background: #9B2226; color: #F4EBD0; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer;
+    }
+    .controls button:hover { background: #F4EBD0; color: #9B2226; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+    <main>
+      <h1>Jump</h1>
+      <canvas id="gameCanvas" width="400" height="400"></canvas>
+      <div id="status"></div>
+      <div class="controls"><button onclick="startGame()">Restart</button></div>
+    </main>
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    let player, platforms, dy, score, gameLoop, gameOver;
+    function startGame() {
+      platforms = [];
+      for (let i = 0; i < 10; i++) {
+        platforms.push({ x: Math.random() * (canvas.width - 80), y: i * (canvas.height / 10), width: 80, height: 10 });
+      }
+      const startPlatform = platforms[platforms.length - 1];
+      player = { x: startPlatform.x + startPlatform.width / 2 - 20, y: startPlatform.y - 40, width: 40, height: 40, dx: 0, dy: 0 };
+      dy = -10;
+      score = 0;
+      gameOver = false;
+      if (gameLoop) cancelAnimationFrame(gameLoop);
+      loop();
+    }
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      player.dy += 0.3;
+      player.y += player.dy;
+      player.x += player.dx;
+      if (player.x < 0) player.x = 0;
+      if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+      if (player.y < canvas.height / 2) {
+        platforms.forEach(p => p.y += Math.abs(player.dy));
+        score += Math.floor(Math.abs(player.dy));
+        player.y = canvas.height / 2;
+      }
+      platforms.forEach(p => {
+        if (player.x < p.x + p.width && player.x + player.width > p.x && player.y + player.height > p.y && player.y + player.height < p.y + p.height && player.dy > 0) {
+          player.dy = dy;
+        }
+      });
+      ctx.fillStyle = "#F4EBD0";
+      platforms.forEach(p => { ctx.fillRect(p.x, p.y, p.width, p.height); });
+      for (let i = 0; i < platforms.length; i++) {
+        if (platforms[i].y > canvas.height) {
+          platforms[i] = { x: Math.random() * (canvas.width - 80), y: 0, width: 80, height: 10 };
+        }
+      }
+      ctx.fillStyle = "#9B2226";
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+      if (player.y > canvas.height) {
+        document.getElementById("status").textContent = `Game Over! Score: ${score}`;
+        gameOver = true;
+        return;
+      }
+      ctx.fillStyle = "#F4EBD0";
+      ctx.font = "20px Orbitron";
+      ctx.fillText(`Score: ${score}`, 10, 30);
+      if (!gameOver) gameLoop = requestAnimationFrame(loop);
+    }
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") player.dx = -5;
+      if (e.key === "ArrowRight") player.dx = 5;
+    });
+    document.addEventListener("keyup", e => {
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
+    });
+    window.onload = startGame;
+  </script>
+</body>
+</html>

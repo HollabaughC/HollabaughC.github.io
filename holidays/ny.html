@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fireworks</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+
+    :root{
+      --bg: #14054c;
+      --cream: #fffff0;
+      --gold: #ffd376;
+      --muted: rgba(255,255,240,0.08);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Orbitron',sans-serif;
+      background: linear-gradient(180deg,var(--bg) 0%, #0e0438 100%);
+      color:var(--cream);
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    header{
+      position:fixed;
+      left:0;right:0;top:0;
+      display:flex;align-items:center;justify-content:center;
+      padding:.6rem 1rem;
+      background: rgba(10,5,40,0.85);
+      border-bottom:3px solid var(--gold);
+      box-shadow:0 4px 30px rgba(0,0,0,.6);
+      z-index:50;
+    }
+    .header-text{ color:var(--gold); font-size:clamp(1rem,2.4vw,1.6rem); letter-spacing:1px; text-shadow:0 0 8px rgba(255,215,118,.25) }
+    .page-wrapper{ flex:1; display:flex; flex-direction:column; padding-top:110px; padding-bottom:80px; }
+
+    main{
+      flex:1;
+      display:flex;
+      gap:1.25rem;
+      padding:1.25rem;
+      align-items:stretch;
+      justify-content:center;
+    }
+
+    .canvas-wrap{
+      flex:1 1 720px;
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+      align-items:stretch;
+      background: linear-gradient(180deg, rgba(255,255,240,0.02), rgba(0,0,0,0.02));
+      border-radius:12px;
+      padding:.75rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,.5), inset 0 0 40px rgba(255,215,118,0.02);
+      border: 1px solid rgba(255,255,240,0.03);
+    }
+
+    canvas#fwCanvas{
+      width:100%; height:600px; border-radius:10px; background:transparent; display:block;
+      cursor:crosshair;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      background-image: radial-gradient(ellipse at 50% 60%, rgba(255,255,240,0.02) 0%, rgba(255,255,240,0.00) 40%);
+    }
+
+    .controls{
+      display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
+      color:var(--cream);
+    }
+
+    .panel{
+      width:320px; max-width:38%;
+      background: rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,240,0.03);
+      border-radius:10px;
+      padding:1rem;
+      box-shadow:0 6px 20px rgba(0,0,0,0.5);
+    }
+
+    .panel h2{ color:var(--gold); font-size:1.05rem; margin-bottom:.5rem }
+    .row{ display:flex; gap:.5rem; align-items:center; margin:.45rem 0; flex-wrap:wrap }
+
+    label{ font-size:0.88rem; color:var(--cream) }
+    .btn{
+      background:var(--gold);
+      color:#14054c;
+      border:none;
+      padding:.5rem .8rem;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow:0 6px 16px rgba(0,0,0,0.45);
+    }
+    .btn.secondary{
+      background:transparent;
+      color:var(--cream);
+      border:1px solid rgba(255,255,240,0.08);
+      box-shadow:none;
+    }
+    .btn:active{ transform:translateY(1px) }
+
+    .palette{ display:flex; gap:.5rem; align-items:center; flex-wrap:wrap }
+    .swatch{
+      width:34px;height:34px;border-radius:6px;border:2px solid rgba(255,255,255,0.06);cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,0.5)
+    }
+    .swatch.selected{ outline:3px solid rgba(255,255,240,0.18); transform:scale(1.06) }
+
+    input[type="range"]{ width:130px }
+    .row small{ color:rgba(255,255,240,0.6); margin-left:.35rem }
+
+    footer{
+      position:fixed; left:0; right:0; bottom:0;
+      padding:.6rem 1rem; background: rgba(10,10,30,0.88); border-top:3px solid var(--gold);
+      text-align:center; color:var(--gold);
+    }
+
+    /* compact responsiveness */
+    @media (max-width:980px){
+      main{ flex-direction:column; padding:1rem; }
+      .panel{ width:100%; max-width:100% }
+      .canvas-wrap{ order:0 }
+      canvas#fwCanvas{ height:520px }
+    }
+    @media (max-width:520px){
+      canvas#fwCanvas{ height:420px }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-text">Cameron Hollabaugh</div>
+  </header>
+
+  <div class="page-wrapper">
+    <main>
+      <div class="canvas-wrap">
+        <canvas id="fwCanvas"></canvas>
+        <div class="controls" style="justify-content:space-between;align-items:center;">
+          <div style="display:flex; gap:.6rem; align-items:center;">
+            <button id="fireBtn" class="btn">Fire</button>
+            <button id="clearBtn" class="btn secondary">Clear</button>
+            <label style="display:flex;align-items:center;gap:.4rem;"><input id="autoToggle" type="checkbox"> Auto</label>
+            <label style="display:flex;align-items:center;gap:.4rem;">Rate <input id="rateRange" type="range" min="200" max="2000" step="100" value="900"></label>
+            <label style="display:flex;align-items:center;gap:.4rem;">Density <input id="densityRange" type="range" min="8" max="80" step="1" value="28"></label>
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center;">
+            <label><input id="randomColors" type="checkbox" checked> Random Colors</label>
+            <small style="color:rgba(255,255,240,0.6)">Click canvas to aim</small>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <h2>Colors</h2>
+        <div class="palette" id="palette">
+          <!-- swatches inserted by JS -->
+        </div>
+
+        <div style="margin-top:0.6rem" class="row">
+          <label>Custom</label>
+          <input id="customColor" type="color" value="#ffd376" style="margin-left:.6rem;height:36px;width:46px;border-radius:6px;border:none;cursor:pointer">
+        </div>
+
+        <h2 style="margin-top:.8rem">Options</h2>
+        <div class="row">
+          <label>Fade (ms)</label>
+          <input id="fadeRange" type="range" min="200" max="1800" step="50" value="900">
+          <small id="fadeValue">900</small>
+        </div>
+
+        <div class="row">
+          <label>Gravity</label>
+          <input id="gravRange" type="range" min="0" max="0.6" step="0.02" value="0.18">
+          <small id="gravValue">0.18</small>
+        </div>
+
+        <div class="row">
+          <label>Wind</label>
+          <input id="windRange" type="range" min="-0.3" max="0.3" step="0.02" value="0">
+          <small id="windValue">0.00</small>
+        </div>
+
+        <div class="row" style="margin-top:.8rem">
+          <button id="pauseBtn" class="btn secondary">Pause</button>
+          <button id="saveImg" class="btn">Save Image</button>
+        </div>
+
+        <div style="margin-top:1rem;font-size:.9rem;color:rgba(255,255,240,0.7)">
+          Theme colors: <span style="color:var(--gold)">●</span> <span style="color:var(--cream)">●</span> <span style="color:var(--bg)">●</span>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    /* Fireworks simulator
+       - Launches rockets which explode into particles
+       - Trails implemented by keeping "oldPositions" and drawing semi-transparent lines
+    */
+
+    const canvas = document.getElementById('fwCanvas');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    // Responsive canvas sizing (use devicePixelRatio)
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(300, Math.floor(rect.width * ratio));
+      canvas.height = Math.max(200, Math.floor(rect.height * ratio));
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Controls & UI
+    const fireBtn = document.getElementById('fireBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const autoToggle = document.getElementById('autoToggle');
+    const rateRange = document.getElementById('rateRange');
+    const densityRange = document.getElementById('densityRange');
+    const randomColors = document.getElementById('randomColors');
+    const paletteEl = document.getElementById('palette');
+    const customColor = document.getElementById('customColor');
+    const fadeRange = document.getElementById('fadeRange');
+    const gravRange = document.getElementById('gravRange');
+    const windRange = document.getElementById('windRange');
+    const fadeValue = document.getElementById('fadeValue');
+    const gravValue = document.getElementById('gravValue');
+    const windValue = document.getElementById('windValue');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const saveImg = document.getElementById('saveImg');
+
+    // Theme / default palette (use provided colors plus accent choices)
+    const themeColors = ['#ffd376', '#fffff0', '#14054c']; // gold, cream, deep purple (you provided)
+    const extra = ['#ff4d6d', '#4de0ff', '#9b5cff', '#7cff96', '#ffd9ff'];
+    const defaultColors = [...themeColors, ...extra];
+
+    // Selected colors set
+    let activeColors = new Set([ '#ffd376' ]);
+    function createPalette() {
+      paletteEl.innerHTML = '';
+      defaultColors.forEach(c => {
+        const sw = document.createElement('div');
+        sw.classList.add('swatch');
+        sw.style.background = c;
+        sw.title = c;
+        sw.dataset.color = c;
+        if (activeColors.has(c)) sw.classList.add('selected');
+        sw.addEventListener('click', () => {
+          if (activeColors.has(c)) { activeColors.delete(c); sw.classList.remove('selected'); }
+          else { activeColors.add(c); sw.classList.add('selected'); }
+          if (activeColors.size === 0) { activeColors.add(c); sw.classList.add('selected'); } // never empty
+        });
+        paletteEl.appendChild(sw);
+      });
+    }
+    createPalette();
+
+    customColor.addEventListener('input', (e)=>{
+      const col = e.target.value;
+      // add to palette if not present
+      if (!defaultColors.includes(col)) {
+        defaultColors.unshift(col);
+        activeColors.add(col);
+        createPalette();
+      } else {
+        activeColors.add(col);
+        createPalette();
+      }
+    });
+
+    // Simulation entities
+    const rockets = [];  // moving rockets that will explode
+    const particles = []; // particles after explosion
+
+    // Parameters
+    let gravity = parseFloat(gravRange.value);
+    let wind = parseFloat(windRange.value);
+    let fadeTime = parseInt(fadeRange.value); // ms
+    let autoInterval = parseInt(rateRange.value);
+    let density = parseInt(densityRange.value);
+
+    gravRange.addEventListener('input', e => { gravity = parseFloat(e.target.value); gravValue.textContent = gravity.toFixed(2); });
+    windRange.addEventListener('input', e => { wind = parseFloat(e.target.value); windValue.textContent = wind.toFixed(2); });
+    fadeRange.addEventListener('input', e => { fadeTime = parseInt(e.target.value); fadeValue.textContent = fadeTime; });
+    rateRange.addEventListener('input', e => { autoInterval = parseInt(e.target.value); });
+    densityRange.addEventListener('input', e => { density = parseInt(e.target.value); });
+
+    // Utility helpers
+    function rand(min, max) { return Math.random()*(max-min)+min; }
+    function pickColor() {
+      if (randomColors.checked) {
+        // prefer active colors but allow hue variation
+        const ac = Array.from(activeColors);
+        if (ac.length === 0) return defaultColors[0];
+        const base = ac[Math.floor(Math.random()*ac.length)];
+        return perturbColor(base);
+      } else {
+        const ac = Array.from(activeColors);
+        return ac[Math.floor(Math.random()*ac.length)];
+      }
+    }
+    function perturbColor(hex) {
+      // convert hex to HSL and vary saturation/lightness slightly for richer effect
+      // simple approach: convert to rgb, then mix a bit with white
+      try{
+        const c = hex.replace('#','');
+        const r = parseInt(c.substring(0,2),16);
+        const g = parseInt(c.substring(2,4),16);
+        const b = parseInt(c.substring(4,6),16);
+        // mix with white randomly
+        const t = Math.random()*0.18;
+        const nr = Math.min(255, Math.round(r + (255-r)*t));
+        const ng = Math.min(255, Math.round(g + (255-g)*t));
+        const nb = Math.min(255, Math.round(b + (255-b)*t));
+        return `rgb(${nr},${ng},${nb})`;
+      }catch(e){
+        return hex;
+      }
+    }
+
+    // Rocket class
+    class Rocket {
+      constructor(x,targetX,targetY,color) {
+        this.x = x;
+        this.y = canvas.height / (window.devicePixelRatio || 1) + 6;
+        this.vx = (targetX - x) * 0.015 + rand(-0.4,0.4);
+        this.vy = -rand(6.6, 9.2);
+        this.targetY = targetY;
+        this.color = color;
+        this.trail = [];
+        this.exploded = false;
+        this.size = rand(2.6,3.6);
+      }
+      update(dt) {
+        // trail
+        this.trail.push({x:this.x, y:this.y});
+        if (this.trail.length>12) this.trail.shift();
+
+        // apply wind & gravity
+        this.vx += wind * 0.03 * dt;
+        this.vy += gravity * 0.03 * dt;
+
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+
+        // explode when vertical speed slows or above target
+        if (!this.exploded && (this.vy > -1.0 || this.y <= this.targetY)) {
+          this.explode();
+          this.exploded = true;
+        }
+      }
+      explode() {
+        const count = Math.max(10, Math.floor(density * rand(0.8,1.2)));
+        const baseColor = this.color;
+        for (let i=0;i<count;i++){
+          const angle = Math.PI*2 * (i / count) + rand(-0.06,0.06);
+          const speed = rand(1.6, 5.4) * (0.6 + Math.random()*0.9);
+          particles.push(new Particle(this.x, this.y, Math.cos(angle)*speed + this.vx, Math.sin(angle)*speed + this.vy*0.3, baseColor));
+        }
+        // a few spark fragments
+        for (let i=0;i<6;i++){
+          particles.push(new Particle(this.x, this.y, rand(-2,2), rand(-2,2), baseColor, true));
+        }
+      }
+      draw(ctx) {
+        // draw trail as small glowing line
+        ctx.beginPath();
+        for (let i=0;i<this.trail.length;i++){
+          const p = this.trail[i];
+          const alpha = (i+1)/this.trail.length;
+          ctx.fillStyle = `rgba(255,255,255,${0.03 + alpha*0.16})`;
+          ctx.fillRect(p.x-0.7,p.y-0.7,1.6,1.6);
+        }
+        // rocket head
+        ctx.beginPath();
+        const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 14);
+        g.addColorStop(0, this.color);
+        g.addColorStop(0.6, 'rgba(255,255,255,0.35)');
+        g.addColorStop(1, 'rgba(255,255,255,0.02)');
+        ctx.fillStyle = g;
+        ctx.fillRect(this.x - this.size/2, this.y - this.size/2, this.size, this.size);
+      }
+    }
+
+    // Particle class
+    class Particle {
+      constructor(x,y,vx,vy,color,small=false){
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.life = 0;
+        this.ttl = rand(fadeTime * 0.7, fadeTime * 1.3);
+        this.size = small ? rand(0.9,1.6) : rand(1.6,3.6);
+        this.color = color;
+        this.old = [];
+        this.small = small;
+      }
+      update(dt) {
+        this.old.push({x:this.x, y:this.y});
+        if (this.old.length > 10) this.old.shift();
+
+        // physics
+        this.vx += wind * 0.012 * dt;
+        this.vy += gravity * 0.032 * dt;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+
+        // apply mild friction
+        this.vx *= 0.998;
+        this.vy *= 0.998;
+
+        this.life += dt;
+      }
+      draw(ctx) {
+        const t = this.life / this.ttl;
+        const alpha = Math.max(0, 1 - t);
+        // draw trail using old positions
+        if (this.old.length > 1) {
+          ctx.beginPath();
+          for (let i=0;i<this.old.length;i++){
+            const p = this.old[i];
+            if (i===0) ctx.moveTo(p.x,p.y);
+            else ctx.lineTo(p.x,p.y);
+          }
+          ctx.strokeStyle = toRGBA(this.color, 0.12 * alpha + (this.small ? 0.02 : 0.06));
+          ctx.lineWidth = this.size * 0.9;
+          ctx.stroke();
+        }
+
+        // draw particle head (glowing)
+        const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size*6);
+        g.addColorStop(0, toRGBA(this.color, 0.9 * alpha));
+        g.addColorStop(0.4, toRGBA(this.color, 0.45 * alpha));
+        g.addColorStop(1, toRGBA('#ffffff', 0.02 * alpha));
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+      isDead() { return this.life >= this.ttl || this.y > canvas.height + 60; }
+    }
+
+    function toRGBA(c,a){
+      if (c.startsWith('rgb')) {
+        return c.replace('rgb', 'rgba').replace(')', `,${a})`);
+      } else if (c.startsWith('#')) {
+        // hex -> rgba
+        const cc = c.replace('#','');
+        const r = parseInt(cc.substring(0,2),16);
+        const g = parseInt(cc.substring(2,4),16);
+        const b = parseInt(cc.substring(4,6),16);
+        return `rgba(${r},${g},${b},${a})`;
+      } else {
+        return `rgba(255,255,255,${a})`;
+      }
+    }
+
+    // Animation loop
+    let last = performance.now();
+    let paused = false;
+    function animate(now){
+      const dt = Math.min(32, now - last) / 16.6667; // normalized to ~60fps
+      last = now;
+      if (!paused) {
+        // fade canvas slightly to create trails. Use globalAlpha blend
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = `rgba(20,5,50,0.18)`; // dimming to create ghosting trail
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // update & draw rockets
+        for (let i = rockets.length-1; i>=0; i--) {
+          rockets[i].update(dt);
+          rockets[i].draw(ctx);
+          if (rockets[i].exploded) rockets.splice(i,1);
+        }
+
+        // update & draw particles
+        for (let i = particles.length-1; i>=0; i--) {
+          const p = particles[i];
+          p.update(dt);
+          p.draw(ctx);
+          if (p.isDead()) particles.splice(i,1);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // launch helpers
+    function launchAt(x,y, color=null) {
+      const startX = rand(40, canvas.width - 40);
+      const tX = x; const tY = y;
+      const col = color || pickColor();
+      rockets.push(new Rocket(startX, tX, tY, col));
+    }
+
+    // auto launcher
+    let autoTimer = null;
+    function scheduleAuto() {
+      if (autoTimer) clearInterval(autoTimer);
+      if (autoToggle.checked) {
+        autoTimer = setInterval(() => {
+          // random target near top half
+          const tx = rand(60, canvas.width-60);
+          const ty = rand(40, canvas.height*0.45);
+          launchAt(tx, ty);
+        }, autoInterval);
+      }
+    }
+    autoToggle.addEventListener('change', scheduleAuto);
+    rateRange.addEventListener('change', scheduleAuto);
+
+    // UI events
+    fireBtn.addEventListener('click', ()=> {
+      // fire to random point or center if tapped quickly
+      const tx = canvas.width/2 + rand(-160,160);
+      const ty = canvas.height*0.25 + rand(-80,80);
+      const col = randomColors.checked ? null : Array.from(activeColors)[Math.floor(Math.random()*activeColors.size)];
+      launchAt(tx,ty,col);
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      rockets.length = 0; particles.length = 0;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    });
+
+    pauseBtn.addEventListener('click', ()=>{
+      paused = !paused;
+      pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    });
+
+    saveImg.addEventListener('click', ()=>{
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'fireworks.png';
+      a.click();
+    });
+
+    // click-to-fire on canvas
+    canvas.addEventListener('click', (ev)=>{
+      const rect = canvas.getBoundingClientRect();
+      const cx = (ev.clientX - rect.left) * (canvas.width / rect.width);
+      const cy = (ev.clientY - rect.top) * (canvas.height / rect.height);
+      launchAt(cx, cy);
+    });
+
+    // keyboard: spacebar fires
+    window.addEventListener('keydown', (e)=>{
+      if (e.code === 'Space') {
+        e.preventDefault();
+        fireBtn.click();
+      }
+    });
+
+    // initial auto schedule
+    scheduleAuto();
+
+    // reflect slider labels
+    fadeValue.textContent = fadeRange.value;
+    gravValue.textContent = gravRange.value;
+    windValue.textContent = parseFloat(windRange.value).toFixed(2);
+
+    // small UI polish: change selection when user clicks a swatch in palette
+    // ensure at least one color active
+    // (already handled in createPalette)
+
+    // make sure canvas has good initial background
+    ctx.fillStyle = 'rgba(20,5,50,1)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // gracefully handle page visibility (pause when hidden)
+    document.addEventListener('visibilitychange', ()=>{
+      if (document.hidden) paused = true;
+      else paused = false;
+      pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+    });
+
+    // Expose a small debug launcher (double-click for big salvo)
+    canvas.addEventListener('dblclick', (ev) => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = (ev.clientX - rect.left) * (canvas.width / rect.width);
+      const cy = (ev.clientY - rect.top) * (canvas.height / rect.height);
+      for (let i=0;i<6;i++){
+        setTimeout(()=> launchAt(cx + rand(-40,40), cy + rand(-40,40)), i*80);
+      }
+    });
+
+    // finally, keep palette & controls visually in sync initially
+    createPalette();
+  </script>
+</body>
+</html>

@@ -23,6 +23,7 @@ function showLoadingAndRedirect(target) {
 
 document.querySelector(".logo").addEventListener("click", (e) => {
   const rect = e.target.getBoundingClientRect();
+
   for (let i = 0; i < 5; i++) {
     const mini = document.createElement("img");
     mini.src = "img/cam.png";
@@ -60,7 +61,11 @@ document.querySelector(".logo").addEventListener("click", (e) => {
       mini.remove();
     }, 3000);
   }
-  setTimeout(() => showLoadingAndRedirect("game.html"), 1500);
+
+  const egg = getEasterEggForToday();
+  const target = egg && egg.logoLink ? egg.logoLink : "game.html";
+
+  setTimeout(() => showLoadingAndRedirect(target), 1500);
 });
 
 document.getElementById("footer-secret").addEventListener("click", () => {
@@ -108,7 +113,8 @@ const easterEggs = [
     text: "Literally",
     colors: ["#ffffff", "#800000", "#008080"],
     cssColors: ["#800000", "#ffffff", "#008080"],
-    fText: "Happy Birthday Neil!"
+    fText: "Happy Birthday Neil!",
+    logoLink: "holidays/neil.html"
   },
   {
     startDate: "02-01",
@@ -116,7 +122,8 @@ const easterEggs = [
     text: "ඞSusFeed.com",
     colors: ["#ffffff", "#ff2644", "#ff2644"],
     cssColors: ["#ff2644", "#ffffff", "#ffffff"],
-    fText: "Journalism rocks!"
+    fText: "Journalism rocks!",
+    logoLink: "holidays/susfeed.html"
   },
   {
     startDate: "02-07",
@@ -124,7 +131,8 @@ const easterEggs = [
     text: "Happy Valentine's!♥✤",
     colors: ["#ffc5e6", "#ff257e", "#ff2644"],
     cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"],
-    fText: "Happy Valentine's!"
+    fText: "Happy Valentine's!",
+    logoLink: "holidays/valentine.html"
   },
   {
     startDate: "02-11",
@@ -132,7 +140,8 @@ const easterEggs = [
     text: "お誕生日おめでとう、日本！",
     colors: ["#FFFFFF", "#ff2644"],
     cssColors: ["#ff2644", "#FFFFFF", "#ff2644"],
-    fText: "お誕生日おめでとう、日本！"
+    fText: "お誕生日おめでとう、日本！",
+    logoLink: "holidays/japan.html"
   },
   {
     startDate: "02-12",
@@ -140,7 +149,8 @@ const easterEggs = [
     text: "Happy Valentine's!♥✤",
     colors: ["#ffc5e6", "#ff257e", "#ff2644"],
     cssColors: ["#732982", "#ffffff", "#ff257e", "#ffc5e6"],
-    fText: "Happy Valentine's!"
+    fText: "Happy Valentine's!",
+    logoLink: "holidays/valentine.html"
   },
   {
     startDate: "04-29",
@@ -148,7 +158,8 @@ const easterEggs = [
     text: "ゴールデンウィーク黄金週間",
     colors: ["#FFD700"],
     cssColors: ["#FFD700", "#FFFFFF", "#B59410"],
-    fText: "ゴールデンウィーク"
+    fText: "ゴールデンウィーク",
+    logoLink: "holidays/golden.html"
   },
   {
     startDate: "06-01",
@@ -156,7 +167,8 @@ const easterEggs = [
     text: "LGBTQ",
     colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982"],
     cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
-    fText: "Happy Pride!"
+    fText: "Happy Pride!",
+    logoLink: "holidays/lgbt.html"
   },
   {
     startDate: "06-06",
@@ -164,7 +176,8 @@ const easterEggs = [
     text: "Viva Sverige!+",
     colors: ["#235789", "#F1D302"],
     cssColors: ["#F1D302", "#FFFFFF", "#235789"],
-    fText: "Long live the king!"
+    fText: "Viva Sverige!",
+    logoLink: "holidays/sweden.html"
   },
   {
     startDate: "06-07",
@@ -172,7 +185,8 @@ const easterEggs = [
     text: "LGBTQ",
     colors: ["#E40303", "#FF8C00", "#FFED00", "#008026", "#004CFF", "#732982",],
     cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
-    fText: "Happy Pride!"
+    fText: "Happy Pride!",
+    logoLink: "holidays/lgbt.html"
   },
   {
     startDate: "08-09",
@@ -180,7 +194,8 @@ const easterEggs = [
     text: "先住民",
     colors: ["#264653", "#9B2226", "#F4EBD0"],
     cssColors: ["#264653", "#F4EBD0", "#9B2226"],
-    fText: "Save the Ainu!"
+    fText: "Save the Ainu!",
+    logoLink: "holidays/ainu.html"
   },
   {
     startDate: "08-19",
@@ -188,7 +203,8 @@ const easterEggs = [
     text: "Chip",
     colors: ["#964B00", "#d0ab8bff", "#B5651D"],
     cssColors: ["#964B00", "#F4EBD0", "#B5651D"],
-    fText: "Happy birthday Chip!"
+    fText: "Happy birthday Chip!",
+    logoLink: "holidays/chip.html"
   },
   {
     startDate: "09-30",
@@ -196,7 +212,8 @@ const easterEggs = [
     text: "Phillip",
     colors: ["#264653", "#004CFF", "#5BCEFA"],
     cssColors: ["#264653", "#5BCEFA", "#004CFF"],
-    fText: "Happy birthday Phillip!"
+    fText: "Happy birthday Phillip!",
+    logoLink: "holidays/phil.html"
   },
   {
     startDate: "10-09",
@@ -204,7 +221,8 @@ const easterEggs = [
     text: "キャメロン",
     colors: ["#7349AC", "#a982b4", "#d4c0d9"],
     cssColors: ["#a982b4", "#d4c0d9", "#7349AC"],
-    fText: "It's my birthday!"
+    fText: "It's my birthday!",
+    logoLink: "holidays/cameron.html"
   },
   {
     startDate: "10-24",
@@ -212,7 +230,8 @@ const easterEggs = [
     text: "Happy Halloween!☠☾",
     colors: ["#7349AC", "#FF9900", "#FFFFFF"],
     cssColors: ["#7349AC", "#FFFFFF", "#FF9900"],
-    fText: "Happy Halloween!"
+    fText: "Happy Halloween!",
+    logoLink: "holidays/halloween.html"
   },
   {
     startDate: "11-20",
@@ -220,7 +239,8 @@ const easterEggs = [
     text: "Trans Rights!",
     colors: ["#5BCEFA", "#F5A9B8", "#FFFFFF"],
     cssColors: ["#5BCEFA", "#FFFFFF", "#F5A9B8"],
-    fText: "Protect the dolls"
+    fText: "Protect the dolls",
+    logoLink: "holidays/trans.html"
   },
   {
     startDate: "12-18",
@@ -228,7 +248,8 @@ const easterEggs = [
     text: "Merry Christmas!❄",
     colors: ["#ff0000", "#ffffff", "#378b29"],
     cssColors: ["#ff0000", "#ffffff", "#378b29"],
-    fText: "Merry Christmas!"
+    fText: "Merry Christmas!",
+    logoLink: "holidays/christmas.html"
   },
   {
     startDate: "12-26",
@@ -236,7 +257,8 @@ const easterEggs = [
     text: "1234567890",
     colors: ["#ffd376", "#fffff0", "#14054c"],
     cssColors: ["#14054c", "#fffff0", "#ffd376"],
-    fText: "Happy New Years!"
+    fText: "Happy New Years!",
+    logoLink: "holidays/ny.html"
   }
 ];
 

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halloween Candy Catch</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #FFFFFF;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #FF9900;
+      background: rgba(20, 0, 40, 0.95);
+      box-shadow: 0 0 25px #7349AC, 0 0 50px #FF9900 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+      height: 60px;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      letter-spacing: 2px;
+      color: #FFFFFF;
+      text-align: center;
+      text-shadow: 0 0 8px #7349AC, 0 0 25px #FF9900;
+    }
+    .logo {
+      width: 50px; height: 50px;
+      margin: 0 0.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, #7349ACaa, #000);
+      box-shadow: 0 0 20px #FF9900, 0 0 40px #7349AC;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-top: 3px solid #7349AC;
+      background: rgba(0, 20, 40, 0.95);
+      box-shadow: 0 0 25px #7349AC, 0 0 50px #FF9900 inset;
+      text-align: center;
+      display: flex; justify-content: center; align-items: center;
+      height: 50px;
+    }
+    #footer-secret {
+      font-size: 0.8rem;
+      color: #FFFFFF;
+      text-shadow: 0 0 8px #FF9900, 0 0 25px #7349AC;
+    }
+
+    main {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      margin-top: 60px; /* header height */
+      margin-bottom: 50px; /* footer height */
+    }
+
+    #above-game {
+      margin: 20px 0 10px 0; /* push well below header */
+      text-align: center;
+    }
+    #above-game p {
+      color: #FF9900;
+      text-shadow: 0 0 6px #7349AC;
+      font-size: 1rem;
+    }
+
+    canvas {
+      background: #111;
+      border: 3px solid #7349AC;
+      box-shadow: 0 0 20px #FF9900 inset;
+      border-radius: 10px;
+      display: block;
+    }
+
+    #below-game {
+      margin-top: 10px;
+      text-align: center;
+    }
+    #status {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    .controls button {
+      background: #FF9900; color: #000; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 6px;
+      font-size: 0.9rem; cursor: pointer; font-weight: bold;
+    }
+    .controls button:hover { background: #7349AC; color: #FFF; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-text">
+      <span>Cameron</span>
+      <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+      <span>Hollabaugh</span>
+    </div>
+  </header>
+
+  <main>
+    <div id="above-game">
+      <p>Catch the Candy 🎃🍬 — Use Arrow Keys</p>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="below-game">
+      <div id="status">Score: 0 | High Score: 0</div>
+      <div class="controls"><button onclick="startGame()">Restart</button></div>
+    </div>
+  </main>
+
+  <footer>
+    <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+  </footer>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halloween Candy Catch</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #FFFFFF;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #FF9900;
+      background: rgba(20, 0, 40, 0.95);
+      box-shadow: 0 0 25px #7349AC, 0 0 50px #FF9900 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+      height: 60px;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1rem, 3vw, 1.8rem);
+      letter-spacing: 2px;
+      color: #FFFFFF;
+      text-align: center;
+      text-shadow: 0 0 8px #7349AC, 0 0 25px #FF9900;
+    }
+    .logo {
+      width: 50px; height: 50px;
+      margin: 0 0.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, #7349ACaa, #000);
+      box-shadow: 0 0 20px #FF9900, 0 0 40px #7349AC;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-top: 3px solid #7349AC;
+      background: rgba(0, 20, 40, 0.95);
+      box-shadow: 0 0 25px #7349AC, 0 0 50px #FF9900 inset;
+      text-align: center;
+      display: flex; justify-content: center; align-items: center;
+      height: 50px;
+    }
+    #footer-secret {
+      font-size: 0.8rem;
+      color: #FFFFFF;
+      text-shadow: 0 0 8px #FF9900, 0 0 25px #7349AC;
+    }
+
+    main {
+      flex: 1;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      margin-top: 60px; /* header height */
+      margin-bottom: 50px; /* footer height */
+    }
+
+    #above-game {
+      margin: 20px 0 10px 0; /* push well below header */
+      text-align: center;
+    }
+    #above-game p {
+      color: #FF9900;
+      text-shadow: 0 0 6px #7349AC;
+      font-size: 1rem;
+    }
+
+    canvas {
+      background: #111;
+      border: 3px solid #7349AC;
+      box-shadow: 0 0 20px #FF9900 inset;
+      border-radius: 10px;
+      display: block;
+    }
+
+    #below-game {
+      margin-top: 10px;
+      text-align: center;
+    }
+    #status {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    .controls button {
+      background: #FF9900; color: #000; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 6px;
+      font-size: 0.9rem; cursor: pointer; font-weight: bold;
+    }
+    .controls button:hover { background: #7349AC; color: #FFF; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-text">
+      <span>Cameron</span>
+      <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+      <span>Hollabaugh</span>
+    </div>
+  </header>
+
+  <main>
+    <div id="above-game">
+      <p>Catch the Candy 🎃🍬 — Use Arrow Keys</p>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="below-game">
+      <div id="status">Score: 0 | High Score: 0</div>
+      <div class="controls"><button onclick="startGame()">Restart</button></div>
+    </div>
+  </main>
+
+  <footer>
+    <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+  </footer>
+
+<script>
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const statusEl = document.getElementById("status");
+
+  let basket, candies, score, highScore = 0, gameOver, candyFall, spawnRate, keys = {};
+
+  function resizeCanvas() {
+    const headerH = document.querySelector("header").offsetHeight;
+    const footerH = document.querySelector("footer").offsetHeight;
+    const aboveH = document.getElementById("above-game").offsetHeight;
+    const belowH = document.getElementById("below-game").offsetHeight;
+    canvas.width = 350;
+    canvas.height = window.innerHeight - headerH - footerH - aboveH - belowH - 40;
+  }
+  window.onresize = resizeCanvas;
+
+  function startGame() {
+    resizeCanvas();
+    basket = { x: canvas.width / 2 - 40, y: canvas.height - 25, w: 80, h: 15, speed: 5, vx: 0 };
+    candies = [];
+    score = 0;
+    gameOver = false;
+
+    candyFall = 1.8;
+    spawnRate = 0.01;
+
+    statusEl.textContent = `Score: 0 | High Score: ${highScore}`;
+    keys = {};
+    document.addEventListener("keydown", e => keys[e.key] = true);
+    document.addEventListener("keyup", e => keys[e.key] = false);
+    requestAnimationFrame(update);
+  }
+
+  function moveBasket() {
+    if (keys["ArrowLeft"]) basket.vx = -basket.speed;
+    else if (keys["ArrowRight"]) basket.vx = basket.speed;
+    else basket.vx *= 0.8;
+
+    basket.x += basket.vx;
+    if (basket.x < 0) basket.x = 0;
+    if (basket.x + basket.w > canvas.width) basket.x = canvas.width - basket.w;
+  }
+
+  function spawnCandy() {
+    let minX = 10;
+    let maxX = canvas.width - 30;
+
+    let timeToFall = canvas.height / candyFall;
+    let maxTravel = basket.speed * timeToFall * 0.6;
+
+    let spawnMin = Math.max(minX, basket.x - maxTravel);
+    let spawnMax = Math.min(maxX, basket.x + maxTravel);
+
+    const candy = {
+      x: Math.random() * (spawnMax - spawnMin) + spawnMin,
+      y: -60,
+      size: 20,
+      emoji: ["🍬","🍭","🍫","🎃"][Math.floor(Math.random()*4)]
+    };
+    candies.push(candy);
+  }
+
+  function update() {
+    if (gameOver) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    moveBasket();
+    ctx.fillStyle = "#FF9900";
+    ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+
+    if (Math.random() < spawnRate) spawnCandy();
+    spawnRate = Math.min(0.03, spawnRate + 0.00002);
+    candyFall = Math.min(3.5, candyFall + 0.0003);
+
+    ctx.font = "20px Arial";
+    ctx.textAlign = "center";
+    for (let i = candies.length - 1; i >= 0; i--) {
+      const c = candies[i];
+      c.y += candyFall;
+      ctx.fillText(c.emoji, c.x, c.y);
+
+      if (c.y + c.size > basket.y &&
+          c.x > basket.x && c.x < basket.x + basket.w) {
+        candies.splice(i, 1);
+        score++;
+      }
+      else if (c.y > canvas.height) {
+        gameOver = true;
+        highScore = Math.max(highScore, score);
+      }
+    }
+
+    statusEl.textContent = `Score: ${score} | High Score: ${highScore}`;
+
+    if (!gameOver) requestAnimationFrame(update);
+    else statusEl.textContent += " 👻 Game Over!";
+  }
+
+  window.onload = startGame;
+</script>
+</body>
+</html>

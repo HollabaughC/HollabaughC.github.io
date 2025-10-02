@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pride</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #004CFF;
+      background: rgba(20, 0, 40, 0.9);
+      box-shadow: 0 0 25px #004CFF, 0 0 50px #5BCEFA inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #5BCEFA;
+      text-align: center;
+      text-shadow: 0 0 8px #5BCEFA, 0 0 25px #004CFF;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #264653aa, #000);
+      box-shadow: 0 0 20px #004CFF, 0 0 40px #5BCEFA;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #5BCEFA;
+      background: rgba(0, 20, 40, 0.9);
+      box-shadow: 0 0 25px #5BCEFA, 0 0 50px #004CFF inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #5BCEFA;
+      text-shadow: 0 0 8px #004CFF, 0 0 25px #5BCEFA;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #5BCEFA; text-shadow: 0 0 10px #004CFF; }
+    
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 120px);
+      grid-template-rows: repeat(2, 120px);
+      gap: 15px;
+      margin-top: 1rem;
+    }
+    .pad {
+      width: 120px; height: 120px;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #000 inset;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .pad.active {
+      opacity: 0.7;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+    }
+
+    #status { margin-top: 1rem; font-size: 1.2rem; }
+    #highscore { margin-top: 0.5rem; font-size: 1rem; color: #5BCEFA; }
+    .controls { margin-top: 1rem; }
+    .controls button {
+      background: #004CFF; color: #fff; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer;
+    }
+    .controls button:hover { background: #5BCEFA; color: #264653; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>Pride Simon Game</h1>
+      <p>Repeat the sequence of Pride colors!</p>
+      <div id="board">
+        <div class="pad" data-color="0" style="background:#E40303;"></div>
+        <div class="pad" data-color="1" style="background:#FF8C00;"></div>
+        <div class="pad" data-color="2" style="background:#FFED00;"></div>
+        <div class="pad" data-color="3" style="background:#008026;"></div>
+        <div class="pad" data-color="4" style="background:#004CFF;"></div>
+        <div class="pad" data-color="5" style="background:#732982;"></div>
+      </div>
+      <div id="status">Click "Start" to play!</div>
+      <div id="highscore">High Score: 0</div>
+      <div class="controls"><button onclick="startGame()">Start</button></div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    const pads = document.querySelectorAll(".pad");
+    const statusEl = document.getElementById("status");
+    const highscoreEl = document.getElementById("highscore");
+
+    let sequence = [];
+    let playerSequence = [];
+    let round = 0;
+    let clickable = false;
+    let highscore = localStorage.getItem("prideSimonHighscore") || 0;
+    highscoreEl.textContent = "High Score: " + highscore;
+
+    function startGame() {
+      sequence = [];
+      playerSequence = [];
+      round = 0;
+      statusEl.textContent = "Watch the sequence...";
+      nextRound();
+    }
+
+    function nextRound() {
+      round++;
+      statusEl.textContent = "Round " + round;
+      playerSequence = [];
+      sequence.push(Math.floor(Math.random() * pads.length));
+      playSequence();
+    }
+
+    function playSequence() {
+      clickable = false;
+      let i = 0;
+      const interval = setInterval(() => {
+        const color = sequence[i];
+        flashPad(color);
+        i++;
+        if (i >= sequence.length) {
+          clearInterval(interval);
+          clickable = true;
+          statusEl.textContent = "Your turn!";
+        }
+      }, 800);
+    }
+
+    function flashPad(colorIndex) {
+      const pad = pads[colorIndex];
+      pad.classList.add("active");
+      setTimeout(() => pad.classList.remove("active"), 400);
+    }
+
+    pads.forEach(pad => {
+      pad.addEventListener("click", () => {
+        if (!clickable) return;
+        const colorIndex = parseInt(pad.dataset.color);
+        flashPad(colorIndex);
+        playerSequence.push(colorIndex);
+        checkPlayerInput();
+      });
+    });
+
+    function checkPlayerInput() {
+      const idx = playerSequence.length - 1;
+      if (playerSequence[idx] !== sequence[idx]) {
+        statusEl.textContent = "💥 Wrong! Game Over!";
+        if (round - 1 > highscore) {
+          highscore = round - 1;
+          localStorage.setItem("prideSimonHighscore", highscore);
+          highscoreEl.textContent = "High Score: " + highscore;
+        }
+        clickable = false;
+        return;
+      }
+      if (playerSequence.length === sequence.length) {
+        statusEl.textContent = "🎉 Correct! Get ready for next round...";
+        setTimeout(nextRound, 1200);
+      }
+    }
+  </script>
+</body>
+</html>

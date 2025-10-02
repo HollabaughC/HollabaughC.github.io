@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swedish History Quiz</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #FFD700;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #FFD700;
+      background: rgba(0, 50, 100, 0.9);
+      box-shadow: 0 0 25px #005BAC, 0 0 50px #FFD700 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #FFD700;
+      text-align: center;
+      text-shadow: 0 0 8px #FFD700, 0 0 25px #005BAC;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #005BACaa, #000);
+      box-shadow: 0 0 20px #FFD700, 0 0 40px #005BAC;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #005BAC;
+      background: rgba(0, 50, 100, 0.9);
+      box-shadow: 0 0 25px #FFD700, 0 0 50px #005BAC inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #FFD700;
+      text-shadow: 0 0 8px #005BAC, 0 0 25px #FFD700;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #FFD700; text-shadow: 0 0 10px #005BAC; }
+    .quiz-question { margin: 1.5rem 0; }
+    .quiz-question p { font-size: 1.4rem; margin-bottom: 0.8rem; }
+    .quiz-question button, #nextBtn, #submitBtn {
+      background: linear-gradient(145deg, #005BAC, #003f7d);
+      color: #fff; border: 2px solid #FFD700;
+      padding: 0.7rem 1.2rem; margin: 0.4rem;
+      border-radius: 10px; font-size: 1rem;
+      cursor: pointer; transition: 0.3s;
+      box-shadow: 0 0 10px #005BAC, 0 0 20px #FFD700 inset;
+    }
+    .quiz-question button:hover, #nextBtn:hover, #submitBtn:hover {
+      background: #FFD700; color: #005BAC;
+      box-shadow: 0 0 10px #FFD700, 0 0 20px #005BAC inset;
+    }
+    #result { margin-top: 1.5rem; font-size: 1.5rem; text-shadow: 0 0 8px #FFD700; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>Swedish History Quiz</h1>
+      <div id="quiz"></div>
+      <button id="nextBtn" onclick="nextQuestion()" style="display:none;">Next</button>
+      <button id="submitBtn" onclick="submitQuiz()" style="display:none;">Submit Answers</button>
+      <div id="result"></div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    const questions = [
+      { q: "Who was the founder of the Swedish Empire in the 17th century?", options: ["Gustavus Adolphus", "Charles XII", "Birger Jarl", "Olof Skötkonung"], answer: 0 },
+      { q: "In what year did Sweden adopt its current constitution (Instrument of Government)?", options: ["1809", "1523", "1945", "1974"], answer: 3 },
+      { q: "Which war marked the end of Sweden as a great European power?", options: ["Thirty Years' War", "Great Northern War", "Napoleonic Wars", "Kalmar War"], answer: 1 },
+      { q: "Who was the first king of the Vasa dynasty, crowned in 1523?", options: ["Charles XI", "Eric XIV", "Gustav Vasa", "Magnus Ladulås"], answer: 2 },
+      { q: "Sweden and Norway were in a union from 1814 until what year?", options: ["1825", "1864", "1905", "1920"], answer: 2 }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = [];
+
+    function showQuestion(index) {
+      const quizContainer = document.getElementById("quiz");
+      quizContainer.innerHTML = "";
+      const item = questions[index];
+      const div = document.createElement("div");
+      div.classList.add("quiz-question");
+      div.innerHTML = `<p>${index+1}. ${item.q}</p>` +
+        item.options.map((opt, i) => `
+          <button type=\"button\" onclick=\"selectAnswer(${index}, ${i}, this)\">${opt}</button>
+        `).join("");
+      quizContainer.appendChild(div);
+
+      document.getElementById("nextBtn").style.display = index < questions.length-1 ? "none" : "none";
+      document.getElementById("submitBtn").style.display = "none";
+    }
+
+    function selectAnswer(qIndex, optIndex, btn) {
+      userAnswers[qIndex] = optIndex;
+      const buttons = btn.parentElement.querySelectorAll("button");
+      buttons.forEach(b => b.style.outline = "none");
+      btn.style.outline = "3px solid #FFD700";
+
+      if (qIndex < questions.length - 1) {
+        document.getElementById("nextBtn").style.display = "inline-block";
+      } else {
+        document.getElementById("submitBtn").style.display = "inline-block";
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestion++;
+      showQuestion(currentQuestion);
+      document.getElementById("nextBtn").style.display = "none";
+    }
+
+    function submitQuiz() {
+      let score = 0;
+      userAnswers.forEach((ans, i) => { if (ans === questions[i].answer) score++; });
+      document.getElementById("quiz").innerHTML = "";
+      document.getElementById("nextBtn").style.display = "none";
+      document.getElementById("submitBtn").style.display = "none";
+      document.getElementById("result").textContent = `You scored ${score} / ${questions.length}!`;
+    }
+
+    window.onload = () => showQuestion(currentQuestion);
+  </script>
+</body>
+</html>

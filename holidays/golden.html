@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koinobori Catch 🎏</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #FFFFFF;
+      color: #B59410;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #FFD700;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 25px #FFD700, 0 0 50px #B59410 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #B59410;
+      text-align: center;
+      text-shadow: 0 0 8px #FFD700, 0 0 25px #B59410;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFD700aa, #fff);
+      box-shadow: 0 0 20px #FFD700, 0 0 40px #B59410;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #FFD700;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 0 25px #FFD700, 0 0 50px #B59410 inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #B59410;
+      text-shadow: 0 0 8px #FFD700, 0 0 25px #B59410;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #B59410; text-shadow: 0 0 10px #FFD700; }
+
+    #game-area {
+      position: relative;
+      width: 90%;
+      height: 400px;
+      background: linear-gradient(to top, #B59410 10%, #FFFFFF 90%);
+      border: 3px solid #FFD700;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px #FFD700;
+    }
+    .koi {
+      position: absolute;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s ease;
+    }
+    .koi:hover { transform: scale(1.2) rotate(5deg); }
+
+    #score, #timer, #highscore {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      text-shadow: 0 0 6px #FFD700;
+    }
+
+    .controls { margin-top: 1rem; }
+    .controls button {
+      background: #B59410; color: #fff; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer;
+    }
+    .controls button:hover { background: #FFD700; color: #B59410; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>🎏 Koinobori Catch 🎏</h1>
+      <p>Click on the koi flags before they swim away!</p>
+      <div id="game-area"></div>
+      <div id="score">Score: 0</div>
+      <div id="timer">Time: 30</div>
+      <div id="highscore">High Score: 0</div>
+      <div class="controls"><button onclick="startGame()">Start</button></div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval, koiInterval, active = false;
+    const gameArea = document.getElementById("game-area");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
+    const highscoreEl = document.getElementById("highscore");
+
+    // Load high score from localStorage
+    let highscore = localStorage.getItem("koinoboriHighscore") || 0;
+    highscoreEl.textContent = "High Score: " + highscore;
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      active = true;
+      scoreEl.textContent = "Score: " + score;
+      timerEl.textContent = "Time: " + timeLeft;
+      gameArea.innerHTML = "";
+      clearInterval(gameInterval);
+      clearInterval(koiInterval);
+
+      gameInterval = setInterval(updateTimer, 1000);
+      koiInterval = setInterval(spawnKoi, 1000);
+    }
+
+    function updateTimer() {
+      if (!active) return;
+      timeLeft--;
+      timerEl.textContent = "Time: " + timeLeft;
+      if (timeLeft <= 0) {
+        endGame();
+      }
+    }
+
+    function spawnKoi() {
+      if (!active) return;
+      const koi = document.createElement("div");
+      koi.classList.add("koi");
+      koi.textContent = "🎏";
+      koi.style.top = Math.random() * (gameArea.clientHeight - 40) + "px";
+      koi.style.left = "-50px";
+      gameArea.appendChild(koi);
+
+      let pos = -50;
+      const move = setInterval(() => {
+        if (!active) { koi.remove(); clearInterval(move); return; }
+        pos += 2;
+        koi.style.left = pos + "px";
+        if (pos > gameArea.clientWidth) {
+          koi.remove();
+          clearInterval(move);
+        }
+      }, 30);
+
+      koi.addEventListener("click", () => {
+        if (!active) return;
+        score++;
+        scoreEl.textContent = "Score: " + score;
+        koi.remove();
+        clearInterval(move);
+      });
+    }
+
+    function endGame() {
+      active = false;
+      clearInterval(gameInterval);
+      clearInterval(koiInterval);
+      // Remove all koi
+      const koiFlags = document.querySelectorAll(".koi");
+      koiFlags.forEach(k => k.remove());
+
+      // Update high score
+      if (score > highscore) {
+        highscore = score;
+        localStorage.setItem("koinoboriHighscore", highscore);
+        highscoreEl.textContent = "High Score: " + highscore;
+        alert("🎉 New High Score! " + score);
+      } else {
+        alert("Game Over! Your score: " + score);
+      }
+    }
+  </script>
+</body>
+</html>

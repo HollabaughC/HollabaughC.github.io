@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip Clicker</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #F4EBD0;
+      color: #964B00;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; padding-top: 120px; padding-bottom: 80px; overflow: hidden; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #964B00;
+      background: rgba(182,101,29,0.9);
+      box-shadow: 0 0 25px #964B00, 0 0 50px #B5651D inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #F4EBD0;
+      text-align: center;
+      text-shadow: 0 0 8px #B5651D, 0 0 25px #964B00;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #964B00aa, #000);
+      box-shadow: 0 0 20px #964B00, 0 0 40px #B5651D;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #964B00;
+      background: rgba(182,101,29,0.9);
+      box-shadow: 0 0 25px #964B00, 0 0 50px #B5651D inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #F4EBD0;
+      text-shadow: 0 0 8px #964B00, 0 0 25px #B5651D;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; overflow: hidden; }
+    h1 { margin-bottom: 0.5rem; color: #964B00; text-shadow: 0 0 10px #B5651D; }
+
+    .game-area {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 2rem;
+      flex: 1;
+      max-height: 100%;
+      overflow: hidden;
+    }
+
+    .chip-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    #chip {
+      width: 150px; height: auto;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+      user-select: none;
+      margin-top: 0.5rem;
+    }
+    #chip:active { transform: scale(0.9); }
+    #score {
+      margin-top: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #B5651D;
+      text-shadow: 0 0 6px #964B00;
+    }
+    .controls { margin-top: 0.5rem; }
+    .controls button {
+      background: #964B00; color: #F4EBD0; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 6px;
+      font-size: 0.9rem; cursor: pointer;
+    }
+    .controls button:hover { background: #B5651D; color: #F4EBD0; }
+
+    .shop {
+      background: #fff3e0;
+      border: 2px solid #964B00;
+      padding: 0.8rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #964B00;
+      width: 250px;
+      text-align: left;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .shop h2 { text-align: center; margin: 0.4rem 0; color: #964B00; font-size: 1.2rem; }
+    .upgrade {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 0.4rem 0;
+      font-size: 0.85rem;
+    }
+    .upgrade button {
+      background: #B5651D; color: #F4EBD0; border: none;
+      padding: 0.3rem 0.6rem; border-radius: 6px;
+      cursor: pointer; font-size: 0.8rem;
+    }
+    .upgrade button:disabled { background: #ccc; color: #666; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>Chip Clicker</h1>
+      <p>Click the elder chip to earn points!</p>
+
+      <div class="game-area">
+        <div class="shop">
+          <h2>Click Upgrades</h2>
+          <div id="click-upgrades"></div>
+        </div>
+
+        <div class="chip-area">
+          <img id="chip" src="../cs/projectchip/img/chip_elder_happy.png" alt="Chip Elder">
+          <div id="score">Score: 0</div>
+          <div class="controls"><button onclick="resetGame()">Reset</button></div>
+        </div>
+
+        <div class="shop">
+          <h2>Auto Upgrades</h2>
+          <div id="auto-upgrades"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    let score = 0;
+    let clickPower = 1;
+    let autoPower = 0;
+
+    const scoreEl = document.getElementById("score");
+    const chipEl = document.getElementById("chip");
+    const clickUpgradesEl = document.getElementById("click-upgrades");
+    const autoUpgradesEl = document.getElementById("auto-upgrades");
+
+    const clickUpgrades = [
+      { name: "Gentle Tap", bonus: 1, cost: 10, owned: 0 },
+      { name: "Firm Press", bonus: 2, cost: 20, owned: 0 },
+      { name: "Double Tap", bonus: 3, cost: 40, owned: 0 },
+      { name: "Precision Gloves", bonus: 4, cost: 80, owned: 0 },
+      { name: "Copper Stylus", bonus: 5, cost: 160, owned: 0 },
+      { name: "Silver Finger", bonus: 6, cost: 320, owned: 0 },
+      { name: "Golden Touch", bonus: 8, cost: 640, owned: 0 },
+      { name: "Cybernetic Implant", bonus: 10, cost: 1280, owned: 0 },
+      { name: "Quantum Finger", bonus: 15, cost: 2560, owned: 0 },
+      { name: "Elder’s Blessing", bonus: 25, cost: 5000, owned: 0 }
+    ];
+
+    const autoUpgrades = [
+      { name: "Wooden Clicker", bonus: 1, cost: 50, owned: 0 },
+      { name: "Clockwork Tapper", bonus: 2, cost: 100, owned: 0 },
+      { name: "Steam Engine Press", bonus: 3, cost: 200, owned: 0 },
+      { name: "Electric Switcher", bonus: 4, cost: 400, owned: 0 },
+      { name: "Robotic Arm", bonus: 5, cost: 800, owned: 0 },
+      { name: "Automated Factory", bonus: 7, cost: 1600, owned: 0 },
+      { name: "AI Overseer", bonus: 10, cost: 3200, owned: 0 },
+      { name: "Nano Swarm", bonus: 15, cost: 6400, owned: 0 },
+      { name: "Quantum Core", bonus: 25, cost: 12800, owned: 0 },
+      { name: "Temporal Loop Device", bonus: 50, cost: 25600, owned: 0 }
+    ];
+
+    chipEl.addEventListener("click", () => {
+      score += clickPower;
+      updateDisplay();
+      saveGame();
+    });
+
+    function buyUpgrade(upgrade, type) {
+      if (score >= upgrade.cost) {
+        score -= upgrade.cost;
+        upgrade.owned++;
+        if (type === "click") {
+          clickPower += upgrade.bonus;
+        } else {
+          autoPower += upgrade.bonus;
+        }
+        upgrade.cost = Math.floor(upgrade.cost * 1.7);
+        updateDisplay();
+        saveGame();
+      }
+    }
+
+    function resetGame() {
+      score = 0;
+      clickPower = 1;
+      autoPower = 0;
+      clickUpgrades.forEach((u, i) => { u.owned = 0; u.cost = [10,20,40,80,160,320,640,1280,2560,5000][i]; });
+      autoUpgrades.forEach((u, i) => { u.owned = 0; u.cost = [50,100,200,400,800,1600,3200,6400,12800,25600][i]; });
+      updateDisplay();
+      saveGame();
+    }
+
+    function updateDisplay() {
+      scoreEl.textContent = `Score: ${score}`;
+      clickUpgradesEl.innerHTML = clickUpgrades.map((u,i) => `
+        <div class="upgrade">
+          <span>${u.name} (+${u.bonus}/click) | Cost: ${u.cost} | Owned: ${u.owned}</span>
+          <button onclick="buyUpgrade(clickUpgrades[${i}], 'click')" ${score<u.cost?'disabled':''}>Buy</button>
+        </div>
+      `).join("");
+      autoUpgradesEl.innerHTML = autoUpgrades.map((u,i) => `
+        <div class="upgrade">
+          <span>${u.name} (+${u.bonus}/sec) | Cost: ${u.cost} | Owned: ${u.owned}</span>
+          <button onclick="buyUpgrade(autoUpgrades[${i}], 'auto')" ${score<u.cost?'disabled':''}>Buy</button>
+        </div>
+      `).join("");
+    }
+
+    function saveGame() {
+      const gameState = {
+        score,
+        clickPower,
+        autoPower,
+        clickUpgrades: clickUpgrades.map(u => ({ owned: u.owned, cost: u.cost })),
+        autoUpgrades: autoUpgrades.map(u => ({ owned: u.owned, cost: u.cost }))
+      };
+      localStorage.setItem("chipClickerSave", JSON.stringify(gameState));
+    }
+
+    function loadGame() {
+      const data = localStorage.getItem("chipClickerSave");
+      if (data) {
+        const saved = JSON.parse(data);
+        score = saved.score ?? 0;
+        clickPower = saved.clickPower ?? 1;
+        autoPower = saved.autoPower ?? 0;
+
+        if (saved.clickUpgrades) {
+          saved.clickUpgrades.forEach((u,i) => {
+            if (clickUpgrades[i]) {
+              clickUpgrades[i].owned = u.owned ?? 0;
+              clickUpgrades[i].cost = u.cost ?? clickUpgrades[i].cost;
+            }
+          });
+        }
+
+        if (saved.autoUpgrades) {
+          saved.autoUpgrades.forEach((u,i) => {
+            if (autoUpgrades[i]) {
+              autoUpgrades[i].owned = u.owned ?? 0;
+              autoUpgrades[i].cost = u.cost ?? autoUpgrades[i].cost;
+            }
+          });
+        }
+      }
+      updateDisplay();
+    }
+
+    setInterval(() => {
+      if (autoPower > 0) {
+        score += autoPower;
+        updateDisplay();
+        saveGame();
+      }
+    }, 1000);
+
+    setInterval(saveGame, 10000);
+
+    window.onload = loadGame;
+  </script>
+</body>
+</html>

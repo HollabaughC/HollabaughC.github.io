@@ -65,4 +65,31 @@ function createKonamiCode(options = {}) {
   };
 }
 
-const konami = createKonamiCode({ debug: true });
+const konami = createKonamiCode({ 
+  debug: true,
+  onActivate: () => {
+    document.body.classList.add("rainbow-mode");
+
+    if (!document.getElementById("btn-devmenu")) {
+      const btnContainer = document.querySelector(".button-container");
+      if (btnContainer) {
+        const newBtn = document.createElement("a");
+        newBtn.href = "games.html";
+        newBtn.className = "circle-btn";
+        newBtn.innerHTML = `
+          <img src="img/CS.png" alt="Dev Menu">
+          <span id="btn-devmenu">Dev Menu</span>
+        `;
+        btnContainer.appendChild(newBtn);
+      }
+    }
+  },
+  onDeactivate: () => {
+    document.body.classList.remove("rainbow-mode");
+
+    const devBtn = document.getElementById("btn-devmenu");
+    if (devBtn) {
+      devBtn.closest("a").remove();
+    }
+  }
+});

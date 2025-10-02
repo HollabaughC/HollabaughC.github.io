@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Game</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #a982b4;
+      color: #fff;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #7349AC;
+      background: rgba(115,73,172,0.9);
+      box-shadow: 0 0 25px #7349AC, 0 0 50px #d4c0d9 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #d4c0d9;
+      text-shadow: 0 0 8px #d4c0d9, 0 0 25px #7349AC;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #7349ACaa, #000);
+      box-shadow: 0 0 20px #7349AC, 0 0 40px #d4c0d9;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #d4c0d9;
+      background: rgba(169,130,180,0.9);
+      box-shadow: 0 0 25px #d4c0d9, 0 0 50px #7349AC inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #d4c0d9;
+      text-shadow: 0 0 8px #7349AC, 0 0 25px #d4c0d9;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #d4c0d9; text-shadow: 0 0 10px #7349AC; }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 100px);
+      grid-template-rows: repeat(4, 100px);
+      gap: 15px;
+      margin-top: 1rem;
+    }
+    .card {
+      width: 100px; height: 100px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .inner {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .card.flipped .inner { transform: rotateY(180deg); }
+    .front, .back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      display: flex; justify-content: center; align-items: center;
+      box-shadow: 0 0 12px #000 inset;
+    }
+    .front {
+      background: #7349AC;
+    }
+    .back {
+      transform: rotateY(180deg);
+      color: #fff;
+      display: flex; justify-content: center; align-items: center;
+      flex-direction: column;
+    }
+    .back img {
+      width: 70px; height: 70px;
+      filter: drop-shadow(0 0 5px #000);
+    }
+    #status { margin-top: 1rem; font-size: 1.2rem; }
+    .controls { margin-top: 1rem; }
+    .controls button {
+      background: #7349AC; color: #fff; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer;
+    }
+    .controls button:hover { background: #d4c0d9; color: #7349AC; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>Cam Match Game</h1>
+      <p>Flip the cards and match the colors!</p>
+      <div id="board"></div>
+      <div id="status">Click any card to start!</div>
+      <div class="controls"><button onclick="initGame()">Restart</button></div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    const colors = [
+      "#E40303","#FF8C00","#FFED00","#008026",
+      "#004CFF","#732982","#a982b4","#d4c0d9",
+      "#7349AC","#ffffff"
+    ];
+    let flippedCards = [];
+    let matchedCount = 0;
+
+    function initGame() {
+      const boardEl = document.getElementById("board");
+      const statusEl = document.getElementById("status");
+      boardEl.innerHTML = ""; statusEl.textContent = "Click any card to start!";
+      flippedCards = []; matchedCount = 0;
+
+      let deck = [];
+      colors.forEach(c => deck.push(c, c));
+
+      deck.sort(() => Math.random() - 0.5);
+
+      deck.forEach(color => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <div class="inner">
+            <div class="front"></div>
+            <div class="back" style="background:${color};">
+              <img src="../img/cam.png" alt="cam">
+            </div>
+          </div>
+        `;
+        card.addEventListener("click", () => flipCard(card, color));
+        boardEl.appendChild(card);
+      });
+    }
+
+    function flipCard(card, color) {
+      if (flippedCards.length === 2 || card.classList.contains("flipped")) return;
+      card.classList.add("flipped");
+      flippedCards.push({card, color});
+
+      if (flippedCards.length === 2) {
+        if (flippedCards[0].color === flippedCards[1].color) {
+          matchedCount++;
+          flippedCards = [];
+          if (matchedCount === colors.length) {
+            document.getElementById("status").textContent = "🎉 You matched them all!";
+          }
+        } else {
+          setTimeout(() => {
+            flippedCards[0].card.classList.remove("flipped");
+            flippedCards[1].card.classList.remove("flipped");
+            flippedCards = [];
+          }, 1000);
+        }
+      }
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Test</title>
+  <link rel="icon" type="image/x-icon" href="../img/cam.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #000;
+      color: #ffc5e6;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+    .page-wrapper { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-top: 140px; padding-bottom: 100px; }
+    header {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 0.5rem 1rem;
+      border-bottom: 3px solid #ff257e;
+      background: rgba(40, 0, 20, 0.9);
+      box-shadow: 0 0 25px #ff257e, 0 0 50px #ffc5e6 inset;
+      z-index: 10;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .header-text {
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(1.2rem, 4vw, 2.2rem);
+      letter-spacing: 2px;
+      color: #ffc5e6;
+      text-align: center;
+      text-shadow: 0 0 8px #ff257e, 0 0 25px #ff2644;
+    }
+    .logo {
+      width: clamp(50px, 15vw, 90px);
+      height: clamp(50px, 15vw, 90px);
+      margin: 0 0.5rem;
+      cursor: pointer;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ff257eaa, #000);
+      box-shadow: 0 0 20px #ff257e, 0 0 40px #ffc5e6;
+      transition: transform 0.3s ease;
+    }
+    .logo:hover { transform: scale(1.1) rotate(5deg); }
+    footer {
+      position: fixed; bottom: 0; left: 0; width: 100%;
+      padding: 1rem 0;
+      border-top: 3px solid #ffc5e6;
+      background: rgba(40, 0, 20, 0.9);
+      box-shadow: 0 0 25px #ffc5e6, 0 0 50px #ff257e inset;
+      text-align: center;
+    }
+    #footer-secret {
+      font-size: 1rem;
+      color: #ffc5e6;
+      text-shadow: 0 0 8px #ff2644, 0 0 25px #ff257e;
+    }
+
+    main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 2rem; text-align: center; }
+    h1 { margin-bottom: 1rem; color: #ffc5e6; text-shadow: 0 0 10px #ff257e; }
+    .love-form {
+      display: flex; flex-direction: column; gap: 1rem;
+      background: rgba(255, 37, 126, 0.1);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff2644 inset;
+    }
+    input {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 2px solid #ff257e;
+      background: #000;
+      color: #ffc5e6;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+    }
+    input:focus {
+      border-color: #ff2644;
+      box-shadow: 0 0 10px #ff2644;
+    }
+    button {
+      background: #ff257e; color: #fff; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px;
+      font-size: 1rem; cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #ff2644; color: #ffc5e6; }
+    #result { margin-top: 1.5rem; font-size: 1.4rem; text-shadow: 0 0 8px #ff257e; }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-text">
+        <span class="left-text">Cameron</span>
+        <a href="../index.html"><img src="../img/cam.png" alt="Cam's Logo" class="logo"></a>
+        <span class="right-text">Hollabaugh</span>
+      </div>
+    </header>
+
+    <main>
+      <h1>💖 Love Test 💖</h1>
+      <p>Enter two names and test your compatibility!</p>
+      <div class="love-form">
+        <input type="text" id="name1" placeholder="Your Name">
+        <input type="text" id="name2" placeholder="Their Name">
+        <button onclick="calculateLove()">Test Love</button>
+      </div>
+      <div id="result"></div>
+    </main>
+
+    <footer>
+      <p id="footer-secret">©2025 Cameron Hollabaugh</p>
+    </footer>
+  </div>
+
+  <script>
+    function calculateLove() {
+      const name1 = document.getElementById("name1").value.trim();
+      const name2 = document.getElementById("name2").value.trim();
+      const resultEl = document.getElementById("result");
+
+      if (!name1 || !name2) {
+        resultEl.textContent = "⚠️ Please enter both names!";
+        return;
+      }
+
+      const combined = (name1 + name2).toLowerCase();
+      let score = 0;
+      for (let i = 0; i < combined.length; i++) {
+        score += combined.charCodeAt(i);
+      }
+      const compatibility = (score % 101);
+
+      let message = "";
+      if (compatibility > 85) message = "❤️ A perfect match!";
+      else if (compatibility > 60) message = "💕 Strong connection!";
+      else if (compatibility > 40) message = "💞 Could work with effort.";
+      else if (compatibility > 20) message = "💔 Not looking great...";
+      else message = "🙈 Maybe just friends!";
+
+      resultEl.textContent = `${name1} + ${name2} = ${compatibility}% Compatibility. ${message}`;
+    }
+  </script>
+</body>
+</html>

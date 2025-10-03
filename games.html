@@ -26,6 +26,26 @@
       letter-spacing: 2px;
       border-bottom: 4px solid #ffcc00;
       text-shadow: 0 0 8px #39ff14, 0 0 12px #39ff14;
+      position: relative;
+    }
+
+    .lang-btn {
+      position: absolute;
+      right: 1rem;
+      top: 1rem;
+      background: #12263a;
+      border: 2px solid #39ff14;
+      color: #39ff14;
+      font-weight: bold;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .lang-btn:hover {
+      background: #39ff14;
+      color: #0a0f1f;
     }
 
     footer {
@@ -98,29 +118,30 @@
 </head>
 <body>
   <header>
-    <a href="index.html">🎮 Cameron's Secret Game Hub 🎮</a>
+    <a href="index.html" id="site-title">🎮 Cameron's Secret Game Hub 🎮</a>
+    <button class="lang-btn" id="lang-toggle">日本語</button>
   </header>
 
   <main>
-    <h1>Select a Game</h1>
+    <h1 id="main-title">Select a Game</h1>
     <div class="game-grid">
-      <a class="game-card" href="game.html">Default Snake Game</a>
-      <a class="game-card" href="secret.html">Default Drawing Game</a>
-      <a class="game-card" href="holidays/neil.html">Neil’s Birthday</a>
-      <a class="game-card" href="holidays/susfeed.html">ඞ SusFeed</a>
-      <a class="game-card" href="holidays/valentine.html">Valentine’s</a>
-      <a class="game-card" href="holidays/japan.html">Japan Day</a>
-      <a class="game-card" href="holidays/golden.html">Golden Week</a>
-      <a class="game-card" href="holidays/lgbt.html">Pride</a>
-      <a class="game-card" href="holidays/sweden.html">Sweden Day</a>
-      <a class="game-card" href="holidays/ainu.html">Ainu Day</a>
-      <a class="game-card" href="holidays/chip.html">Chip’s Birthday</a>
-      <a class="game-card" href="holidays/phil.html">Phillip’s Birthday</a>
-      <a class="game-card" href="holidays/cameron.html">Cameron’s Birthday</a>
-      <a class="game-card" href="holidays/halloween.html">Halloween</a>
-      <a class="game-card" href="holidays/trans.html">Trans Day</a>
-      <a class="game-card" href="holidays/christmas.html">Christmas</a>
-      <a class="game-card" href="holidays/ny.html">New Years</a>
+      <a class="game-card" href="game.html" data-en="Default Snake Game" data-jp="デフォルトスネークゲーム">Default Snake Game</a>
+      <a class="game-card" href="secret.html" data-en="Default Drawing Game" data-jp="デフォルトお絵かきゲーム">Default Drawing Game</a>
+      <a class="game-card" href="holidays/neil.html" data-en="Neil’s Birthday" data-jp="ニールの誕生日">Neil’s Birthday</a>
+      <a class="game-card" href="holidays/susfeed.html" data-en="ඞ SusFeed" data-jp="ඞ サスフィード">ඞ SusFeed</a>
+      <a class="game-card" href="holidays/valentine.html" data-en="Valentine’s" data-jp="バレンタイン">Valentine’s</a>
+      <a class="game-card" href="holidays/japan.html" data-en="Japan Day" data-jp="日本の日">Japan Day</a>
+      <a class="game-card" href="holidays/golden.html" data-en="Golden Week" data-jp="ゴールデンウィーク">Golden Week</a>
+      <a class="game-card" href="holidays/lgbt.html" data-en="Pride" data-jp="プライド">Pride</a>
+      <a class="game-card" href="holidays/sweden.html" data-en="Sweden Day" data-jp="スウェーデンの日">Sweden Day</a>
+      <a class="game-card" href="holidays/ainu.html" data-en="Ainu Day" data-jp="アイヌの日">Ainu Day</a>
+      <a class="game-card" href="holidays/chip.html" data-en="Chip’s Birthday" data-jp="チップの誕生日">Chip’s Birthday</a>
+      <a class="game-card" href="holidays/phil.html" data-en="Phillip’s Birthday" data-jp="フィリップの誕生日">Phillip’s Birthday</a>
+      <a class="game-card" href="holidays/cameron.html" data-en="Cameron’s Birthday" data-jp="キャメロンの誕生日">Cameron’s Birthday</a>
+      <a class="game-card" href="holidays/halloween.html" data-en="Halloween" data-jp="ハロウィン">Halloween</a>
+      <a class="game-card" href="holidays/trans.html" data-en="Trans Day" data-jp="トランスの日">Trans Day</a>
+      <a class="game-card" href="holidays/christmas.html" data-en="Christmas" data-jp="クリスマス">Christmas</a>
+      <a class="game-card" href="holidays/ny.html" data-en="New Years" data-jp="お正月">New Years</a>
     </div>
   </main>
 
@@ -130,6 +151,32 @@
 
   <div id="loading-overlay"></div>
 
-  <script src="main.js"></script>
+  <script>
+    const toggleBtn = document.getElementById("lang-toggle");
+    const siteTitle = document.getElementById("site-title");
+    const mainTitle = document.getElementById("main-title");
+    const gameCards = document.querySelectorAll(".game-card");
+
+    let isJP = false;
+
+    toggleBtn.addEventListener("click", () => {
+      isJP = !isJP;
+      if (isJP) {
+        siteTitle.textContent = "🎮 キャメロンの秘密ゲームハブ 🎮";
+        mainTitle.textContent = "ゲームを選んでください";
+        toggleBtn.textContent = "EN";
+        gameCards.forEach(card => {
+          card.textContent = card.getAttribute("data-jp");
+        });
+      } else {
+        siteTitle.textContent = "🎮 Cameron's Secret Game Hub 🎮";
+        mainTitle.textContent = "Select a Game";
+        toggleBtn.textContent = "日本語";
+        gameCards.forEach(card => {
+          card.textContent = card.getAttribute("data-en");
+        });
+      }
+    });
+  </script>
 </body>
 </html>

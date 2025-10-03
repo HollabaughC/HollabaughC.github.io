@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>If I Had a Nickel</title>
+  <link rel="icon" type="image/x-icon" href="nickel.png">
+  <style>
+    :root{--bg:#eef2f7;--jar:#cfe3ff;--glass:rgba(255,255,255,0.35);--label:#123;}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,var(--bg),#fff);display:flex;flex-direction:column;gap:20px;align-items:center;padding:32px}
+    h1{margin:0 0 8px 0;font-weight:600}
+    .row{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+    .jar-card{width:260px;background:transparent;border-radius:12px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center}
+    .label{font-weight:600;color:var(--label);margin-bottom:8px;text-align:center}
+    .canvas-wrap{width:220px;height:320px;border-radius:18px;position:relative;box-shadow:0 8px 20px rgba(20,40,80,0.08);background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.1));overflow:hidden}
+    canvas{width:100%;height:100%;display:block}
+    .rim{position:absolute;left:12px;right:12px;top:36px;height:28px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));mix-blend-mode:screen;pointer-events:none}
+  </style>
+</head>
+<body>
+  <h1>If I Had a Nickel For:</h1>
+  <div class="row" id="jars"></div>
+
+  <script>
+  const jarData = [
+    {label: 'Every time I made an academic breakthrough because of that ice cream', count: 3},
+    {label: 'Every time I got a degree or certificate for the bit', count: 3},
+    {label: 'Every time I have moved countries on a whim for a class or degree', count: 2}
+  ];
+  const nickelImagePath = 'nickel.png';
+  const GRAVITY = 1200;
+  const COIN_DIAMETER = 36;
+  function createJar(label, count){
+    const container = document.createElement('div');
+    container.className = 'jar-card';
+    const lbl = document.createElement('div'); lbl.className='label'; lbl.textContent = label; container.appendChild(lbl);
+    const wrap = document.createElement('div'); wrap.className='canvas-wrap';
+    const rim = document.createElement('div'); rim.className='rim'; wrap.appendChild(rim);
+    const canvas = document.createElement('canvas'); canvas.width = 440; canvas.height = 640;
+    wrap.appendChild(canvas);
+    container.appendChild(wrap);
+    document.getElementById('jars').appendChild(container);
+
+    const ctx = canvas.getContext('2d');
+    const coins = [];
+    const w = canvas.width, h = canvas.height;
+    const rimTopY = Math.round(h*0.08);
+    const leftWallX = Math.round(w*0.16);
+    const rightWallX = Math.round(w*0.84);
+    const bottomY = Math.round(h*0.88);
+    const coinImg = new Image(); coinImg.src = nickelImagePath;
+
+    function spawn(n){
+      for(let i=0;i<n;i++){
+        const radius = COIN_DIAMETER/2 * (canvas.width/220);
+        const xMin = leftWallX + radius + 6;
+        const xMax = rightWallX - radius - 6;
+        const x = xMin + Math.random()*(xMax-xMin);
+        const y = rimTopY - 40 - Math.random()*80;
+        coins.push({x,y,vx:(Math.random()-0.5)*30,vy:Math.random()*20,r:radius,invMass:1/radius,settled:false});
+      }
+    }
+    spawn(count);
+
+    function step(dt){
+      for(let c of coins){
+        if(c.settled) continue;
+        c.vy += GRAVITY * dt;
+        c.x += c.vx * dt;
+        c.y += c.vy * dt;
+        if(c.x - c.r < leftWallX){ c.x = leftWallX + c.r; c.vx *= -0.2; }
+        if(c.x + c.r > rightWallX){ c.x = rightWallX - c.r; c.vx *= -0.2; }
+        if(c.y + c.r > bottomY){ c.y = bottomY - c.r; c.vy *= -0.2; c.vx *= 0.6; if(Math.abs(c.vy)<10) c.vy=0; }
+      }
+      for(let i=0;i<coins.length;i++){
+        for(let j=i+1;j<coins.length;j++){
+          const a = coins[i], b = coins[j];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.hypot(dx,dy);
+          const minDist = a.r + b.r;
+          if(dist>0 && dist < minDist){
+            const overlap = (minDist - dist) * 0.5;
+            const nx = dx/dist, ny = dy/dist;
+            a.x -= nx * overlap; a.y -= ny * overlap;
+            b.x += nx * overlap; b.y += ny * overlap;
+            const relVx = b.vx - a.vx; const relVy = b.vy - a.vy;
+            const sep = relVx*nx + relVy*ny;
+            if(sep < 0){
+              const impulse = -sep * 0.3;
+              a.vx -= (impulse * nx);
+              a.vy -= (impulse * ny);
+              b.vx += (impulse * nx);
+              b.vy += (impulse * ny);
+            }
+          }
+        }
+      }
+      for(let c of coins){
+        if(Math.abs(c.vx) < 1 && Math.abs(c.vy) < 1 && c.y + c.r >= bottomY - 1) c.settled = true;
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(leftWallX, rimTopY+6);
+      ctx.lineTo(leftWallX, bottomY);
+      ctx.quadraticCurveTo(w/2, h*0.98, rightWallX, bottomY);
+      ctx.lineTo(rightWallX, rimTopY+6);
+      ctx.quadraticCurveTo(w/2, rimTopY-18, leftWallX, rimTopY+6);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'rgba(255,255,255,0.55)');
+      grad.addColorStop(1,'rgba(220,235,255,0.12)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(160,190,230,0.6)';
+      ctx.stroke();
+      ctx.restore();
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(w/2, rimTopY+8, (rightWallX-leftWallX)/2, 14, 0, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fill();
+      ctx.restore();
+      coins.sort((a,b)=>a.y - b.y);
+      for(let c of coins){
+        const sx = c.x - c.r, sy = c.y - c.r, s = c.r*2;
+        if(coinImg.complete && coinImg.naturalWidth !== 0){
+          ctx.drawImage(coinImg, sx, sy, s, s);
+        } else {
+          ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,Math.PI*2); ctx.fillStyle='#c0c0b0'; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle='#9aa'; ctx.stroke();
+        }
+      }
+    }
+
+    let last = performance.now();
+    function loop(now){
+      const dt = Math.min(0.032, (now - last)/1000);
+      last = now;
+      step(dt);
+      draw();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  for(let i=0;i<jarData.length;i++){
+    createJar(jarData[i].label, jarData[i].count);
+  }
+  </script>
+</body>
+</html>

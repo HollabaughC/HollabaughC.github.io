@@ -268,3 +268,35 @@ footer {
 main {
   flex: 1;
 }
+
+.language-toggle {
+  position: absolute;
+  top: 1.2em;
+  right: 1.5em;
+}
+
+#lang-switch {
+  background: radial-gradient(circle at 30% 30%, #fff5f5, #ffeaea);
+  color: #8b0000;
+  border: 2px solid #fff0f0;
+  border-radius: 20px;
+  padding: 0.4em 1em;
+  font-size: 1em;
+  font-family: 'Sawarabi Mincho', 'Noto Serif JP', serif;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+#lang-switch:hover {
+  background: radial-gradient(circle at 30% 30%, #ffeaea, #ffd6d6);
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(139, 0, 0, 0.4);
+}
+
+#lang-switch:active {
+  transform: scale(0.95);
+  background: #fff0f0;
+}

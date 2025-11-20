@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cameron's Project Zone</title>
+<link rel="icon" type="image/x-icon" href="../img/cam.png">
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Comic Sans MS", Arial, sans-serif;
+    background: #f4f4fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  header {
+    background: #7cc6ff;
+    padding: 1rem 0 1.8rem;
+    text-align: center;
+    border-bottom: 6px solid #b76fff;
+    position: relative;
+    box-shadow: 0 4px 0 #4c46aa;
+  }
+
+  header img {
+    width: clamp(70px, 12vw, 100px);
+    height: clamp(70px, 12vw, 100px);
+    border-radius: 50%;
+    border: 5px solid #4c46aa;
+    background: white;
+  }
+
+  #site-title {
+    display: block;
+    text-decoration: none;
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin-top: .5rem;
+    color: #4c46aa;
+    font-weight: bold;
+  }
+
+  .lang-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: #4c46aa;
+    border: 3px solid #fff;
+    color: #fff;
+    padding: .4rem .8rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: clamp(1rem, 4vw, 2rem);
+  }
+
+  h1 {
+    text-align: center;
+    color: #4c46aa;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+  }
+
+  .game-grid {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: clamp(1rem, 3vw, 2rem);
+    width: 100%;
+  }
+
+  .game-card {
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: clamp(1rem, 4vw, 2rem);
+    min-height: 140px;
+
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-size: clamp(1rem, 3.5vw, 1.4rem);
+
+    background: #7c79ff;
+    box-shadow: 6px 6px 0 #4c46aa;
+
+    transition: 0.2s ease;
+    border: none;
+  }
+
+  .game-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 10px 10px 0 #7cc6ff;
+  }
+
+  footer {
+    background: #7cc6ff;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    border-top: 6px solid #b76fff;
+    color: #4c46aa;
+  }
+</style>
+</head>
+
+<body>
+<header>
+  <a href="../index.html" title="Index"><img src="../img/cam.png" alt="Logo" /></a>
+  <a id="site-title" href="index.html">Cameron's Project Zone</a>
+  <button class="lang-btn" id="lang-toggle">日本語</button>
+</header>
+
+<main>
+  <h1 id="main-title">Choose a Project</h1>
+
+  <div class="game-grid">
+    <a class="game-card" href="cooking/index.html" data-en="Cookbook" data-jp="料理本">The Boys Cookbook (2024)</a>
+  </div>
+</main>
+
+<footer>©2025 Cameron Hollabaugh</footer>
+
+<script>
+  const toggleBtn = document.getElementById("lang-toggle");
+  const siteTitle = document.getElementById("site-title");
+  const mainTitle = document.getElementById("main-title");
+  const cards = document.querySelectorAll(".game-card");
+
+  let isJP = false;
+
+  toggleBtn.addEventListener("click", () => {
+    isJP = !isJP;
+    if (isJP) {
+      siteTitle.textContent = "キャメロンのプロジェクトゾーン";
+      mainTitle.textContent = "プロジェクトを選んでください";
+      toggleBtn.textContent = "EN";
+      cards.forEach(card => card.textContent = card.dataset.jp);
+    } else {
+      siteTitle.textContent = "Cameron's Project Zone";
+      mainTitle.textContent = "Choose a Project";
+      toggleBtn.textContent = "日本語";
+      cards.forEach(card => card.textContent = card.dataset.en);
+    }
+  });
+
+  function randomSplat() {
+    const points = 12 + Math.floor(Math.random() * 6);
+    let poly = "";
+    for (let i = 0; i < points; i++) {
+      const angle = (i / points) * Math.PI * 2;
+      const radius = 35 + Math.random() * 35;
+      const x = 50 + Math.cos(angle) * radius;
+      const y = 50 + Math.sin(angle) * radius;
+      poly += `${x}% ${y}%, `;
+    }
+    return poly.slice(0, -2);
+  }
+
+  document.querySelectorAll(".game-card").forEach(card => {
+    card.style.clipPath = `polygon(${randomSplat()})`;
+    card.style.background = ["#7c79ff", "#63b7af", "#f2c94c", "#d66fff"][Math.floor(Math.random()*4)];
+  });
+</script>
+
+</body>
+</html>

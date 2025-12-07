@@ -472,6 +472,7 @@ const langToggle = document.getElementById("lang-toggle");
         wd: "Web Dev Work",
         jp: "Japanese Linguistics Work",
         ainu: "Ainu Research Work",
+        misc: "Miscellaneous Work",
         btn: "日本語",
         footer: "©2025 Cameron Hollabaugh",
         left: "Cameron",
@@ -485,6 +486,7 @@ const langToggle = document.getElementById("lang-toggle");
         wd: "ウェブ開発作品",
         jp: "日本語学の研究",
         ainu: "アイヌ研究",
+        misc: "そのほかの作品作品",
         btn: "English",
         footer: "©2025 キャメロン・ホーラボー",
         left: "キャメロン",
@@ -504,6 +506,7 @@ const langToggle = document.getElementById("lang-toggle");
       document.getElementById("btn-wd").textContent = t.wd;
       document.getElementById("btn-jp").textContent = t.jp;
       document.getElementById("btn-ainu").textContent = t.ainu;
+      document.getElementById("btn-misc").textContent = t.misc;
       document.getElementById("footer-secret").textContent = t.footer;
       document.querySelector(".left-text").textContent = t.left;
       document.querySelector(".right-text").textContent = t.right;

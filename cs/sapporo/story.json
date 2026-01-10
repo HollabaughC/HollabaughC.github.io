@@ -1657,7 +1657,7 @@
     "choices": [
       {
         "text": "Yes.",
-        "next": "story1.json",
+        "next": "story2.json",
         "skillChange": {"hacking": 1}
       },
       {

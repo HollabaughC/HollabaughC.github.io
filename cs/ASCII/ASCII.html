@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ASCII</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="ASCII.png" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0e14;
+  --panel: #121826;
+  --border: #1f2937;
+  --primary: #60a5fa;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: linear-gradient(180deg, #0b0e14, #0e1320);
+  color: var(--text);
+  padding: 1.5rem;
+}
+header {
+  max-width: 1000px;
+  margin: 0 auto 1.5rem auto;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+header p {
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+}
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+input, select, button {
+  margin-top: 0.35rem;
+  width: 100%;
+  background: #0b1220;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem;
+  color: var(--text);
+  font-size: 0.85rem;
+}
+button {
+  background: var(--primary);
+  border: none;
+  color: #020617;
+  font-weight: 600;
+  cursor: pointer;
+}
+button.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+pre {
+  margin: 1.25rem auto 0 auto;
+  background: #000;
+  border-radius: 14px;
+  padding: 1rem;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  line-height: 1em;
+  text-align: center;
+  color: #fff;
+}
+pre span { white-space: pre; }
+canvas { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Image to ASCII Art</h1>
+  <p>Convert images into modern text-based art</p>
+</header>
+
+<div class="app">
+  <div class="controls">
+    <div>
+      <label>Image</label>
+      <input type="file" accept="image/*" id="imageInput">
+    </div>
+    <div>
+      <label>Width (characters)</label>
+      <input type="number" id="widthInput" value="120" min="20" max="300">
+    </div>
+    <div>
+      <label>Character Set</label>
+      <select id="charset">
+        <option value="standard">Normal</option>
+        <option value="dots">Dots</option>
+      </select>
+    </div>
+    <div>
+      <label>Color Mode</label>
+      <select id="colorMode">
+        <option value="bw">Black</option>
+        <option value="color">Full Color</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="convertBtn">Generate</button>
+    <button class="secondary" id="saveTxt">Save TXT</button>
+    <button class="secondary" id="savePng">Save PNG</button>
+  </div>
+
+  <pre id="asciiOutput"></pre>
+</div>
+
+<canvas id="canvas"></canvas>
+<canvas id="exportCanvas"></canvas>
+
+<script>
+const imageInput = document.getElementById('imageInput');
+const widthInput = document.getElementById('widthInput');
+const asciiOutput = document.getElementById('asciiOutput');
+const convertBtn = document.getElementById('convertBtn');
+const charsetSelect = document.getElementById('charset');
+const colorModeSelect = document.getElementById('colorMode');
+const saveTxtBtn = document.getElementById('saveTxt');
+const savePngBtn = document.getElementById('savePng');
+const canvas = document.getElementById('canvas');
+const exportCanvas = document.getElementById('exportCanvas');
+const ctx = canvas.getContext('2d');
+const exportCtx = exportCanvas.getContext('2d');
+
+const charsets = {
+  standard: '@%#*+=-:. ',
+  dots: '.'
+};
+
+let lastASCII = '';
+let lastColorData = [];
+
+convertBtn.addEventListener('click', () => {
+  if (!imageInput.files[0]) return;
+  const img = new Image();
+  img.onload = () => render(img);
+  img.src = URL.createObjectURL(imageInput.files[0]);
+});
+
+function render(img) {
+  const chars = charsets[charsetSelect.value];
+  const w = parseInt(widthInput.value, 10);
+  const h = Math.round(w * (img.height / img.width) * 0.55);
+  canvas.width = w;
+  canvas.height = h;
+  ctx.drawImage(img, 0, 0, w, h);
+  const data = ctx.getImageData(0, 0, w, h).data;
+
+  let textOut = '';
+  let htmlOut = '';
+  lastColorData = [];
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * 4;
+      const r = data[i], g = data[i+1], b = data[i+2];
+      const v = 0.2126*r + 0.7152*g + 0.0722*b;
+
+      let ch;
+      if (charsetSelect.value === 'dots' && colorModeSelect.value === 'bw') {
+        ch = v > 128 ? '.' : ' ';
+      } else {
+        const idx = Math.floor((v / 255) * (chars.length - 1));
+        ch = chars[chars.length - 1 - idx];
+      }
+
+      textOut += ch;
+      lastColorData.push({ ch, r, g, b });
+
+      if (colorModeSelect.value === 'color') {
+        htmlOut += `<span style="color: rgb(${r},${g},${b})">${ch}</span>`;
+      } else {
+        htmlOut += ch;
+      }
+    }
+    textOut += '\n';
+    htmlOut += '\n';
+  }
+
+  lastASCII = textOut;
+  asciiOutput.innerHTML = colorModeSelect.value === 'color' ? htmlOut : textOut;
+}
+
+saveTxtBtn.addEventListener('click', () => {
+  if (!lastASCII) return;
+  const blob = new Blob([lastASCII], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ascii-art.txt';
+  a.click();
+});
+
+savePngBtn.addEventListener('click', () => {
+  if (!lastASCII) return;
+  const lines = lastASCII.split('\n');
+  const fontSize = 10;
+  const lineHeight = fontSize * 1.1;
+  exportCtx.font = `${fontSize}px monospace`;
+  exportCanvas.width = exportCtx.measureText(lines[0]).width;
+  exportCanvas.height = lines.length * lineHeight;
+  exportCtx.fillStyle = '#000';
+  exportCtx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+  let i = 0;
+  lines.forEach((line, y) => {
+    for (let x = 0; x < line.length; x++) {
+      const item = lastColorData[i++] || { r: 255, g: 255, b: 255 };
+      exportCtx.fillStyle = colorModeSelect.value === 'color'
+        ? `rgb(${item.r},${item.g},${item.b})`
+        : '#ffffff';
+      exportCtx.fillText(line[x], x * exportCtx.measureText(' ').width, (y + 1) * lineHeight);
+    }
+  });
+
+  const a = document.createElement('a');
+  a.href = exportCanvas.toDataURL('image/png');
+  a.download = 'ascii-art.png';
+  a.click();
+});
+</script>
+</body>
+</html>

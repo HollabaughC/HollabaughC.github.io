@@ -14,6 +14,7 @@ const translations = {
     chip: "Project Chip (2025)",
     smeff: "Explain it With Smeff (2025)",
     sapporo: "Sapporo (2025)",
+    fps: "FPS 3D Engine Demo (2026)",
     title: "Click the GitHub Icon to See All of the Source Code"
   },
   jp: {
@@ -31,6 +32,7 @@ const translations = {
     chip: "プロジェクトチップ (2025)",
     smeff: "Smeffで説明 (2025)",
     sapporo: "札幌 (2025)",
+    fps: "FPS 3D エンジンのデモ (2026)",
     title: "GitHubアイコンをクリックしてソースコードを見る"
   }
 };
@@ -57,7 +59,8 @@ function updateLanguage(lang) {
     Irankarapte: t.irankarapte,
     "Project Chip": t.chip,
     Smeff: t.smeff,
-    "Project Sapporo": t.sapporo
+    "Project Sapporo": t.sapporo,
+    "FPS": t.fps
   };
 
   document.querySelectorAll(".program-btn").forEach(btn => {

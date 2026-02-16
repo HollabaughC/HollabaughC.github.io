@@ -7,7 +7,8 @@ const programs = [
   { title: "Project Chip (2025)", link: "../cs/projectchip/index.html", icon: "../cs/img/chip.png", subtitle: "A digital pet where you take care of Chip the Beaver." },
   { title: "Explain it With Smeff (2025)", link: "../cs/smeff/index.html", icon: "../cs/img/smeff.png", subtitle: "The site full of web games from ancient Mesopotamia." },
   { title: "Sapporo (2025)", link: "../cs/sapporo/index.html", icon: "../cs/img/sapporo.png", subtitle: "A web-based text adventure game!" },
-  { title: "Image to ASCII (2026)", link: "../cs/ASCII/ASCII.html", icon: "../cs/img/ASCII.png", subtitle: "An image to ASCII tool with loads of options." }
+  { title: "Image to ASCII (2026)", link: "../cs/ASCII/ASCII.html", icon: "../cs/img/ASCII.png", subtitle: "An image to ASCII tool with loads of options." },
+  { title: "FPS 3D Engine Demo (2026)", link: "../cs/fps/test.html", icon: "../cs/img/neil.png", subtitle: "A 3D engine demo for web-based games." }
 ];
 
 const searchInput = document.getElementById('search-input');

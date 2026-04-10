@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPA Composer</title>
+  <link rel="icon" type="image/x-icon" href="img/logo.png">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <header>
+    <h1>Phoneme Composer</h1>
+    <p>Select MBROLA symbols.</p>
+  </header>
+
+  <main>
+    <section class="composer">
+      <textarea id="outputBox" placeholder="Your IPA text will appear here..." rows="3"></textarea>
+      <button id="speakBtn">🔊 Speak</button>
+    </section>
+
+    <section class="view-toggle">
+      <label class="toggle-label">
+        <input type="checkbox" id="toggleConsonants">
+        <span class="slider"></span>
+        <span class="label-text">Consonant Search</span>
+      </label>
+
+      <label class="toggle-label">
+        <input type="checkbox" id="toggleVowels">
+        <span class="slider"></span>
+        <span class="label-text">Vowel Search</span>
+      </label>
+    </section>
+
+    <section class="ipa-tables" id="tableView">
+      <h2>IPA Consonants</h2>
+      <div class="scroll-x">
+        <table class="ipa-table" id="consonants"></table>
+      </div>
+
+      <table id="vowelTable" class="ipa-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Front</th>
+            <th>Central</th>
+            <th>Back</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Close</th>
+            <td id="close-front"></td>
+            <td id="close-central"></td>
+            <td id="close-back"></td>
+          </tr>
+          <tr>
+            <th>Near-close</th>
+            <td id="nearclose-front"></td>
+            <td id="nearclose-central"></td>
+            <td id="nearclose-back"></td>
+          </tr>
+          <tr>
+            <th>Close-mid</th>
+            <td id="closemid-front"></td>
+            <td id="closemid-central"></td>
+            <td id="closemid-back"></td>
+          </tr>
+          <tr>
+            <th>Mid</th>
+            <td id="mid-front"></td>
+            <td id="mid-central"></td>
+            <td id="mid-back"></td>
+          </tr>
+          <tr>
+            <th>Open-mid</th>
+            <td id="openmid-front"></td>
+            <td id="openmid-central"></td>
+            <td id="openmid-back"></td>
+          </tr>
+          <tr>
+            <th>Near-open</th>
+            <td id="nearopen-front"></td>
+            <td id="nearopen-central"></td>
+            <td id="nearopen-back"></td>
+          </tr>
+          <tr>
+            <th>Open</th>
+            <td id="open-front"></td>
+            <td id="open-central"></td>
+            <td id="open-back"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ipa-selector">
+      <h2>Consonant Selector</h2>
+      <label for="mannerSelect">Manner:</label>
+      <select id="mannerSelect"></select>
+
+      <label for="placeSelect">Place:</label>
+      <select id="placeSelect"></select>
+
+      <div id="selectionResult" class="ipa-result"></div>
+    </section>
+
+    <section class="ipa-selector" id="vowelSelector" style="display:none;">
+      <h2>Vowel Selector</h2>
+      <label for="heightSelect">Height:</label>
+      <select id="heightSelect"></select>
+
+      <label for="backnessSelect">Backness:</label>
+      <select id="backnessSelect"></select>
+
+      <div id="vowelSelectionResult" class="ipa-result"></div>
+    </section>
+  </main>
+
+  <script src="index.js"></script>
+  <script src="speak.js"></script>
+</body>
+</html>

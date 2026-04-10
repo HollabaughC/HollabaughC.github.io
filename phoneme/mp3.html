@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WAV Volume & Pitch Normalizer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{--bg:#0f1220;--card:#171a2e;--accent:#7c7cff;--text:#e7e9ff;--muted:#aab}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui;background:radial-gradient(1200px 600px at 10% -10%,#1b1f46,transparent),var(--bg);color:var(--text)}
+main{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:min(900px,100%);background:linear-gradient(180deg,#1a1d36,#141730);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.45);padding:28px}
+header{display:flex;gap:16px;align-items:center}
+header h1{font-size:clamp(22px,4vw,34px);margin:0;font-weight:800}
+header p{margin:4px 0 0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--card);border-radius:18px;padding:18px}
+.panel h2{margin:0 0 10px;font-size:18px}
+.controls{display:grid;gap:14px}
+label{display:grid;gap:6px;font-size:14px;color:var(--muted)}
+input[type=file]{padding:10px;border-radius:12px;background:#0e1024;color:var(--text);border:1px dashed #2b2f66}
+input[type=range],select,button{width:100%}
+input[type=range]{accent-color:var(--accent)}
+select,button{background:#0e1024;border:1px solid #2b2f66;color:var(--text);border-radius:12px;padding:12px}
+button.primary{background:linear-gradient(180deg,#8a8aff,#6d6dff);border:none;color:#0b0d24;font-weight:700}
+button.primary:disabled{opacity:.6}
+.log{font-family:ui-monospace,Menlo,monospace;background:#0b0d1e;border-radius:14px;padding:12px;height:220px;overflow:auto;color:#cfd3ff}
+.footer{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:16px}
+.badge{background:#0e1024;border:1px solid #2b2f66;border-radius:999px;padding:6px 10px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<div class="card">
+<header>
+<div>
+<h1>WAV Volume & Pitch Normalizer</h1>
+<p>Select a folder of WAV files, normalize loudness and pitch, download a ZIP with structure preserved</p>
+</div>
+</header>
+<div class="grid">
+<div class="panel">
+<h2>Input</h2>
+<div class="controls">
+<label>Folder of WAV files
+<input id="folder" type="file" webkitdirectory multiple accept=".wav" />
+</label>
+<label>Target loudness (dBFS)
+<input id="loudness" type="range" min="-24" max="-1" step="0.5" value="-1" />
+</label>
+<label>Pitch reference
+<select id="pitchRef">
+<option value="none">No pitch change</option>
+<option value="440">A4 = 440 Hz</option>
+<option value="432">A4 = 432 Hz</option>
+</select>
+</label>
+<label>Pitch target (semitones)
+<input id="semitones" type="range" min="-12" max="12" step="1" value="0" />
+</label>
+<button id="process" class="primary">Process & Zip</button>
+</div>
+</div>
+<div class="panel">
+<h2>Status</h2>
+<div id="log" class="log"></div>
+</div>
+</div>
+<div class="footer">
+<div class="badge">Client-side processing</div>
+<div class="badge">Preserves folder paths</div>
+</div>
+</div>
+</main>
+<script>
+const logEl=document.getElementById('log')
+const log=m=>{logEl.textContent+=m+"\n";logEl.scrollTop=logEl.scrollHeight}
+const folderInput=document.getElementById('folder')
+const btn=document.getElementById('process')
+const loudnessEl=document.getElementById('loudness')
+const semitonesEl=document.getElementById('semitones')
+const pitchRefEl=document.getElementById('pitchRef')
+const ctx=new AudioContext()
+const readFile=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsArrayBuffer(f)})
+const decode=b=>ctx.decodeAudioData(b.slice(0))
+const peak=buf=>{let p=0;for(let c=0;c<buf.numberOfChannels;c++){const d=buf.getChannelData(c);for(let i=0;i<d.length;i++){const a=Math.abs(d[i]);if(a>p)p=a}}return p}
+const gainForDb=(p,db)=>{const t=Math.pow(10,db/20);return p>0?t/p:1}
+const resample=async(buf,rate)=>{const o=new OfflineAudioContext(buf.numberOfChannels,Math.ceil(buf.duration*rate),rate);const s=o.createBufferSource();s.buffer=buf;s.connect(o.destination);s.start();return o.startRendering()}
+const pitchShift=async(buf,semitones)=>{if(semitones===0)return buf;const r=Math.pow(2,semitones/12);return resample(buf,buf.sampleRate*r)}
+const normalize=async(buf,targetDb)=>{const p=peak(buf);const g=gainForDb(p,targetDb);const o=new OfflineAudioContext(buf.numberOfChannels,buf.length,buf.sampleRate);const s=o.createBufferSource();const gn=o.createGain();gn.gain.value=g;s.buffer=buf;s.connect(gn).connect(o.destination);s.start();return o.startRendering()}
+const encodeWav=buf=>{const n=buf.numberOfChannels;const l=buf.length;const sr=buf.sampleRate;let d=l*n*2+44;const a=new ArrayBuffer(d);const v=new DataView(a);let o=0;const w=s=>{for(let i=0;i<s.length;i++)v.setUint8(o++,s.charCodeAt(i))};w('RIFF');v.setUint32(o,d-8,true);o+=4;w('WAVE');w('fmt ');v.setUint32(o,16,true);o+=4;v.setUint16(o,1,true);o+=2;v.setUint16(o,n,true);o+=2;v.setUint32(o,sr,true);o+=4;v.setUint32(o,sr*n*2,true);o+=4;v.setUint16(o,n*2,true);o+=2;v.setUint16(o,16,true);o+=2;w('data');v.setUint32(o,l*n*2,true);o+=4;for(let i=0;i<l;i++)for(let c=0;c<n;c++){let s=Math.max(-1,Math.min(1,buf.getChannelData(c)[i]));v.setInt16(o,s<0?s*0x8000:s*0x7fff,true);o+=2}return new Blob([a],{type:'audio/wav'})}
+btn.onclick=async()=>{if(!folderInput.files.length)return;btn.disabled=true;logEl.textContent='';log('Starting');const zip=new JSZip();const files=[...folderInput.files].filter(f=>f.name.toLowerCase().endsWith('.wav'));for(const f of files){log('Processing '+f.webkitRelativePath);const ab=await readFile(f);let buf=await decode(ab);const ref=pitchRefEl.value;let st=parseInt(semitonesEl.value,10);if(ref!=='none'){const base=440;const target=parseFloat(ref);const diff=12*Math.log2(target/base);st+=diff}
+if(st!==0)buf=await pitchShift(buf,st);buf=await normalize(buf,parseFloat(loudnessEl.value));const wav=encodeWav(buf);zip.file(f.webkitRelativePath,wav)}
+const blob=await zip.generateAsync({type:'blob'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='normalized_wavs.zip';a.click();URL.revokeObjectURL(a.href);log('Done');btn.disabled=false}
+</script>
+</body>
+</html>

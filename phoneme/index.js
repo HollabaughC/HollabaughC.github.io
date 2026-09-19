@@ -523,8 +523,8 @@ function makeIPA(char) {
 
   span.addEventListener("click", () => {
     const isConsonant = consonantsManners.some(row =>
-      row.slice(1).some(([vless, vced]) => vless === char || vced === char)
-    );
+  row.slice(1).some(([vless, vced]) => vless === char || vced === char)
+);
 
     if (isConsonant) {
       showConsonantMenu(char);
